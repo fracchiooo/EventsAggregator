@@ -74,6 +74,9 @@ group :development do
   gem "omniauth-facebook"
   gem "omniauth-rails_csrf_protection"
   gem "sass-rails"
+  gem "omniauth"
+  gem "omniauth-google-oauth2"
+  gem "google-api-client", "~> 0.53.0"
  # gem "canard", "~> 0.6.2.pre"
  # gem "cancan"
 end

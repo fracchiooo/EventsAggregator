@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-
+  require 'google/apis/people_v1'
   #alias_attribute :events, :eventi_partecipo
   #alias_attribute ::events, :eventi_preferiti
   #has_many :eventi_partecipo
@@ -13,7 +13,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
-         :lockable, :omniauthable, :omniauth_providers => [:facebook]
+         :lockable, :omniauthable, :omniauth_providers => [:facebook, :google_oauth2]
 
 
 
@@ -32,12 +32,44 @@ class User < ApplicationRecord
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user| 
       user.email = auth.info.email 
       user.password = Devise.friendly_token[0,20] 
-      user.data_nascita= Date.strptime(auth.extra.raw_info.birthday,'%d/%m/%Y')
+
+      if auth.provider=='google_oauth2'
+
+        token=auth.credentials.token
+        url="https://people.googleapis.com/v1/people/"+(auth.uid).to_s+"?oauth_token="+token.to_s+"&personFields=birthdays,genders&key=AIzaSyDiwKxTnX4EFxCuo75XRDAeltZ6KKXL-Ds"
+        uri=URI.parse(url)
+        http= Net::HTTP.new(uri.host,uri.port)
+        http.use_ssl=true
+        http.verify_mode= OpenSSL::SSL::VERIFY_NONE
+        request= Net::HTTP::Get.new(uri.request_uri)
+        response=http.request(request)
+        res=JSON.parse(response.body)
+     
+        begin
+          compleanno= res['birthdays'][0]["date"]
+          user.data_nascita= Date.strptime((compleanno['day'].to_s+'/'+compleanno['month'].to_s+'/'+compleanno['year'].to_s),'%d/%m/%Y')
+        rescue 
+          user.data_nascita=Date.strptime('01/01/1970','%d/%m/%Y')
+        end
+
+        begin
+          user.sesso=res['genders'][0]["value"]
+        rescue
+          user.sesso='altro'
+        end
+
+      else
+        user.sesso=auth.extra.raw_info.gender
+        user.data_nascita=Date.strptime(auth.extra.raw_info.birthday,'%d/%m/%Y')
+
+      end
+
+
+
       user.immagine_profilo=auth.info.image
-      user.username= "profilo ${Random.rand(3000)}"
+      user.username= "profilo "+(Time.now).to_s
       user.nome=auth.info.first_name
       user.cognome=auth.info.last_name
-      user.sesso=auth.extra.raw_info.gender
     end 
   end 
                   
