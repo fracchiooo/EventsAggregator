@@ -17,6 +17,11 @@ class User < ApplicationRecord
 
 
   enum role: [:user, :admin]
+ # enum sesso: [:male, :female, :altro]
+  enum sesso: [:male, :female, :altro]
+
+  after_initialize :set_default_sesso, :if => :new_record?
+
 
   after_initialize :set_default_role, :if => :new_record?
        
@@ -24,6 +29,10 @@ class User < ApplicationRecord
     self.role ||=:user
   end
        
+      
+  def set_default_sesso
+    self.sesso ||=:male
+  end
        
        
        
@@ -76,6 +85,8 @@ class User < ApplicationRecord
     super.tap do |user| 
       if data = session["devise.facebook_data"] && session["devise.facebook_data"]["extra"]["raw_info"] 
         user.email = data["email"] if user.email.blank? 
+
+
       end 
     end 
   end

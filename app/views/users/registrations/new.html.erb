@@ -35,7 +35,7 @@
 
   <div class="field">
     <%= f.label :sesso %><br />
-    <%= f.text_field :sesso, autofocus: true, autocomplete: "sesso" %>
+    <%= f.select :sesso, options_for_select(["male","female","altro"]), autofocus: true, autocomplete: "sesso" %>
   </div>
 
 

@@ -37,7 +37,7 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.0]
       t.string :username, null: false, default: ""
       t.string :nome, null: false, default: ""
       t.string :cognome, null: false, default: ""
-      t.string :sesso, null: false, default: ""
+      t.integer :sesso, default: 0
 
 
 

@@ -10,9 +10,6 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema[7.0].define(version: 0) do
-=======
 ActiveRecord::Schema[7.0].define(version: 2022_09_28_192551) do
   create_table "comments", force: :cascade do |t|
     t.text "testo"
@@ -34,7 +31,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_28_192551) do
     t.string "username", default: "", null: false
     t.string "nome", default: "", null: false
     t.string "cognome", default: "", null: false
-    t.string "sesso", default: "", null: false
+    t.integer "sesso", default: 0
     t.integer "role", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -50,5 +47,4 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_28_192551) do
   end
 
   add_foreign_key "comments", "users"
->>>>>>> 224a718d09d2630805457c8111f4500cbf57d151
 end
