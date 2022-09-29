@@ -67,6 +67,17 @@ group :development do
   # gem "spring"
 end
 
+
+group :development do
+
+  gem "devise"
+  gem "omniauth-facebook"
+  gem "omniauth-rails_csrf_protection"
+  gem "sass-rails"
+ # gem "canard", "~> 0.6.2.pre"
+ # gem "cancan"
+end
+
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"

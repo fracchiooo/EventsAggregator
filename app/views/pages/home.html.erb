@@ -1,0 +1,45 @@
+<h1>Pages#home</h1>
+<p>Find me in app/views/pages/home.html.erb</p>
+
+
+<p class="notice" style="color: green"> <%= notice %> </p>
+<p class="alert" style="color: red" > <%= alert %> </p>
+
+
+
+<%if user_signed_in? %>
+
+<h6> <%= current_user.role %> </h6>
+
+
+
+
+
+<div id="my_comments">
+  <% current_user.comments.each do |comment| %>
+
+    <h2>
+    <%= comment.testo %>
+    </h2>
+    <p>
+      <%= link_to "Show this movie", comment %>
+    </p>
+  <% end %>
+</div>
+
+
+
+ <p> loggato come <%= current_user.email %> </p>  
+
+[<%= link_to 'Logout', destroy_user_session_path, :method => :delete %>]
+
+
+<% else %>
+
+   <p> non sei loggato </p>
+
+    [<%= link_to 'Iscriviti', new_user_registration_path %>]
+
+    [<%= link_to 'Accedi', new_user_session_path %>]
+
+<% end %>
