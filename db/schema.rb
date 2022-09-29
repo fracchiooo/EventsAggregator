@@ -10,6 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
+ActiveRecord::Schema[7.0].define(version: 0) do
+=======
 ActiveRecord::Schema[7.0].define(version: 2022_09_28_192551) do
   create_table "comments", force: :cascade do |t|
     t.text "testo"
@@ -47,4 +50,5 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_28_192551) do
   end
 
   add_foreign_key "comments", "users"
+>>>>>>> 224a718d09d2630805457c8111f4500cbf57d151
 end
