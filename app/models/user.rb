@@ -1,5 +1,4 @@
 class User < ApplicationRecord
-  require 'google/apis/people_v1'
   #alias_attribute :events, :eventi_partecipo
   #alias_attribute ::events, :eventi_preferiti
   #has_many :eventi_partecipo
