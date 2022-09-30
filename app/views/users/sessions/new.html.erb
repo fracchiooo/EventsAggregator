@@ -1,29 +1,53 @@
-<h2>Log in</h2>
-
 <p class="notice" style="color: green"> <%= notice %> </p>
 <p class="alert" style="color: red" > <%= alert %> </p>
 
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="field">
-    <%= f.label :email %><br />
+<div id="login">
+  <div class="container">
+    <div id="login-row" class="row justify-content-center align-items-center">
+        <div id="login-column" class="col-md-6">
+            <div id="login-box" class="col-md-12">
+
+
+
+<div id="login-form">
+<%= form_for(resource, as: resource_name, url: session_path(resource_name), :html => {:class => "form"}) do |f| %>
+  <%= render "users/shared/error_messages", resource: resource %>
+
+  <h3 class="text-center text-info"> Login </h3>
+  
+  <div class="form-group">
+    <%= f.label :email, class: "text-info" %><br />
     <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
   </div>
 
-  <div class="field">
-    <%= f.label :password %><br />
+  <div class="form-group">
+    <%= f.label :password, class: "text-info" %><br />
     <%= f.password_field :password, autocomplete: "current-password" %>
   </div>
 
   <% if devise_mapping.rememberable? %>
-    <div class="field">
+    <div class="form-group">
       <%= f.check_box :remember_me %>
       <%= f.label :remember_me %>
     </div>
   <% end %>
 
   <div class="actions">
-    <%= f.submit "Log in" %>
+    <%= f.submit "Log in", class: "btn btn-info btn-md" %>
   </div>
+
+
 <% end %>
 
+
+<div id="register-link" class="text-right">
 <%= render "users/shared/links" %>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+

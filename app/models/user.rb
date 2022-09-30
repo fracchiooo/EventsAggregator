@@ -5,7 +5,7 @@ class User < ApplicationRecord
   #has_many :eventi_preferiti
 
 
-  has_many :comments
+  has_many :comments, dependent: :destroy
 
   validates :data_nascita, :username, :nome, :cognome, :sesso, presence: true
   # Include default devise modules. Others available are:
@@ -44,7 +44,7 @@ class User < ApplicationRecord
       if auth.provider=='google_oauth2'
 
         token=auth.credentials.token
-        url="https://people.googleapis.com/v1/people/"+(auth.uid).to_s+"?oauth_token="+token.to_s+"&personFields=birthdays,genders&key=AIzaSyDiwKxTnX4EFxCuo75XRDAeltZ6KKXL-Ds"
+        url="https://people.googleapis.com/v1/people/"+(auth.uid).to_s+"?oauth_token="+token.to_s+"&personFields=birthdays,genders&key="+Rails.application.credentials.dig(:google_api_key)
         uri=URI.parse(url)
         http= Net::HTTP.new(uri.host,uri.port)
         http.use_ssl=true

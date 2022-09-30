@@ -1,60 +1,98 @@
-<h2>Sign up</h2>
 
 <p class="notice" style="color: green"> <%= notice %> </p>
 <p class="alert" style="color: red" > <%= alert %> </p>
 
 
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= render "users/shared/error_messages", resource: resource %>
+<div id="signup">
+  <div class="container">
+    <div id="signup-row" class="row justify-content-center align-items-center">
+        <div id="signup-column" class="col-md-9">
+            <div id="signup-box" class="col-md-12">
 
-  <div class="field">
-    <%= f.label :email %><br />
+
+
+<div id="signup-form">
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), :html => {:class => "form"}) do |f| %>
+  <%= render "users/shared/error_messages", resource: resource %>
+  <h3 class="text-center text-info"> Iscriviti </h3>
+
+<div class="row">
+
+<div class="col-sm">
+  <div class="form-group">
+    <%= f.label :email, class: "text-info" %><br />
     <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
   </div>
 
-  <div class="field">
-    <%= f.label :datanascita %><br />
+  <div class="form-group">
+    <%= f.label :datanascita, class: "text-info" %><br />
     <%= f.date_field :data_nascita, autofocus: true, autocomplete: "data di nascita" %>
   </div>
 
-  <div class="field">
-    <%= f.label :username %><br />
+  <div class="form-group">
+    <%= f.label :username, class: "text-info" %><br />
     <%= f.text_field :username, autofocus: true, autocomplete: "username" %>
   </div>
 
-  <div class="field">
-    <%= f.label :nome %><br />
+  <div class="form-group">
+    <%= f.label :nome, class: "text-info" %><br />
     <%= f.text_field :nome, autofocus: true, autocomplete: "nome" %>
   </div>
 
-  <div class="field">
-    <%= f.label :cognome %><br />
+</div>
+
+<div class="col-sm">
+
+  <div class="form-group">
+    <%= f.label :cognome, class: "text-info" %><br />
     <%= f.text_field :cognome, autofocus: true, autocomplete: "cognome" %>
   </div>
 
-  <div class="field">
-    <%= f.label :sesso %><br />
+  <div class="form-group">
+    <%= f.label :sesso, class: "text-info" %><br />
     <%= f.select :sesso, options_for_select(["male","female","altro"]), autofocus: true, autocomplete: "sesso" %>
   </div>
 
 
-  <div class="field">
-    <%= f.label :password %>
+  <div class="form-group" >
+    <%= f.label :password , class: "text-info"%>
     <% if @minimum_password_length %>
     <em>(<%= @minimum_password_length %> characters minimum)</em>
     <% end %><br />
     <%= f.password_field :password, autocomplete: "new-password" %>
   </div>
 
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
+  <div class="form-group">
+    <%= f.label :password_confirmation, class: "text-info" %><br />
     <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
   </div>
 
-  <div class="actions">
-    <%= f.submit "Sign up" %>
+</div>
+
+</div>
+
+
+<div style="align-items: center; justify-content: center;">
+
+  <div class="actions" style="margin-top:6px;">
+    <%= f.submit "Sign up", class: "btn btn-info btn-md" %>
   </div>
+
+</div>
 <% end %>
 
+
+
+<div id="register-link" class="text-right" style="align-items: center; justify-content: center;">
 <%= render "users/shared/links" %>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div style="padding: 10px;"></div>

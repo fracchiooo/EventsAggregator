@@ -72,7 +72,7 @@ group :development do
 
   gem "devise"
   gem "omniauth-facebook"
-  gem "omniauth-rails_csrf_protection"
+  gem "omniauth-rails_csrf_protection" 
   gem "sass-rails"
   gem "omniauth"
   gem "omniauth-google-oauth2"
