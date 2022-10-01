@@ -4,7 +4,7 @@ class User < ApplicationRecord
   #has_many :eventi_partecipo
   #has_many :eventi_preferiti
 
-
+  has_many :like_comments
   has_many :comments, dependent: :destroy
 
   validates :data_nascita, :username, :nome, :cognome, :sesso, presence: true

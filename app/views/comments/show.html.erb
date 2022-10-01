@@ -9,3 +9,19 @@
 
   <%= button_to "Destroy this comment", @comment, method: :delete %>
 </div>
+
+
+<%= @comment.like_comments.count %> Likes
+
+<% like_c= current_user.like_comments.find_by(comment: @comment) %>
+
+<% if like_c.nil? %>
+
+<%= button_to "Mi piace", like_comments_path, params: { like_comment:{ comment_id: @comment.id}} ,method: :post %>
+
+<% else %>
+
+<%= button_to "Non mi piace", like_comment_path(like_c),method: :delete %>
+
+
+<% end %>
