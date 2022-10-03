@@ -6,6 +6,7 @@ class User < ApplicationRecord
 
   has_many :like_comments
   has_many :comments, dependent: :destroy
+  has_many :segnala_cs
 
   validates :data_nascita, :username, :nome, :cognome, :sesso, presence: true
   # Include default devise modules. Others available are:

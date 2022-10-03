@@ -8,7 +8,47 @@
   <%= link_to "Back to comments", comments_path %>
 
   <%= button_to "Destroy this comment", @comment, method: :delete %>
+
+
+  <%= @comment.segnala_cs.count %> segnalazioni!
+
+<% if current_user.segnala_cs.find_by(comment: @comment).nil? %>
+  <form action="/segnala_cs" method="post">
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+  <input type="hidden" name="segnala_c[comment_id]" value="<%= @comment.id %>">
+  <button type="submit" style="background:none; border:none; padding:0" >
+  <i class="bi bi-exclamation-triangle-fill" style="font-size:200%;">  </i>
+  </button>
+  </form>
+<% else %>
+
+<button enable=false style="background:none; border:none; padding:0" >
+<i class="bi bi-exclamation-triangle-fill" style="font-size:200%;">  </i>
+</button>
+
+<% end %>
+
+
+
 </div>
+
+
+<div class="container">
+
+<h2> informazioni commentatore: </h2>
+
+<%# @utente=User.find(@comment.user_id) %>
+
+<h6> <%= @user.username %> </h6>
+
+<img src="<%= @user.immagine_profilo %>"> </img>
+
+
+
+<%# @likes.find(1).user_id %>
+
+</div>
+
 
 
 <%= @comment.like_comments.count %> Likes
@@ -17,11 +57,30 @@
 
 <% if like_c.nil? %>
 
-<%= button_to "Mi piace", like_comments_path, params: { like_comment:{ comment_id: @comment.id}} ,method: :post %>
+<%# button_to "Mi piace", like_comments_path, params: { like_comment:{ comment_id: @comment.id}} ,method: :post %>
+<form action="/like_comments" method="post">
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+  <input type="hidden" name="like_comment[comment_id]" value="<%= @comment.id %>">
+ 
+
+  <button type="submit" style="background:none; border:none; padding:0" >
+  <i class="bi bi-hand-thumbs-up-fill" style="font-size:200%;">  </i>
+  </button>
+
+
+  </form>
+
 
 <% else %>
 
-<%= button_to "Non mi piace", like_comment_path(like_c),method: :delete %>
+<%# button_to "Non mi piace", like_comment_path(like_c),method: :delete %>
 
+<form action="<%= like_comment_path(like_c) %>" method="post">
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+  <input type="hidden" name="_method" value="DELETE">
+  <button type="submit" style="background:none; border:none; padding:0" >
+  <i class="bi bi-hand-thumbs-down-fill" style="font-size:200%">  </i>
+  </button>
+  </form>
 
 <% end %>

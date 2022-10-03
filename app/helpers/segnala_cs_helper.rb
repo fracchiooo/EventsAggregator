@@ -1,0 +1,2 @@
+module SegnalaCsHelper
+end
