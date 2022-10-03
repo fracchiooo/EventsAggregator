@@ -1,86 +1,151 @@
 <p style="color: green"><%= notice %></p>
 
-
-<h2 style="color:green"> <%= @comment.testo %> </h2>
-
-<div>
-  <%= link_to "Edit this comment", edit_comment_path(@comment) %> |
-  <%= link_to "Back to comments", comments_path %>
-
-  <%= button_to "Destroy this comment", @comment, method: :delete %>
+<% like_c= current_user.like_comments.find_by(comment: @comment) %>
 
 
-  <%= @comment.segnala_cs.count %> segnalazioni!
+<div class="row d-flex justify-content-center">
+  <div class="col-md-8 col-lg-6">
+    <div class="card shadow-0 border" style="background-color: #f0f2f5;">
+      <div class="card-body p-4">
 
+      <div class="card mb-4">
+      <div class="card-body">
+
+<h5 class="fst-italic" style="padding-bottom:7%"> <%= @comment.testo %> </h5>
+
+<div class="d-flex justify-content-between">
+<div class="container">
+<div class="row w-25">
+<img src="<%= @user.immagine_profilo %>" alt="avatar" width="45" height="45" />
+</div>
+<div class="row">
+<p class="small fw-lighter"><%= @user.username %></p>
+</div>
+</div>
+
+
+
+
+
+
+<div class="row">
+<% if like_c.nil? %>
+
+
+<div id="segnalazioni" class="row">
+
+<div class="col-sm-6">
 <% if current_user.segnala_cs.find_by(comment: @comment).nil? %>
-  <form action="/segnala_cs" method="post">
-  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-  <input type="hidden" name="segnala_c[comment_id]" value="<%= @comment.id %>">
-  <button type="submit" style="background:none; border:none; padding:0" >
-  <i class="bi bi-exclamation-triangle-fill" style="font-size:200%;">  </i>
-  </button>
-  </form>
+
+<form action="/segnala_cs" method="post">
+<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+<input type="hidden" name="segnala_c[comment_id]" value="<%= @comment.id %>">
+<button type="submit" style="background:none; border:none; padding:0" >
+<i class="bi bi-exclamation-triangle-fill" style="font-size:150%;">  </i>
+</button>
+</form>
 <% else %>
 
 <button enable=false style="background:none; border:none; padding:0" >
-<i class="bi bi-exclamation-triangle-fill" style="font-size:200%;">  </i>
+<i class="bi bi-exclamation-triangle-fill" style="font-size:150%;">  </i>
 </button>
 
+
 <% end %>
-
-
+</div>
+<div class="col-sm-6" style="padding-top:7px">
+<p class="small text-muted"><%= @comment.segnala_cs.count %>  </p>
+</div>
 
 </div>
 
 
-<div class="container">
+<div class="row">
 
-<h2> informazioni commentatore: </h2>
-
-<%# @utente=User.find(@comment.user_id) %>
-
-<h6> <%= @user.username %> </h6>
-
-<img src="<%= @user.immagine_profilo %>"> </img>
-
-
-
-<%# @likes.find(1).user_id %>
-
-</div>
-
-
-
-<%= @comment.like_comments.count %> Likes
-
-<% like_c= current_user.like_comments.find_by(comment: @comment) %>
-
-<% if like_c.nil? %>
-
-<%# button_to "Mi piace", like_comments_path, params: { like_comment:{ comment_id: @comment.id}} ,method: :post %>
+<div class="col-sm-6">
+<div class="d-flex flex-row align-items-center">
 <form action="/like_comments" method="post">
-  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-  <input type="hidden" name="like_comment[comment_id]" value="<%= @comment.id %>">
- 
-
-  <button type="submit" style="background:none; border:none; padding:0" >
-  <i class="bi bi-hand-thumbs-up-fill" style="font-size:200%;">  </i>
-  </button>
-
-
-  </form>
-
+<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+<input type="hidden" name="like_comment[comment_id]" value="<%= @comment.id %>">
+<button type="submit" style="background:none; border:none; padding:0" >
+<i class="bi bi-hand-thumbs-up-fill" style="font-size:150%;">  </i>
+</button>
+</form>
+</div>
+</div>
 
 <% else %>
 
-<%# button_to "Non mi piace", like_comment_path(like_c),method: :delete %>
+<div id="segnalazioni" class="row">
 
-<form action="<%= like_comment_path(like_c) %>" method="post">
-  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-  <input type="hidden" name="_method" value="DELETE">
-  <button type="submit" style="background:none; border:none; padding:0" >
-  <i class="bi bi-hand-thumbs-down-fill" style="font-size:200%">  </i>
-  </button>
-  </form>
+<div class="col-sm-6">
+<% if current_user.segnala_cs.find_by(comment: @comment).nil? %>
+<form action="/segnala_cs" method="post">
+<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+<input type="hidden" name="segnala_c[comment_id]" value="<%= @comment.id %>">
+<button type="submit" style="background:none; border:none; padding:0" >
+<i class="bi bi-exclamation-triangle-fill" style="font-size:150%;">  </i>
+</button>
+</form>
+<% else %>
+
+<button enable=false style="background:none; border:none; padding:0" >
+<i class="bi bi-exclamation-triangle-fill" style="font-size:150%;">  </i>
+</button>
 
 <% end %>
+</div>
+
+<div class="col-sm-6" style="padding-top:7px">
+<p class="small text-muted"><%= @comment.segnala_cs.count %>  </p>
+
+</div>
+
+</div>
+
+
+
+<div class="row justify-content-center">
+
+<div class="col-sm-6">
+<div class="d-flex flex-row align-items-center">
+               
+<form action="<%= like_comment_path(like_c) %>" method="post">
+<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+<input type="hidden" name="_method" value="DELETE">
+<button type="submit" style="background:none; border:none; padding:0" >
+<i class="bi bi-hand-thumbs-down-fill" style="font-size:150%">  </i>
+</button>
+</form>
+</div>
+</div>
+ <% end %>        
+ <div class="col-sm-6" style="margin-top:7px">
+ <p class="small text-muted"><%= @comment.like_comments.count %> </p>
+</div>
+ </div>
+</div>
+
+</div>
+</div>
+ 
+
+<% if (current_user.id==@comment.user_id || current_user.role=='admin') %>
+
+<div id="links" class="row card-body p-4">
+<div class="col-sm-3">
+<%= link_to "modifica", edit_comment_path(@comment),class: "btn btn-primary" %>
+</div>
+<div class="col-sm-3">
+<%= button_to "elimina", @comment, method: :delete, class: "btn btn-danger"  %>
+</div>
+</div>  
+<% end %>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
