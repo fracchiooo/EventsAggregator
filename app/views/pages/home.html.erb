@@ -16,14 +16,13 @@
 
 
 <div id="my_comments">
-  <% current_user.comments.each do |comment| %>
 
-    <h2>
-    <%= comment.testo %>
-    </h2>
-    <p>
-      <%= link_to "Show this comment", comment %>
-    </p>
+  <% User.all.each do |utente| %>
+    <% utente.comments.each do |comment| %>
+
+    <%= render 'comments/comment', comment: comment, user: User.find(comment.user_id) %>
+
+    <% end %>
   <% end %>
 </div>
 

@@ -1,12 +1,107 @@
-<div id="<%= dom_id comment %>">
-  <p>
-    <strong>Testo:</strong>
-    <%= comment.testo %>
-  </p>
 
-  <p>
-    <strong>Segnalato:</strong>
-    <%= comment.segnalato %>
-  </p>
+<% like_c= current_user.like_comments.find_by(comment: comment) %>
 
+<div class="card" style="max-height:0%; max-width: 80%">
+
+<div id="generale" class="row justify-content-center" >
+
+<div id="foto_e_nome" class="col-sm-2">
+<div id="foto" class="row w-50" >
+
+<% if user.immagine_profilo.nil? %>
+<img src="/images.jpeg" alt="avatar" width="45" height="45" />
+
+<% else %>
+<img src="data:image/png;base64,<%= user.immagine_profilo %>" alt="avatar" width="45" height="45" />
+<% end %>
+</div>
+<div id="username" class="row">
+<p class="small fw-lighter" style="margin-top:10%"><%= user.username %></p>
+</div>
+</div>
+
+<div id="testo" class="col-sm-5 ">
+<div class="card shadow-0 border " style="height:100%; width:100%; background-color: #f0f2f5;">
+<% if (current_user.id==comment.user_id || current_user.role=='admin') %>
+<form id="my_form" action="<%=comment_path(comment) %>" method="post">
+<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+<input type="hidden" name="_method" value="PATCH">
+<textarea name="comment[testo]" id="comment_testo" class=" h6 fst-italic" style="background-color: #f0f2f5; border: none; width:100%; padding-bottom:19%; text-align:center" > 
+<%= comment.testo %>
+</textarea>
+</form>
+<% else %>
+
+<h6 class="fst-italic" style="width:100%; border:none; padding-bottom:12%; text-align:center"> <%= comment.testo %> </h6>
+
+
+<% end %>
+
+</div>
+</div>
+
+
+<div id="like_e_num" class="col-sm-1">
+<div id="like" class="row">
+<% if like_c.nil? %>
+<form action="/like_comments" method="post">
+<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+<input type="hidden" name="like_comment[comment_id]" value="<%= comment.id %>">
+<button type="submit" style="background:none; border:none; padding:0" >
+<i class="bi bi-hand-thumbs-up-fill" style="font-size:150%;">  </i>
+</button>
+</form>
+<% else %>
+<form action="<%= like_comment_path(like_c) %>" method="post">
+<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+<input type="hidden" name="_method" value="DELETE">
+<button type="submit" style="background:none; border:none; padding:0" >
+<i class="bi bi-hand-thumbs-down-fill" style="font-size:150%">  </i>
+</button>
+</form>
+<% end %> 
+</div>
+<div id="num_l" class="row">
+<p class="small text-muted"><%= comment.like_comments.count %> </p>
+</div>
+</div>
+
+<div id="segna_e_num" class="col-sm-1">
+<div id="segnala" class="row">
+<% if current_user.segnala_cs.find_by(comment: comment).nil? %>
+<form action="/segnala_cs" method="post">
+<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+<input type="hidden" name="segnala_c[comment_id]" value="<%= comment.id %>">
+<button type="submit" style="background:none; border:none; padding:0" >
+<i class="bi bi-exclamation-triangle-fill" style="font-size:150%;">  </i>
+</button>
+</form>
+<% else %>
+
+<div class="form">
+<button enable=false style="background:none; border:none; padding:0" >
+<i class="bi bi-exclamation-triangle-fill" style="font-size:150%;">  </i>
+</button>
+</div>
+
+<% end %>
+</div>
+<div id="num_s" class="row">
+<p class="small text-muted"><%= comment.segnala_cs.count %>  </p>
+</div>
+</div>
+
+
+
+<div id="links" class="col-sm-1" style="align:left" >
+
+<% if (current_user.id==comment.user_id || current_user.role=='admin') %>
+<nav>
+<button form="my_form" type="submit" class="btn btn-primary" style="margin-bottom:5%; margin-top:10%; text-align:center" >modifica</button>
+<%= button_to "elimina", comment, method: :delete, class: "btn btn-danger"  %>
+</nav>
+<% end %>
+</div>  
+
+</div>
 </div>

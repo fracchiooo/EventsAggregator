@@ -7,7 +7,9 @@ class SegnalaCsController < ApplicationController
             flash[:notice]= @segnala_c.errors.full_messages.to_sentence
         end
 
-        redirect_to @segnala_c.comment
+        #redirect_to @segnala_c.comment
+        redirect_to root_path
+
         
     end
 
