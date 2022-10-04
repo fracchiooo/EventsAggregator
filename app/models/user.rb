@@ -3,7 +3,7 @@ class User < ApplicationRecord
   #alias_attribute ::events, :eventi_preferiti
   #has_many :eventi_partecipo
   #has_many :eventi_preferiti
-
+  require 'open-uri'
   has_many :like_comments
   has_many :comments, dependent: :destroy
   has_many :segnala_cs
@@ -75,7 +75,13 @@ class User < ApplicationRecord
 
 
 
-      user.immagine_profilo=auth.info.image
+      #user.immagine_profilo=auth.info.image
+      #web=URI.open(auth.info.image).read
+
+      URI.open(auth.info.image) do |f|
+        #f.write(Base64.decode64(base_64_encoded_data))
+        user.immagine_profilo=Base64.strict_encode64(f.string)
+      end
       user.username= "profilo "+(Time.now).to_s
       user.nome=auth.info.first_name
       user.cognome=auth.info.last_name
