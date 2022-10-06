@@ -3,6 +3,8 @@
 
 <div class="card" style="max-height:0%; max-width: 80%">
 
+
+
 <div id="generale" class="row justify-content-center" >
 
 <div id="foto_e_nome" class="col-sm-2">
@@ -44,18 +46,18 @@
 <div id="like_e_num" class="col-sm-1">
 <div id="like" class="row">
 <% if like_c.nil? %>
-<form action="/like_comments" method="post">
+<form id="<%=comment.id%>p" action="<%= comment_like_comments_path(comment) %>" method="post">
 <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
 <input type="hidden" name="like_comment[comment_id]" value="<%= comment.id %>">
-<button type="submit" style="background:none; border:none; padding:0" >
+<button type="submit" style="background:none; border:none; padding:0" onclick="functio()" >
 <i class="bi bi-hand-thumbs-up-fill" style="font-size:150%;">  </i>
 </button>
 </form>
 <% else %>
-<form action="<%= like_comment_path(like_c) %>" method="post">
+<form id="<%=comment.id%>d" action="<%=comment_like_comment_path(comment,like_c) %>" method="post">
 <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
 <input type="hidden" name="_method" value="DELETE">
-<button type="submit" style="background:none; border:none; padding:0" >
+<button type="submit" style="background:none; border:none; padding:0" onclick="functio()">
 <i class="bi bi-hand-thumbs-down-fill" style="font-size:150%">  </i>
 </button>
 </form>
@@ -69,7 +71,7 @@
 <div id="segna_e_num" class="col-sm-1">
 <div id="segnala" class="row">
 <% if current_user.segnala_cs.find_by(comment: comment).nil? %>
-<form action="/segnala_cs" method="post">
+<form action="<%= comment_segnala_cs_path(comment) %>" method="post">
 <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
 <input type="hidden" name="segnala_c[comment_id]" value="<%= comment.id %>">
 <button type="submit" style="background:none; border:none; padding:0" >
@@ -104,4 +106,13 @@
 </div>  
 
 </div>
+
 </div>
+
+
+
+<script>
+
+
+
+</script>
