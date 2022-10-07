@@ -10,9 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_07_085109) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_07_144755) do
   create_table "comments", force: :cascade do |t|
     t.text "testo"
+    t.boolean "segnalato", default: false
+    t.integer "num_segnalazioni", default: 0
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -67,6 +69,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_07_085109) do
     t.integer "failed_attempts"
     t.string "unlock_token"
     t.datetime "locked_at"
+    t.string "first_name"
+    t.string "last_name"
+    t.date "birthday"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
