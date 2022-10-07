@@ -2,21 +2,28 @@
 
 <h1>Events</h1>
 
+<%= render "filters", event: @event %>
+
 <div id="events">
-  <% @events.each do |event| %>
-    <h3> <%= event['title'] %> </h3>
-    <p>
-      <a href="<%= event_path(event['id']) %>">apri l'evento</a>
-    </p>
+  <%# se la ricerca ha almeno un risultato %>
+  <% if @events.present? %>
+    <% @events.each do |event| %>
+      <h3> <%= event['title'] %> </h3>
+      <p>
+        <a href="<%= event_path(event['id']) %>">apri l'evento</a>
+      </p>
+    <% end %>
   <% end %>
 </div>
 
 <div id="events">
-  <% @events2.each do |event| %>
-    <h3> <%= event['name'] %> </h3>
-    <p>
-      <a href="<%= event_path(event['id']) %>">apri l'evento</a>
-    </p>
+  <% if @events2.present? %>
+    <% @events2.each do |event| %>
+      <h3> <%= event['name'] %> </h3>
+      <p>
+        <a href="<%= event_path(event['id']) %>">apri l'evento</a>
+      </p>
+    <% end %>
   <% end %>
 </div>
 

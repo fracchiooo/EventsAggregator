@@ -1,0 +1,12 @@
+<%= form_with url: "#", method: :get do |form| %>
+  <%= form.label :query, "Search for:" %>
+  <%= form.text_field :q %>  <%# predicthq: "q", ticketmaster: "keyword" %>
+  <%= form.date_field :date_start_event %>
+  <%= form.date_field :date_end_event %>
+  <%= form.select :category, ["nessuno", "Academic", "Sports", "Conforences", "Expos", 
+                                "Concerts", "Festivals", "Performing-arts", "Community", 
+                                "Live TV Events", "Public Holidays", "School Holidays", 
+                                "Observances", "Politics", "Daylight Savings", "Severe Weather",
+                                "Disasters", "Airport Delays", "Health Warnings", "Terror"], selected: "nessuno" %>
+  <%= form.submit "Search" %>
+<% end %>

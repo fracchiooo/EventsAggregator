@@ -3,8 +3,8 @@ class EventsController < ApplicationController
 
   # GET /events or /events.json
   def index
-    @events = Predicthq.getEvents
-    @events2 = Ticketmaster.getEvents
+    @events = Predicthq.getEvents(params[:q])
+    @events2 = Ticketmaster.getEvents(params[:q])
   end
 
   # GET /events/1 or /events/1.json
