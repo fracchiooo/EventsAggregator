@@ -4,6 +4,7 @@ class EventsController < ApplicationController
   # GET /events or /events.json
   def index
     @events = Predicthq.getEvents
+    @events2 = Ticketmaster.getEvents
   end
 
   # GET /events/1 or /events/1.json
@@ -60,7 +61,7 @@ class EventsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_event
-      @event = Event.find(params[:id])
+      @event = Event.find_by(event_id: params[:id])
     end
 
     # Only allow a list of trusted parameters through.

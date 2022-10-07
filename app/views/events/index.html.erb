@@ -11,4 +11,13 @@
   <% end %>
 </div>
 
+<div id="events">
+  <% @events2.each do |event| %>
+    <h3> <%= event['name'] %> </h3>
+    <p>
+      <a href="<%= event_path(event['id']) %>">apri l'evento</a>
+    </p>
+  <% end %>
+</div>
+
 <%= link_to "Torna alla Home", home_index_path %>
