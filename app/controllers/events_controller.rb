@@ -61,8 +61,13 @@ class EventsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_event
-      @event = Event.find_by(event_id: params[:id])
+      @event = Event.find_by(event_id: params[:id]) or not_found
     end
+
+    def not_found
+      # raise ActionController::RoutingError.new('Not Found')
+      render :file => "#{Rails.root}/public/404.html",  layout: false, status: :not_found
+    end    
 
     # Only allow a list of trusted parameters through.
     def event_params
