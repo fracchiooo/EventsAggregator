@@ -2,13 +2,24 @@ require 'cgi' #URL-encoding
 
 class Predicthq
 
-    def self.getEvents(keyword)
-        begin
-            # TODO: gestire i parametri, questa è ricerca di default       
-            query = keyword.to_s.empty? ? "" : "q=#{CGI.escape(keyword)}"
+    def self.getEvents(keyword, first_date, fin_date)
+        begin    
+            query = keyword.to_s.present? ? "q=#{CGI.escape(keyword)}&" : ""
+            if first_date.to_s.present?
+                start_date_temp = Date::strptime(first_date, "%Y-%m-%d").strftime('%Y-%m-%dT%H:%M:%SZ')
+                start_d = "start.gte=#{start_date_temp}&"
+            else 
+                start_d = "" 
+            end
+            if fin_date.to_s.present?
+                end_date_temp = Date::strptime(fin_date, "%Y-%m-%d").strftime('%Y-%m-%dT%H:%M:%SZ')
+                end_d = "start.lte=#{end_date_temp}&" 
+            else 
+                end_d = "" 
+            end
 
             # url="https://api.predicthq.com/v1/events/?place.scope=2641170&"+query+"&active.gte=2022-10-01&active.lte=2022-10-31&category=sports&sort=rank" #ipotetica chiamata di default?
-            url="https://api.predicthq.com/v1/events/?"+query
+            url="https://api.predicthq.com/v1/events/?"+query+start_d+end_d
 
             uri=URI.parse(url)
             http= Net::HTTP.new(uri.host,uri.port)

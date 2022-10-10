@@ -1,11 +1,22 @@
 class Ticketmaster
 
-    def self.getEvents(keyword)
+    def self.getEvents(keyword, first_date, fin_date)
         begin
-            # TODO: gestire i parametri, questa è ricerca di default
-            q = "keyword=#{keyword}"
+            q = keyword.to_s.present? ? "keyword=#{keyword}&" : ""
+            if first_date.to_s.present?
+                start_date_temp = Date::strptime(first_date, "%Y-%m-%d").strftime('%Y-%m-%dT%H:%M:%SZ')
+                start_d = "startDateTime=#{start_date_temp}&"
+            else 
+                start_d = "" 
+            end
+            if fin_date.to_s.present?
+                end_date_temp = Date::strptime(fin_date, "%Y-%m-%d").strftime('%Y-%m-%dT%H:%M:%SZ')
+                end_d = "endDateTime=#{end_date_temp}&"
+            else 
+                end_d = "" 
+            end
 
-            url="https://app.ticketmaster.com/discovery/v2/events.json?"+q+"&apikey=#{Rails.application.credentials[:ticketmaster][:api_key]}"
+            url="https://app.ticketmaster.com/discovery/v2/events.json?"+q+start_d+end_d+"apikey=#{Rails.application.credentials[:ticketmaster][:api_key]}"
 
             uri=URI.parse(url)
             http= Net::HTTP.new(uri.host,uri.port)
