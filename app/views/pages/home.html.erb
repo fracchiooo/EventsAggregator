@@ -1,69 +1,48 @@
-<h1>Pages#home</h1>
-<p>Find me in app/views/pages/home.html.erb</p>
+<style>
+  body {
+    background: url('https://i.ytimg.com/vi/QjnOwLXfhwg/maxresdefault.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+</style>
+
+<div class="text-center text-white w-100 h-100 p-3 mx-auto flex-column">  
+  <main class="px-3">
+    <h1 class="fw-bold">EventsAggregator</h1>
+    <br>
+    <p class="lead text-wrap fw-bold">
+      EventsAggregator è un’applicazione che punta ad aggregare gli eventi riportati su <br> diverse fonti, quali
+      TicketMaster e PredictHQ. <br> L’applicazione inoltre dà la possibilità di cercare eventi per categoria e
+      posizione <br> geografica, permettendo di commentare un evento, di valutarlo e di segnalare il <br> proprio
+      interesse per la partecipazione.
+    </p>
+    <br>
+    <p class="lead">
+      <%= link_to 'Visualizza Eventi', events_path, class: "btn btn-lg btn-secondary fw-bold border-white bg-white text-dark" %>
+    </p>
+  </main>
+</div>
+
+<footer class="fixed-bottom text-center text-white fw-bold">
+  <p>EventsAggregator © 2022</p>
+</footer>
 
 
-<p class="notice" style="color: green"> <%= notice %> </p>
-<p class="alert" style="color: red" > <%= alert %> </p>
-
-
-
+<!--
 <%if user_signed_in? %>
 
 <h6> <%= current_user.role %> </h6>
-
-
-
-
 
 <div id="my_comments">
 
   <% User.all.each do |utente| %>
     <% utente.comments.each do |comment| %>
-
     <%= render 'comments/comment', comment: comment, user: User.find(comment.user_id) %>
-
     <% end %>
   <% end %>
 </div>
 
 
-
- <p> loggato come <%= current_user.email %> </p>  
-
-[<%= link_to 'Logout', destroy_user_session_path, :method => :delete %>]
-
-
-<% else %>
-
-   <p> non sei loggato </p>
-
-    [<%= link_to 'Iscriviti', new_user_registration_path %>]
-
-    [<%= link_to 'Accedi', new_user_session_path %>]
-
 <% end %>
-
-<%= link_to 'Eventi', events_path %>
-
-
-<script>
-
-
-function functio(){
-
-
-document.location.reload(false);
-}
-
-document.addEventListener("DOMContentLoaded", function(event) {  
-            var scrollpos = localStorage.getItem('scrollpos'); 
-            if (scrollpos) window.scrollTo(0, scrollpos); 
-        }); 
- 
-        window.onbeforeunload = function(e) { 
-            localStorage.setItem('scrollpos', window.scrollY); 
-        };
-
-
-
-</script>
+-->
