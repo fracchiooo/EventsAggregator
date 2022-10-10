@@ -48,7 +48,7 @@ class Predicthq
                     # coordinates: event['geo']['geometry']['coordinates'].join(",")
                     e = Event.new(  event_id:event['id'], 
                                     organizer_id:"event['entities'][0]['entity_id']", 
-                                    coordinates: event['geo']['geometry']['coordinates'].join(",") )
+                                    coordinates: event['geo']['geometry']['coordinates'][1].to_s + "," + event['geo']['geometry']['coordinates'][0].to_s )
                     e.save!
                 end
             end
