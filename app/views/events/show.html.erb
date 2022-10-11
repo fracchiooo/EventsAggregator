@@ -1,5 +1,5 @@
 <p style="color: green"><%= notice %></p>
-
+<p style="color: red"><%= alert %></p>
 <%= render @event %>
 
 <div>
@@ -23,7 +23,7 @@
 </textarea>
 </form>
 
-<button form="form_create" type="submit" class="btn btn-primary" style=" text-align:center" >crea</button>
+<button form="form_create" type="submit" onclick="functio(1)" class="btn btn-primary" style=" text-align:center" >crea</button>
 
 
 
@@ -34,3 +34,26 @@
 
   <% end %>
 </div>
+
+
+<script>
+
+document.getElementById('comment_testo').value='';
+
+
+function functio(n){
+
+document.location.reload(false);
+}
+
+document.addEventListener("DOMContentLoaded", function(event) {  
+            var scrollpos = localStorage.getItem('scrollpos'); 
+            if (scrollpos) window.scrollTo(0, scrollpos); 
+        }); 
+
+        window.onbeforeunload = function(e) { 
+            localStorage.setItem('scrollpos', window.scrollY); 
+        };
+
+
+</script>

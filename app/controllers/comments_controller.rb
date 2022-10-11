@@ -1,6 +1,5 @@
 class CommentsController < ApplicationController
   before_action :set_comment, only: %i[ show edit update destroy ]
-  before_action :authenticate_user!
 
   # GET /comments or /comments.json
   def index
@@ -30,57 +29,73 @@ class CommentsController < ApplicationController
   def create
 
     print 'createeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+    print comment_params[:event_id]
 
-    @user=current_user
-    @comment=@user.comments.create(comment_params)
+    if user_signed_in?
+      @user=current_user
+      @comment=@user.comments.create(comment_params)
 
 
-    respond_to do |format|
-      if @comment.save
+      respond_to do |format|
+        if @comment.save
         #format.html { redirect_to comment_url(@comment), notice: "Comment was successfully created." }
         #format.json { render :show, status: :created, location: @comment }
-        format.html { redirect_to event_path(@comment.event_id), notice: "Comment was successfully created." }
-        format.json { head :no_content }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @comment.errors, status: :unprocessable_entity }
+          format.html { redirect_to event_path(@comment.event_id), notice: "Comment was successfully created." }
+          format.json { head :no_content }
+        else
+          format.html { render :pages/home, status: :unprocessable_entity }
+          format.json { render json: @comment.errors, status: :unprocessable_entity }
+        end
       end
+    else     
+      event=Event.find_by id: comment_params[:event_id]
+      redirect_to event_path(event.event_id), alert: "è necessario iscriversi per poter commentare" 
     end
   end
 
   # PATCH/PUT /comments/1 or /comments/1.json
   def update
     print 'updateeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
-    respond_to do |format|
-      if !(current_user.id==@comment.user_id || current_user.role=='admin')
-        format.html { redirect_to root_path, alert: "non autorizzato alla update." }
-        format.json { head :no_content }
-      elsif @comment.update(comment_params)
+    if user_signed_in?
+      respond_to do |format|
+        if !(current_user.id==@comment.user_id || current_user.role=='admin')
+          format.html { redirect_to root_path, alert: "non autorizzato alla update." }
+          format.json { head :no_content }
+        elsif @comment.update(comment_params)
         #format.html { redirect_to comment_url(@comment), notice: "Comment was successfully updated." }
         #format.json { render :show, status: :ok, location: @comment }
-        format.html { redirect_to event_path(@comment.event_id), notice: "Comment was successfully updated." }
-        format.json { head :no_content }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @comment.errors, status: :unprocessable_entity }
+          format.html { redirect_to event_path(@comment.event_id), notice: "Comment was successfully updated." }
+          format.json { head :no_content }
+        else
+          format.html { render :edit, status: :unprocessable_entity }
+          format.json { render json: @comment.errors, status: :unprocessable_entity }
+        end
       end
+    else     
+      event=Event.find_by id: comment_params[:event_id]
+      redirect_to event_path(event.event_id), alert: "è necessario iscriversi per poter aggiornare un commento"
     end
   end
 
   # DELETE /comments/1 or /comments/1.json
   def destroy
 
-    respond_to do |format|
-      if !(current_user.id==@comment.user_id || current_user.role=='admin')
-        format.html { redirect_to root_path, alert: "non autorizzato alla destroy." }
-        format.json { head :no_content }
-      else
-      @comment.destroy
+    if user_signed_in?
+      respond_to do |format|
+        if !(current_user.id==@comment.user_id || current_user.role=='admin')
+          format.html { redirect_to root_path, alert: "non autorizzato alla destroy." }
+          format.json { head :no_content }
+        else
+        @comment.destroy
       #format.html { redirect_to comments_url, notice: "Comment was successfully destroyed." }
       #format.json { head :no_content }
-      format.html { redirect_to event_path(@comment.event_id), notice: "Comment was successfully destroyed." }
-      format.json { head :no_content }
+        format.html { redirect_to event_path(@comment.event_id), notice: "Comment was successfully destroyed." }
+        format.json { head :no_content }
+        end
       end
+    else     
+      event=Event.find_by id: comment_params[:event_id]
+      redirect_to event_path(event.event_id), alert: "è necessario iscriversi per poter eliminare un commento"
     end
   end
 
