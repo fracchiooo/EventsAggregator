@@ -28,6 +28,9 @@ class CommentsController < ApplicationController
 
   # POST /comments or /comments.json
   def create
+
+    print 'createeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+
     @user=current_user
     @comment=@user.comments.create(comment_params)
 
@@ -36,7 +39,7 @@ class CommentsController < ApplicationController
       if @comment.save
         #format.html { redirect_to comment_url(@comment), notice: "Comment was successfully created." }
         #format.json { render :show, status: :created, location: @comment }
-        format.html { redirect_to root_path, notice: "Comment was successfully created." }
+        format.html { redirect_to event_path(@comment.event_id), notice: "Comment was successfully created." }
         format.json { head :no_content }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -47,6 +50,7 @@ class CommentsController < ApplicationController
 
   # PATCH/PUT /comments/1 or /comments/1.json
   def update
+    print 'updateeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
     respond_to do |format|
       if !(current_user.id==@comment.user_id || current_user.role=='admin')
         format.html { redirect_to root_path, alert: "non autorizzato alla update." }
@@ -54,7 +58,7 @@ class CommentsController < ApplicationController
       elsif @comment.update(comment_params)
         #format.html { redirect_to comment_url(@comment), notice: "Comment was successfully updated." }
         #format.json { render :show, status: :ok, location: @comment }
-        format.html { redirect_to root_path, notice: "Comment was successfully updated." }
+        format.html { redirect_to event_path(@comment.event_id), notice: "Comment was successfully updated." }
         format.json { head :no_content }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -74,7 +78,7 @@ class CommentsController < ApplicationController
       @comment.destroy
       #format.html { redirect_to comments_url, notice: "Comment was successfully destroyed." }
       #format.json { head :no_content }
-      format.html { redirect_to root_path, notice: "Comment was successfully destroyed." }
+      format.html { redirect_to event_path(@comment.event_id), notice: "Comment was successfully destroyed." }
       format.json { head :no_content }
       end
     end
@@ -83,11 +87,20 @@ class CommentsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_comment
-      @comment = Comment.find(params[:id])
+        
+      @comment = Comment.find(params[:event_id])
     end
 
     # Only allow a list of trusted parameters through.
     def comment_params
-      params.require(:comment).permit(:testo)
+
+      if params[:id]
+        event= Event.find_by event_id: params[:id]
+        params.require(:comment).permit(:testo).merge(event_id: event.id, id: params[:event_id])
+
+      else
+        params.require(:comment).permit(:testo).merge(event_id: params[:event_id])
+    
+      end
     end
 end

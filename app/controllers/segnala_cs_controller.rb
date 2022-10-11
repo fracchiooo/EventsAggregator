@@ -8,7 +8,7 @@ class SegnalaCsController < ApplicationController
         end
 
         #redirect_to @segnala_c.comment
-        redirect_to root_path
+        redirect_back(fallback_location: root_path)
 
         
     end

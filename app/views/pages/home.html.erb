@@ -15,16 +15,6 @@
 
 
 
-<div id="my_comments">
-
-  <% User.all.each do |utente| %>
-    <% utente.comments.each do |comment| %>
-
-    <%= render 'comments/comment', comment: comment, user: User.find(comment.user_id) %>
-
-    <% end %>
-  <% end %>
-</div>
 
 
 

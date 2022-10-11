@@ -3,13 +3,14 @@ Rails.application.routes.draw do
   get '/home', to: "pages#home"
 
   devise_for :users, :controllers => {:omniauth_callbacks => "users/omniauth_callbacks"}
-  resources :home
-  resources :comments do
-    resources :like_comments, only: [:create, :destroy]
-    resources :segnala_cs, only: [:create]
-  end
 
-  resources :events
+
+  resources :events do
+    resources :comments, only: [:create, :destroy, :update ] do
+      resources :like_comments, only: [:create, :destroy]
+      resources :segnala_cs, only: [:create]
+    end
+  end
 
   #resources :like_comments, only: [:create, :destroy]
   #resources :segnala_cs, only: [:create]

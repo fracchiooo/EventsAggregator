@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_07_144755) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_10_170834) do
   create_table "comments", force: :cascade do |t|
-    t.text "testo"
-    t.boolean "segnalato", default: false
-    t.integer "num_segnalazioni", default: 0
+    t.text "testo", null: false
+    t.integer "event_id", null: false
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["event_id"], name: "index_comments_on_event_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
@@ -78,6 +78,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_07_144755) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "comments", "events"
+  add_foreign_key "comments", "events", on_delete: :cascade
   add_foreign_key "comments", "users"
   add_foreign_key "comments", "users", on_delete: :cascade
   add_foreign_key "like_comments", "comments"

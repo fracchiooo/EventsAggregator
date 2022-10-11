@@ -25,13 +25,15 @@
 <div id="testo" class="col-sm-5 ">
 <div class="card shadow-0 border " style="height:100%; width:100%; background-color: #f0f2f5;">
 <% if (current_user.id==comment.user_id || current_user.role=='admin') %>
-<form id="my_form" action="<%=comment_path(comment) %>" method="post">
+<form id="my_form" action="<%=event_comment_path(comment) %>" method="post">
 <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
 <input type="hidden" name="_method" value="PATCH">
 <textarea name="comment[testo]" id="comment_testo" class=" h6 fst-italic" style="background-color: #f0f2f5; border: none; width:100%; padding-bottom:19%; text-align:center" > 
 <%= comment.testo %>
 </textarea>
 </form>
+
+<%= comment.id %>
 <% else %>
 
 <h6 class="fst-italic" style="width:100%; border:none; padding-bottom:12%; text-align:center"> <%= comment.testo %> </h6>
@@ -46,21 +48,26 @@
 <div id="like_e_num" class="col-sm-1">
 <div id="like" class="row">
 <% if like_c.nil? %>
-<form id="<%=comment.id%>p" action="<%= comment_like_comments_path(comment) %>" method="post">
-<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-<input type="hidden" name="like_comment[comment_id]" value="<%= comment.id %>">
-<button type="submit" style="background:none; border:none; padding:0" onclick="functio()" >
-<i class="bi bi-hand-thumbs-up-fill" style="font-size:150%;">  </i>
-</button>
-</form>
+
+
+
+<div id='like_div'>
+
+<div id='butt_like'>
+<%= button_to raw('<i class="bi bi-hand-thumbs-up-fill" style="font-size:150%;">  </i>'), event_comment_like_comments_path(comment, event) , params: {like_comment: {comment_id: comment.id}}, class: "btn btn-trasparent", remote: true, data: {turbo_method: :post}, method: :post, :onclick => "" %>
+</div>
+</div>
+
+
+
 <% else %>
-<form id="<%=comment.id%>d" action="<%=comment_like_comment_path(comment,like_c) %>" method="post">
-<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-<input type="hidden" name="_method" value="DELETE">
-<button type="submit" style="background:none; border:none; padding:0" onclick="functio()">
-<i class="bi bi-hand-thumbs-down-fill" style="font-size:150%">  </i>
-</button>
-</form>
+
+<div id='dislike_div'>
+<div id='butt_dislike'>
+<%= button_to raw('<i class="bi bi-hand-thumbs-down-fill" style="font-size:150%;">  </i>'), event_comment_like_comment_path(comment, event, like_c) , params: {like_comment: {comment_id: comment.id}}, class: "btn btn-trasparent", remote: true, data: {turbo_method: :delete}, method: :delete, :onclick => "" %>
+</div>
+</div>
+
 <% end %> 
 </div>
 <div id="num_l" class="row">
@@ -71,17 +78,16 @@
 <div id="segna_e_num" class="col-sm-1">
 <div id="segnala" class="row">
 <% if current_user.segnala_cs.find_by(comment: comment).nil? %>
-<form action="<%= comment_segnala_cs_path(comment) %>" method="post">
-<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-<input type="hidden" name="segnala_c[comment_id]" value="<%= comment.id %>">
-<button type="submit" style="background:none; border:none; padding:0" >
-<i class="bi bi-exclamation-triangle-fill" style="font-size:150%;">  </i>
-</button>
-</form>
+
+
+
+<%= button_to raw('<i class="bi bi-exclamation-triangle-fill" style="font-size:150%;">  </i>'),event_comment_segnala_cs_path(comment, event) , params: {segnala_c: {comment_id: comment.id}}, class: "btn btn-trasparent", remote: true, data: {turbo_method: :post}, method: :post, :onclick => "" %>
+
 <% else %>
 
+
 <div class="form">
-<button enable=false style="background:none; border:none; padding:0" >
+<button enable=false class="btn btn-trasparent" style="background:none; border:none; padding:0" >
 <i class="bi bi-exclamation-triangle-fill" style="font-size:150%;">  </i>
 </button>
 </div>
@@ -100,7 +106,7 @@
 <% if (current_user.id==comment.user_id || current_user.role=='admin') %>
 <nav>
 <button form="my_form" type="submit" class="btn btn-primary" style="margin-bottom:5%; margin-top:10%; text-align:center" >modifica</button>
-<%= button_to "elimina", comment, method: :delete, class: "btn btn-danger"  %>
+<%= button_to "elimina", event_comment_path(comment), method: :delete, class: "btn btn-danger"  %>
 </nav>
 <% end %>
 </div>  
@@ -114,5 +120,28 @@
 <script>
 
 
+var like=document.getElementById('butt_like').innerHTML;
+var dislike=document.getElementById('butt_dislike').innerHTML;
+
+
+function aggiorna_like(n){
+
+
+
+if(n==0){
+
+document.getElementById('like_div').innerHTML= dislike;
+
+}
+
+else{
+document.getElementById('dislike_div').innerHTML=like;
+
+}
+
+
+
+
+}
 
 </script>
