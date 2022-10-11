@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   root 'pages#home'
   get '/home', to: "pages#home"
+  get '/faq', to: "pages#faq"
+  get '/contatti', to: "pages#contatti"
 
   devise_for :users, :controllers => {:omniauth_callbacks => "users/omniauth_callbacks"}
   resources :home
