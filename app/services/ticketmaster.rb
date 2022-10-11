@@ -1,6 +1,8 @@
+require 'cgi' #URL-encoding
+
 class Ticketmaster
 
-    def self.getEvents(keyword, first_date, fin_date)
+    def self.getEvents(keyword, first_date, fin_date, loc)
         begin
             q = keyword.to_s.present? ? "keyword=#{keyword}&" : ""
             if first_date.to_s.present?
@@ -15,8 +17,9 @@ class Ticketmaster
             else 
                 end_d = "" 
             end
+            coords = loc.to_s.present? ? "geoPoint=#{CGI.unescape(loc)}&radius=50&unit=km&" : ""
 
-            url="https://app.ticketmaster.com/discovery/v2/events.json?"+q+start_d+end_d+"apikey=#{Rails.application.credentials[:ticketmaster][:api_key]}"
+            url="https://app.ticketmaster.com/discovery/v2/events.json?"+q+start_d+end_d+coords+"apikey=#{Rails.application.credentials[:ticketmaster][:api_key]}"
 
             uri=URI.parse(url)
             http= Net::HTTP.new(uri.host,uri.port)
