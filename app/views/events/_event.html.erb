@@ -18,4 +18,29 @@
     <a target="_blank" href="https://www.google.it/maps/search/Hotels/@<%= event.coordinates %>,17z/data=!3m1!4b1">Visualizza Hotel nelle vicinanze</a>
   </p>
 
+  <div class="row">
+    <div class="col">
+      <p>Condividi: </p>
+      <a class="share text-decoration-none text-black" target="_blank" href="https://web.whatsapp.com/send?text=">
+        <i class="fa-xl fa-brands fa-square-whatsapp"></i>
+      </a>
+
+      <a class="share text-decoration-none text-black" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=">
+        <i class="fa-xl fa-brands fa-square-facebook"></i>
+      </a>
+
+      <a class="share text-decoration-none text-black" target="_blank" href="https://twitter.com/intent/tweet?url=">
+        <i class="fa-xl fa-brands fa-square-twitter"></i>
+      </a>
+    </div>
+  </div>
+
+  <br>
+
 </div>
+
+<script>
+  document.querySelectorAll('.share').forEach(function(link) {
+    link.href = link.href + location.href;
+  });
+</script>
