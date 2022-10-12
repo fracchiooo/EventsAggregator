@@ -2,7 +2,7 @@ require 'cgi' #URL-encoding
 
 class Predicthq
 
-    def self.getEvents(keyword, first_date, fin_date, current_loc, loc)
+    def self.getEvents(keyword, first_date, fin_date, current_loc, loc, category)
         begin    
             query = keyword.to_s.present? ? "q=#{CGI.escape(keyword)}&" : ""
             if first_date.to_s.present?
@@ -16,6 +16,11 @@ class Predicthq
                 end_d = "start.lte=#{end_date_temp}&" 
             else 
                 end_d = "" 
+            end
+            if category.to_s.present? && category!="nessuno" then
+                cat = "category=#{category.downcase.parameterize(separator:'-')}&"
+            else
+                cat = ""
             end
 
             if loc.to_s.present?
@@ -36,7 +41,7 @@ class Predicthq
 
 
             # url="https://api.predicthq.com/v1/events/?place.scope=2641170&"+query+"&active.gte=2022-10-01&active.lte=2022-10-31&category=sports&sort=rank" #ipotetica chiamata di default?
-            url="https://api.predicthq.com/v1/events/?"+query+start_d+end_d+coords
+            url="https://api.predicthq.com/v1/events/?"+query+start_d+end_d+coords+cat
 
             uri=URI.parse(url)
             http= Net::HTTP.new(uri.host,uri.port)
