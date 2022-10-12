@@ -27,7 +27,7 @@
       
       <div>
         <%if user_signed_in? %>
-          <%= link_to 'Profilo', "#", class: "btn btn-outline-primary" %>
+          <%= link_to 'Profilo', edit_user_registration_path, class: "btn btn-outline-primary" %>
           <%= link_to 'Logout', destroy_user_session_path, :method => :delete, class: "btn btn-outline-danger" %>
         <% else %>
           <%= link_to 'Iscriviti', new_user_registration_path, class: "btn btn-outline-warning" %>

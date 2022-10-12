@@ -8,7 +8,7 @@ class User < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :segnala_cs
 
-  validates :data_nascita, :username, :nome, :cognome, :sesso, presence: true
+  validates :avatar, :data_nascita, :username, :nome, :cognome, :sesso, presence: true
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -16,6 +16,8 @@ class User < ApplicationRecord
          :lockable, :omniauthable, :omniauth_providers => [:facebook, :google_oauth2]
 
 
+
+  has_one_attached :avatar
 
   enum role: [:user, :admin]
  # enum sesso: [:male, :female, :altro]
