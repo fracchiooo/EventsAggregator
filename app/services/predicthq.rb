@@ -2,7 +2,7 @@ require 'cgi' #URL-encoding
 
 class Predicthq
 
-    def self.getEvents(keyword, first_date, fin_date, loc)
+    def self.getEvents(keyword, first_date, fin_date, current_loc, loc)
         begin    
             query = keyword.to_s.present? ? "q=#{CGI.escape(keyword)}&" : ""
             if first_date.to_s.present?
@@ -17,7 +17,23 @@ class Predicthq
             else 
                 end_d = "" 
             end
-            coords = loc.to_s.present? ? "within=50km@#{CGI.unescape(loc)}&" : ""
+
+            if loc.to_s.present?
+                if current_loc.to_i == 0
+                    # non usa la posizione corrente (not checked)
+                    # find_coords = "https://maps.googleapis.com/maps/api/geocode/json?address=#{loc}&key=#{Rails.application.credentials[:google_api_key_places]}"
+                    # coordinates = find_coords_res['results'][0]['geometry']['location']['lat'].to_s + "," + find_coords_res['results'][0]['geometry']['location']['lng'].to_s    
+                    find_coords = Geocoder.search(loc)
+                    coordinates = find_coords.first.coordinates[0].to_s + "," + find_coords.first.coordinates[1].to_s
+                    coords = "within=50km@#{coordinates}&"
+                elsif current_loc.to_i == 1
+                    # usa posizione corrente (checked)
+                    coords = "within=50km@#{CGI.unescape(loc)}&"
+                end
+            else
+                coords = ""
+            end
+
 
             # url="https://api.predicthq.com/v1/events/?place.scope=2641170&"+query+"&active.gte=2022-10-01&active.lte=2022-10-31&category=sports&sort=rank" #ipotetica chiamata di default?
             url="https://api.predicthq.com/v1/events/?"+query+start_d+end_d+coords

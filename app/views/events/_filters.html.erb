@@ -5,7 +5,7 @@
   <%= form.date_field :end_date %>  <%# predicthq: "start.lte", ticketmaster: "endDateTime" %>
 
   <%= form.label :luogo, "Where:" %>
-  <%= form.text_field :loc, id:"pac-input", class:"controls", placeholder:"nowhere" %> <%# predicthq: "within=Xkm@lat,long", ticketmaster: "geoPoint" <input name="loc"/> %>
+  <%= form.text_field :loc, id:"autocomplete", class:"controls", placeholder:"nowhere" %> <%# predicthq: "within=Xkm@lat,long", ticketmaster: "geoPoint" %>
   <div class="form-check form-switch">
     <%= form.check_box :current_location, class: "form-check-input", role: "switch", id: "flexSwitchCheckDefault" %>
     <label class="form-check-label" id="form-check-label" for="flexSwitchCheckDefault">Utilizza la tua posizione corrente</label>
@@ -21,11 +21,17 @@
 
 
 
+<script
+  src="https://maps.googleapis.com/maps/api/js?key=<%=Rails.application.credentials[:google_api_key_places]%>&callback=initAutocomplete&libraries=places"
+  async defer
+></script>
+
 <script>
   let check_label = document.getElementById("form-check-label");
   let checkbox = document.getElementById("flexSwitchCheckDefault");
-  let position_text_input = document.getElementById("pac-input");
+  let position_text_input = document.getElementById("autocomplete");
 
+  // current position
   checkbox.addEventListener("change", is_check, false);
   function is_check(){
     if (checkbox.checked){
@@ -35,9 +41,8 @@
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition, showError);
       } else {
-        // posizione non trovata
         check_label.value = "Geolocation is not supported by this browser";
-        check_label.innerHTML = "Geolocation is not supported by this browser";
+        check_label.innerHTML = check_label.value;
       }
     }
   }
@@ -50,104 +55,67 @@
   function showError(error) {
     switch(error.code) {
         case error.PERMISSION_DENIED:
-            x.innerHTML = "User denied the request for Geolocation."
+            check_label.value = "User denied the request for Geolocation.";
+            check_label.innerHTML = check_label.value;
             break;
         case error.POSITION_UNAVAILABLE:
-            x.innerHTML = "Location information is unavailable."
+            check_label.value = "Location information is unavailable.";
+            check_label.innerHTML = check_label.value;
             break;
         case error.TIMEOUT:
-            x.innerHTML = "The request to get user location timed out."
+            check_label.value = "The request to get user location timed out.";
+            check_label.innerHTML = check_label.value;
             break;
         case error.UNKNOWN_ERROR:
-            x.innerHTML = "An unknown error occurred."
+            check_label.value = "An unknown error occurred.";
+            check_label.innerHTML = check_label.value;
             break;
     }
   }
 
   // se si vuole utilizzare la current position, submit aspetta di avere le coordinate
   function validation(){
-    if (document.getElementById("mostra").value == "loading...") { console.log("Wait for it"); return false; }
+    if (check_label.value == "loading...") { console.log("Wait for it"); return false; }
+    onPlaceSubmit() // controlla validità del campo luogo inserito
     document.getElementById("form_search").submit();
   }
+
+
+  /*** GOOGLE search box ***/
+  let autocomplete;
+  let place;
+  function initAutocomplete() {
+    autocomplete = new google.maps.places.Autocomplete(
+      position_text_input,
+      {
+        types: ['(cities)'],
+        fields: ['place_id', 'geometry', 'name']
+      });
+    autocomplete.addListener('place_changed', onPlaceChanged);
+  }
+
+  function onPlaceChanged() { 
+    place = autocomplete.getPlace();
+    if ( !place.geometry ) {
+      // User did not select a prediction before click Enter
+      console.log('You have to select a prediction')
+      reset_place_field()
+    } else {
+      // Display details about the valid place
+      position_text_input.value = place.name; //.place_id
+    }
+  }
+  function onPlaceSubmit() {
+    if ( typeof place === 'undefined' && !checkbox.checked ) {
+      reset_place_field()
+    }
+  }
+  function reset_place_field() {
+    position_text_input.placeholder = 'Enter a place';
+    position_text_input.value = "";
+    position_text_input.innerHTML = "select a place";
+  }
+
+  // se deseleziono il text_field, controllo di aver selezionato un luogo
+  position_text_input.addEventListener('blur', onPlaceSubmit);
 </script>
-
-
-<%# 
-GOOGLE MAPS API FUNZIONANTI, MA MANCANO LE AUTORIZZAZIONI A GOOGLE
-
-<script
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDlkmF4KWwLQkuuIH00uen5o6lXA_ly6Ts&callback=initAutocomplete&libraries=places&v=weekly"
-  defer
-></script>
-
-<script defer>var exports = {};</script>
-<script defer>
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-function initAutocomplete() {
-    var map = new google.maps.Map(document.getElementById("map"), {
-        center: { lat: -33.8688, lng: 151.2195 },
-        zoom: 13,
-        mapTypeId: "roadmap",
-    });
-    // Create the search box and link it to the UI element.
-    var input = document.getElementById("pac-input");
-    var searchBox = new google.maps.places.SearchBox(input);
-    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-    // Bias the SearchBox results towards current map's viewport.
-    map.addListener("bounds_changed", function () {
-        searchBox.setBounds(map.getBounds());
-    });
-    var markers = [];
-    // Listen for the event fired when the user selects a prediction and retrieve
-    // more details for that place.
-    searchBox.addListener("places_changed", function () {
-        var places = searchBox.getPlaces();
-        if (places.length == 0) {
-            return;
-        }
-        // Clear out the old markers.
-        markers.forEach(function (marker) {
-            marker.setMap(null);
-        });
-        markers = [];
-        // For each place, get the icon, name and location.
-        var bounds = new google.maps.LatLngBounds();
-        places.forEach(function (place) {
-            if (!place.geometry || !place.geometry.location) {
-                console.log("Returned place contains no geometry");
-                return;
-            }
-            var icon = {
-                url: place.icon,
-                size: new google.maps.Size(71, 71),
-                origin: new google.maps.Point(0, 0),
-                anchor: new google.maps.Point(17, 34),
-                scaledSize: new google.maps.Size(25, 25),
-            };
-            // Create a marker for each place.
-            markers.push(new google.maps.Marker({
-                map: map,
-                icon: icon,
-                title: place.name,
-                position: place.geometry.location,
-            }));
-            if (place.geometry.viewport) {
-                // Only geocodes have viewport.
-                bounds.union(place.geometry.viewport);
-            }
-            else {
-                bounds.extend(place.geometry.location);
-            }
-        });
-        map.fitBounds(bounds);
-    });
-}
-window.initAutocomplete = initAutocomplete;
-</script>
-
-<style>
-#map {
-  height: 100%;
-}
-</style> %>

@@ -2,7 +2,7 @@ require 'cgi' #URL-encoding
 
 class Ticketmaster
 
-    def self.getEvents(keyword, first_date, fin_date, loc)
+    def self.getEvents(keyword, first_date, fin_date, current_loc, loc)
         begin
             q = keyword.to_s.present? ? "keyword=#{keyword}&" : ""
             if first_date.to_s.present?
@@ -17,7 +17,23 @@ class Ticketmaster
             else 
                 end_d = "" 
             end
-            coords = loc.to_s.present? ? "geoPoint=#{CGI.unescape(loc)}&radius=50&unit=km&" : ""
+            # TODO: se due RICHIESTE UGUALI di seguito, errore e non funziona più la ricerca città con google
+            if loc.to_s.present?
+                if current_loc.to_i == 0
+                    # non usa la posizione corrente (not checked)
+                    # find_coords = "https://maps.googleapis.com/maps/api/geocode/json?address=#{loc}&key=#{Rails.application.credentials[:google_api_key_places]}" #place_id=#{loc}
+                    # coordinates = find_coords_res['results'][0]['geometry']['location']['lat'].to_s + "," + find_coords_res['results'][0]['geometry']['location']['lng'].to_s    
+                    find_coords = Geocoder.search(loc)
+                    coordinates = find_coords.first.coordinates[0].to_s + "," + find_coords.first.coordinates[1].to_s
+                    coords = "geoPoint=#{CGI.escape(coordinates)}&radius=50&unit=km&"
+                elsif current_loc.to_i == 1
+                    # usa posizione corrente (checked)
+                    coords = "geoPoint=#{CGI.unescape(loc)}&radius=50&unit=km&"
+                end
+            else
+                coords = ""
+            end
+
 
             url="https://app.ticketmaster.com/discovery/v2/events.json?"+q+start_d+end_d+coords+"apikey=#{Rails.application.credentials[:ticketmaster][:api_key]}"
 
