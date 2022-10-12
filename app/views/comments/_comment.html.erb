@@ -1,5 +1,11 @@
 
-<% like_c= current_user.like_comments.find_by(comment: comment) %>
+
+<% begin
+        like_c=current_user.like_comments.find_by(comment: comment)
+   rescue
+        like_c=nil
+   end
+%>
 
 <div class="card" style="max-height:0%; max-width: 80%">
 
@@ -24,7 +30,7 @@
 
 <div id="testo" class="col-sm-5 ">
 <div class="card shadow-0 border " style="height:100%; width:100%; background-color: #f0f2f5;">
-<% if (current_user.id==comment.user_id || current_user.role=='admin') %>
+<% if !current_user.nil? && (current_user.id==comment.user_id || current_user.role=='admin') %>
 <form id="my_form" action="<%=event_comment_path(comment) %>" method="post">
 <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
 <input type="hidden" name="_method" value="PATCH">
@@ -53,7 +59,7 @@
 <div id='like_div'>
 
 <div id='butt_like'>
-<%= button_to raw('<i class="bi bi-hand-thumbs-up-fill" style="font-size:150%;">  </i>'), event_comment_like_comments_path(comment, event) , params: {like_comment: {comment_id: comment.id}}, class: "btn btn-trasparent", remote: true, data: {turbo_method: :post}, method: :post, :onclick => "" %>
+<%= button_to raw('<i class="bi bi-hand-thumbs-up-fill" style="font-size:150%;">  </i>'), event_comment_like_comments_path(comment, event) , params: {like_comment: {comment_id: comment.id}}, class: "btn btn-trasparent", remote: true, data: {turbo_method: :post}, method: :post, :onclick => "functio(0)" %>
 </div>
 </div>
 
@@ -63,7 +69,7 @@
 
 <div id='dislike_div'>
 <div id='butt_dislike'>
-<%= button_to raw('<i class="bi bi-hand-thumbs-down-fill" style="font-size:150%;">  </i>'), event_comment_like_comment_path(comment, event, like_c) , params: {like_comment: {comment_id: comment.id}}, class: "btn btn-trasparent", remote: true, data: {turbo_method: :delete}, method: :delete, :onclick => "" %>
+<%= button_to raw('<i class="bi bi-hand-thumbs-down-fill" style="font-size:150%;">  </i>'), event_comment_like_comment_path(comment, event, like_c) , params: {like_comment: {comment_id: comment.id}}, class: "btn btn-trasparent", remote: true, data: {turbo_method: :delete}, method: :delete, :onclick => "functio(0)" %>
 </div>
 </div>
 
@@ -76,11 +82,11 @@
 
 <div id="segna_e_num" class="col-sm-1">
 <div id="segnala" class="row">
-<% if current_user.segnala_cs.find_by(comment: comment).nil? %>
+<% if current_user.nil? || current_user.segnala_cs.find_by(comment: comment).nil? %>
 
 
 
-<%= button_to raw('<i class="bi bi-exclamation-triangle-fill" style="font-size:150%;">  </i>'),event_comment_segnala_cs_path(comment, event) , params: {segnala_c: {comment_id: comment.id}}, class: "btn btn-trasparent", remote: true, data: {turbo_method: :post}, method: :post, :onclick => "" %>
+<%= button_to raw('<i class="bi bi-exclamation-triangle-fill" style="font-size:150%;">  </i>'),event_comment_segnala_cs_path(comment, event) , params: {segnala_c: {comment_id: comment.id}}, class: "btn btn-trasparent", remote: true, data: {turbo_method: :post}, method: :post, :onclick => "functio(0)" %>
 
 <% else %>
 
@@ -102,10 +108,10 @@
 
 <div id="links" class="col-sm-1" style="align:left" >
 
-<% if (current_user.id==comment.user_id || current_user.role=='admin') %>
+<% if !current_user.nil? && (current_user.id==comment.user_id || current_user.role=='admin') %>
 <nav>
-<button form="my_form" type="submit" class="btn btn-primary" style="margin-bottom:5%; margin-top:10%; text-align:center" >modifica</button>
-<%= button_to "elimina", event_comment_path(comment), method: :delete, class: "btn btn-danger"  %>
+<button form="my_form" type="submit" class="btn btn-primary" onclick="functio(0)" style="margin-bottom:5%; margin-top:10%; text-align:center" >modifica</button>
+<%= button_to "elimina", event_comment_path(comment), method: :delete, class: "btn btn-danger", :onclick => "functio(0)"  %>
 </nav>
 <% end %>
 </div>  
@@ -142,5 +148,8 @@ document.getElementById('dislike_div').innerHTML=like;
 
 
 }
+
+
+
 
 </script>
