@@ -8,7 +8,7 @@ class User < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :segnala_cs
 
-  validates :avatar, :data_nascita, :username, :nome, :cognome, :sesso, presence: true
+  validates :data_nascita, :username, :nome, :cognome, :sesso, presence: true
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,

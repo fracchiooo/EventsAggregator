@@ -4,23 +4,19 @@
   <%= render "users/shared/error_messages", resource: resource %>
 
 <div class="form-group">
-  <label class="col-sm-4 col-form-label">Avatar:
-    <% if current_user.avatar.present? %>
-      <%= image_tag(current_user.avatar.variant(resize_to_fill: [50, 50]), class: "rounded-circle") %>
-    <% else %>
-      <img alt="image" class="rounded-circle" src="/assets/default_avatar_small.jpg">
-    <% end %>
+  <label class="col-sm-4 col-form-label">Immagine Profilo:
+    <img src="data:image/png;base64,<%= current_user.immagine_profilo %>" alt="avatar" width="45" height="45", class="rounded-circle" />
   </label>
-  <div class="col-sm-8"><%= f.file_field :avatar, class: "form-control" %></div>
+  <div class="col-sm-8">Carica foto<%= f.file_field :avatar, class: "form-control" %></div>
 </div>
   <div class="field">
-    <%= f.label :first_name %>
-    <%= f.text_field :first_name, autofocus: true %>
+    <%= f.label :nome %>
+    <%= f.text_field :nome, autofocus: true %>
   </div>
 
   <div class="field">
-    <%= f.label :last_name %>
-    <%= f.text_field :last_name, autofocus: true %>
+    <%= f.label :cognome %>
+    <%= f.text_field :cognome, autofocus: true %>
   </div>
 
   <div class="field">
@@ -29,8 +25,8 @@
   </div>
 
   <div class="field">
-    <%= f.label :birthday %>
-    <%= f.text_field :birthday, autofocus: true %>
+    <%= f.label :data_nascita %>
+    <%= f.text_field :data_nascita, autofocus: true %>
   </div>
 
   <div class="field">
