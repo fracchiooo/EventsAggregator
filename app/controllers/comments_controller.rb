@@ -31,7 +31,7 @@ class CommentsController < ApplicationController
 
     if user_signed_in?
       @user=current_user
-      @comment=@user.comments.create(comment_params)
+      @comment=@user.comments.create(comment_params_create)
 
 
       respond_to do |format|
@@ -46,7 +46,7 @@ class CommentsController < ApplicationController
         end
       end
     else     
-      event=Event.find_by id: comment_params[:event_id]
+      event=Event.find_by id: comment_params_create[:event_id]
       redirect_to event_path(event.event_id), alert: "è necessario iscriversi per poter commentare" 
     end
   end
@@ -57,7 +57,6 @@ class CommentsController < ApplicationController
 
     print '|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||'
     print params
-    STDOUT.flush
 
     
     if user_signed_in?
@@ -65,7 +64,7 @@ class CommentsController < ApplicationController
         if !(current_user.id==@comment.user_id || current_user.role=='admin')
           format.html { redirect_to root_path, alert: "non autorizzato alla update." }
           format.json { head :no_content }
-        elsif @comment.update(comment_params)
+        elsif @comment.update(comment_params_update)
         #format.html { redirect_to comment_url(@comment), notice: "Comment was successfully updated." }
         #format.json { render :show, status: :ok, location: @comment }
           format.html { redirect_to event_path(@comment.event_id), notice: "Comment was successfully updated." }
@@ -76,8 +75,8 @@ class CommentsController < ApplicationController
         end
       end
     else     
-      event=Event.find_by id: comment_params[:event_id]
-      redirect_to event_path(event.event_id), alert: "è necessario iscriversi per poter aggiornare un commento"
+      event=Event.find_by id: comment_params_update[:event_id]
+      redirect_to event_path(event.event_id, alert: "è necessario iscriversi per poter aggiornare un commento"
     end
   end
 
@@ -98,7 +97,7 @@ class CommentsController < ApplicationController
         end
       end
     else     
-      event=Event.find_by id: comment_params[:event_id]
+      event=Event.find_by id: comment_params_create[:event_id]
       redirect_to event_path(event.event_id), alert: "è necessario iscriversi per poter eliminare un commento"
     end
   end
@@ -111,11 +110,27 @@ class CommentsController < ApplicationController
     end
 
     # Only allow a list of trusted parameters through.
-    def comment_params
-
-
+    def comment_params_create
       params.require(:comment).permit(:testo).merge(event_id: params[:event_id])
-    
       
     end
+
+
+    def comment_params_update
+
+      print '/////////////////////////////////////////////////////////'
+      print 'event id  '
+      print params[:event_id]
+      print 'id  '
+      print params[:id]
+      print 'comment id   '
+      print params[:comment_id]
+
+      eventid=(Event.find(params[:id])).event_id
+
+      params.require(:comment).permit(:testo).merge(comment_id: params[:event_id], event_id: eventid)
+
+    end
+
+
 end

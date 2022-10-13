@@ -25,33 +25,33 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def update
     print 'updateeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 
-    if user_signed_in?
-      respond_to do |format|
-        if !(current_user.id==@user.id || current_user.role=='admin')
-          format.html { redirect_to root_path, alert: "non autorizzato alla update." }
-          format.json { head :no_content }
-        else
-          
-          image=user_params[:immagine_profilo]
+    image_path=params[:user][:immagine_profilo].path
 
-          image=Base64.strict_encode64(image.read)
-          
-          user_params[:immagine_profilo]=image
-          user_params[:password]=current_user.password
 
-          if !@user.update(user_params)
-            format.html { render :edit, status: :unprocessable_entity }
-            format.json { render json: @user.errors, status: :unprocessable_entity }
+    params[:user].delete :password_confirmation
+    params[:user].delete :password
+    params[:user].delete :current_password
+    params[:user].delete :immagine_profilo
 
-          else   
-            super
-          end
 
-        end
-      end
-    else     
-      redirect_to root_path, alert: "è necessario iscriversi"
+
+
+    super
+
+
+    File.open(image_path,"rb") do |f|
+
+      @user.update(immagine_profilo: Base64.strict_encode64(f.read))
+
     end
+
+
+
+
+    #imagen=Base64.strict_encode64(image.to_s)
+    #print imagen
+    #current_user.immagine_profilo=imagen
+
 
   end
 

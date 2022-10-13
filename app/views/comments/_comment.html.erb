@@ -108,7 +108,7 @@
 <% if !current_user.nil? && (current_user.id==comment.user_id || current_user.role=='admin') %>
 <nav>
 
-<%= button_to "modifica", event_comment_path(event,comment), params:{comment: comment}, method: :patch, class: "btn btn-primary", :onclick => "functio(0)" %>
+<%= button_to "modifica", event_comment_path(comment,event), method: :patch, class: "btn btn-primary", :onclick => "functio(0)" %>
 <%= button_to "elimina", event_comment_path(comment), method: :delete, class: "btn btn-danger", :onclick => "functio(0)"  %>
 </nav>
 <% end %>
