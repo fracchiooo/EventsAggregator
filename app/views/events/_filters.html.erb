@@ -1,11 +1,11 @@
-<%= form_with url: "#", id: "form_search", method: :get do |form| %>
+<%= form_with url: "?", id: "form_search", method: :get do |form| %>
   <%= form.label :query, "Search for:" %>
   <%= form.text_field :q %>  <%# predicthq: "q", ticketmaster: "keyword" %>
   <%= form.date_field :start_date %>  <%# predicthq: "start.gte", ticketmaster: "startDateTime" %>
   <%= form.date_field :end_date %>  <%# predicthq: "start.lte", ticketmaster: "endDateTime" %>
 
   <%= form.label :luogo, "Where:" %>
-  <%= form.text_field :loc, id:"autocomplete", class:"controls", placeholder:"nowhere" %> <%# predicthq: "within=Xkm@lat,long", ticketmaster: "geoPoint" %>
+  <%= form.text_field :loc, id:"autocomplete", class:"controls", placeholder:"nowhere", autocomplete:"off" %> <%# predicthq: "within=Xkm@lat,long", ticketmaster: "geoPoint" %>
   <div class="form-check form-switch">
     <%= form.check_box :current_location, class: "form-check-input", role: "switch", id: "flexSwitchCheckDefault" %>
     <label class="form-check-label" id="form-check-label" for="flexSwitchCheckDefault">Utilizza la tua posizione corrente</label>
@@ -32,10 +32,6 @@
       let checkbox = document.getElementById("flexSwitchCheckDefault");
       let position_text_input = document.getElementById("autocomplete");
       
-      // callback su maps.googleapis 
-      window.addEventListener('load', (event) =>{
-        initAutocomplete();
-      });
       // eseguire onSubmit
       document.getElementById("submit-button").addEventListener("submit", (event) => {
         validation();
@@ -100,15 +96,14 @@
       /***** GOOGLE search box *****/
       let autocomplete;
       let place;
-      function initAutocomplete() {
-        autocomplete = new google.maps.places.Autocomplete(
-          position_text_input,
-          {
-            types: ['(cities)'],
-            fields: ['place_id', 'geometry', 'name']
-          });
-        autocomplete.addListener('place_changed', onPlaceChanged);
-      }
+      // callback su maps.googleapis eseguita onload
+      autocomplete = new google.maps.places.Autocomplete(
+        position_text_input,
+        {
+          types: ['(cities)'],
+          fields: ['place_id', 'geometry', 'name']
+        });
+      autocomplete.addListener('place_changed', onPlaceChanged);
 
       function onPlaceChanged() { 
         place = autocomplete.getPlace();
