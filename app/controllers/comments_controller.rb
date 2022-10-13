@@ -28,8 +28,6 @@ class CommentsController < ApplicationController
   # POST /comments or /comments.json
   def create
 
-    print 'createeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
-    print comment_params[:event_id]
 
     if user_signed_in?
       @user=current_user

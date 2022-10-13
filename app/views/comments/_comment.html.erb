@@ -17,8 +17,7 @@
 <div id="foto" class="row w-50" >
 
 <% if user.immagine_profilo.nil? %>
-<img src="/images.jpeg" alt="avatar" width="45" height="45" />
-
+<h4> immagine non presente </h4>
 <% else %>
 <img src="data:image/png;base64,<%= user.immagine_profilo %>" alt="avatar" width="45" height="45" />
 <% end %>

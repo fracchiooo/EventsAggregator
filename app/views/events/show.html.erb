@@ -19,11 +19,11 @@
 <form id="form_create" action="<%= event_comments_path(@event) %>" method="post">
 <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
 <input type="hidden" name="_method" value="CREATE">
-<textarea name="comment[testo]" id="comment_testo" class=" h6 fst-italic" style="background-color: #f0f2f5; text-align:center" > 
+<textarea name="comment[testo]" id="comment_testo" placeholder="scrivi un commento..." class=" h6 fst-italic" style="background-color: #f0f2f5; text-align:center" > 
 </textarea>
 </form>
 
-<button form="form_create" type="submit" onclick="functio(1)" class="btn btn-primary" style=" text-align:center" >crea</button>
+<button form="form_create" type="submit" onclick="functio(1)" class="btn btn-primary" style=" text-align:center" >commenta</button>
 
 
 
