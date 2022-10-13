@@ -8,7 +8,9 @@ class User < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :segnala_cs
 
-  validates :data_nascita, :username, :nome, :cognome, :sesso, presence: true
+  #validates :avatar, :data_nascita, :username, :nome, :cognome, :sesso, presence: true
+  
+  
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -25,8 +27,10 @@ class User < ApplicationRecord
 
   after_initialize :set_default_sesso, :if => :new_record?
 
-
   after_initialize :set_default_role, :if => :new_record?
+
+  after_initialize :set_default_immagine_profilo, :if => :new_record?
+
        
   def set_default_role
     self.role ||=:user
@@ -36,6 +40,19 @@ class User < ApplicationRecord
   def set_default_sesso
     self.sesso ||=:male
   end
+
+
+  def set_default_immagine_profilo
+
+
+    File.open("#{Rails.root}/public/images.jpeg","rb") do |f|
+
+      self.immagine_profilo ||= Base64.strict_encode64(f.read)
+    end
+
+
+  end
+
        
        
        
@@ -60,7 +77,7 @@ class User < ApplicationRecord
           compleanno= res['birthdays'][0]["date"]
           user.data_nascita= Date.strptime((compleanno['day'].to_s+'/'+compleanno['month'].to_s+'/'+compleanno['year'].to_s),'%d/%m/%Y')
         rescue 
-          user.data_nascita=Date.strptime('01/01/1970','%d/%m/%Y')
+          user.data_nascita=nil
         end
 
         begin
@@ -84,7 +101,7 @@ class User < ApplicationRecord
         #f.write(Base64.decode64(base_64_encoded_data))
         user.immagine_profilo=Base64.strict_encode64(f.string)
       end
-      user.username= "profilo "+(Time.now).to_s
+      user.username= "profilo-#{SecureRandom.hex(10)}"
       user.nome=auth.info.first_name
       user.cognome=auth.info.last_name
     end 

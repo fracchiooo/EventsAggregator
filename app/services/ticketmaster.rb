@@ -2,7 +2,7 @@ require 'cgi' #URL-encoding
 
 class Ticketmaster
 
-    def self.getEvents(keyword, first_date, fin_date, current_loc, loc)
+    def self.getEvents(keyword, first_date, fin_date, current_loc, loc, category)
         begin
             q = keyword.to_s.present? ? "keyword=#{keyword}&" : ""
             if first_date.to_s.present?
@@ -17,6 +17,12 @@ class Ticketmaster
             else 
                 end_d = "" 
             end
+            if category.to_s.present? && category!="nessuno" then
+                cat = "classificationName=#{CGI.escape(category).to_s}&"
+            else
+                cat = ""
+            end
+
             # TODO: se due RICHIESTE UGUALI di seguito, errore e non funziona più la ricerca città con google
             if loc.to_s.present?
                 if current_loc.to_i == 0
@@ -35,7 +41,7 @@ class Ticketmaster
             end
 
 
-            url="https://app.ticketmaster.com/discovery/v2/events.json?"+q+start_d+end_d+coords+"apikey=#{Rails.application.credentials[:ticketmaster][:api_key]}"
+            url="https://app.ticketmaster.com/discovery/v2/events.json?"+q+start_d+end_d+coords+cat+"apikey=#{Rails.application.credentials[:ticketmaster][:api_key]}"
 
             uri=URI.parse(url)
             http= Net::HTTP.new(uri.host,uri.port)

@@ -1,121 +1,140 @@
-<%= form_with url: "#", id: "form_search", method: :get do |form| %>
+<%= form_with url: "?", id: "form_search", method: :get do |form| %>
   <%= form.label :query, "Search for:" %>
   <%= form.text_field :q %>  <%# predicthq: "q", ticketmaster: "keyword" %>
   <%= form.date_field :start_date %>  <%# predicthq: "start.gte", ticketmaster: "startDateTime" %>
   <%= form.date_field :end_date %>  <%# predicthq: "start.lte", ticketmaster: "endDateTime" %>
 
   <%= form.label :luogo, "Where:" %>
-  <%= form.text_field :loc, id:"autocomplete", class:"controls", placeholder:"nowhere" %> <%# predicthq: "within=Xkm@lat,long", ticketmaster: "geoPoint" %>
+  <%= form.text_field :loc, id:"autocomplete", class:"controls", placeholder:"nowhere", autocomplete:"off" %> <%# predicthq: "within=Xkm@lat,long", ticketmaster: "geoPoint" %>
   <div class="form-check form-switch">
     <%= form.check_box :current_location, class: "form-check-input", role: "switch", id: "flexSwitchCheckDefault" %>
     <label class="form-check-label" id="form-check-label" for="flexSwitchCheckDefault">Utilizza la tua posizione corrente</label>
   </div>
 
-  <%= form.select :category, ["nessuno", "Academic", "Sports", "Conforences", "Expos", 
+  <%= form.select :category, ["nessuno", "Academic", "Sports", "Conferences", "Expos", 
                                 "Concerts", "Festivals", "Performing-arts", "Community", 
                                 "Live TV Events", "Public Holidays", "School Holidays", 
                                 "Observances", "Politics", "Daylight Savings", "Severe Weather",
                                 "Disasters", "Airport Delays", "Health Warnings", "Terror"], selected: "nessuno" %>
-  <%= form.submit "Search" , onclick: "return validation()"%>
+  <%= form.submit "Search" , onclick: "", id: "submit-button"%>
 <% end %>
 
 
 
-<script
-  src="https://maps.googleapis.com/maps/api/js?key=<%=Rails.application.credentials[:google_api_key_places]%>&callback=initAutocomplete&libraries=places"
-  async defer
-></script>
+<%# tutto viene inserito nella head => caricato una volta sola %>
+<% content_for(:filter_events) do %>
 
-<script>
-  let check_label = document.getElementById("form-check-label");
-  let checkbox = document.getElementById("flexSwitchCheckDefault");
-  let position_text_input = document.getElementById("autocomplete");
+  <script>
+    // aspetta che si carichi la pagina, poi fai partire lo script
+    document.addEventListener("turbo:load", ()=>{
+      
+      let check_label = document.getElementById("form-check-label");
+      let checkbox = document.getElementById("flexSwitchCheckDefault");
+      let position_text_input = document.getElementById("autocomplete");
+      
+      // eseguire onSubmit
+      document.getElementById("submit-button").addEventListener("submit", (event) => {
+        validation();
+      }); 
 
-  // current position
-  checkbox.addEventListener("change", is_check, false);
-  function is_check(){
-    if (checkbox.checked){
-      check_label.value = "loading..."
-      check_label.innerHTML = "loading..."
+      // current position calculation
+      checkbox.addEventListener("change", is_check, false);
+      function is_check(){
+        if (checkbox.checked){
+          check_label.value = "loading..."
+          check_label.innerHTML = "loading..."
+          document.getElementById("submit-button").disabled = true
 
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition, showError);
-      } else {
-        check_label.value = "Geolocation is not supported by this browser";
-        check_label.innerHTML = check_label.value;
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition, showError);
+          } else {
+            check_label.value = "Geolocation is not supported by this browser";
+            check_label.innerHTML = check_label.value;
+            document.getElementById("submit-button").disabled = false
+          }
+        }
       }
-    }
-  }
-  function showPosition(position) {
-    const coordinates = position.coords.latitude + "," + position.coords.longitude;
-    position_text_input.value = coordinates;
-    check_label.value = coordinates;
-    check_label.innerHTML = coordinates;
-  }
-  function showError(error) {
-    switch(error.code) {
-        case error.PERMISSION_DENIED:
-            check_label.value = "User denied the request for Geolocation.";
-            check_label.innerHTML = check_label.value;
-            break;
-        case error.POSITION_UNAVAILABLE:
-            check_label.value = "Location information is unavailable.";
-            check_label.innerHTML = check_label.value;
-            break;
-        case error.TIMEOUT:
-            check_label.value = "The request to get user location timed out.";
-            check_label.innerHTML = check_label.value;
-            break;
-        case error.UNKNOWN_ERROR:
-            check_label.value = "An unknown error occurred.";
-            check_label.innerHTML = check_label.value;
-            break;
-    }
-  }
+      function showPosition(position) {
+        const coordinates = position.coords.latitude + "," + position.coords.longitude;
+        position_text_input.value = coordinates;
+        check_label.value = coordinates;
+        check_label.innerHTML = coordinates;
+        document.getElementById("submit-button").disabled = false
+      }
+      function showError(error) {
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+                check_label.value = "User denied the request for Geolocation.";
+                check_label.innerHTML = check_label.value;
+                break;
+            case error.POSITION_UNAVAILABLE:
+                check_label.value = "Location information is unavailable.";
+                check_label.innerHTML = check_label.value;
+                break;
+            case error.TIMEOUT:
+                check_label.value = "The request to get user location timed out.";
+                check_label.innerHTML = check_label.value;
+                break;
+            case error.UNKNOWN_ERROR:
+                check_label.value = "An unknown error occurred.";
+                check_label.innerHTML = check_label.value;
+                break;
+        }
+        document.getElementById("submit-button").disabled = false
+      }
 
-  // se si vuole utilizzare la current position, submit aspetta di avere le coordinate
-  function validation(){
-    if (check_label.value == "loading...") { console.log("Wait for it"); return false; }
-    onPlaceSubmit() // controlla validità del campo luogo inserito
-    document.getElementById("form_search").submit();
-  }
+      function validation(){
+        // se si vuole utilizzare la current position, submit aspetta di avere le coordinate
+        if (check_label.value == "loading...") { console.log("Wait for it"); return false; }
+        // altrimenti: controlla validità del campo luogo inserito
+        onPlaceSubmit() 
+        document.getElementById("form_search").submit();
+      }
 
 
-  /*** GOOGLE search box ***/
-  let autocomplete;
-  let place;
-  function initAutocomplete() {
-    autocomplete = new google.maps.places.Autocomplete(
-      position_text_input,
-      {
-        types: ['(cities)'],
-        fields: ['place_id', 'geometry', 'name']
-      });
-    autocomplete.addListener('place_changed', onPlaceChanged);
-  }
 
-  function onPlaceChanged() { 
-    place = autocomplete.getPlace();
-    if ( !place.geometry ) {
-      // User did not select a prediction before click Enter
-      console.log('You have to select a prediction')
-      reset_place_field()
-    } else {
-      // Display details about the valid place
-      position_text_input.value = place.name; //.place_id
-    }
-  }
-  function onPlaceSubmit() {
-    if ( typeof place === 'undefined' && !checkbox.checked ) {
-      reset_place_field()
-    }
-  }
-  function reset_place_field() {
-    position_text_input.placeholder = 'Enter a place';
-    position_text_input.value = "";
-    position_text_input.innerHTML = "select a place";
-  }
+      /***** GOOGLE search box *****/
+      let autocomplete;
+      let place;
+      // callback su maps.googleapis eseguita onload
+      autocomplete = new google.maps.places.Autocomplete(
+        position_text_input,
+        {
+          types: ['(cities)'],
+          fields: ['place_id', 'geometry', 'name']
+        });
+      autocomplete.addListener('place_changed', onPlaceChanged);
 
-  // se deseleziono il text_field, controllo di aver selezionato un luogo
-  position_text_input.addEventListener('blur', onPlaceSubmit);
-</script>
+      function onPlaceChanged() { 
+        place = autocomplete.getPlace();
+        if ( !place.geometry ) {
+          // User did not select a prediction before click Enter
+          console.log('You have to select a prediction')
+          reset_place_field()
+        } else {
+          // Display details about the valid place
+          position_text_input.value = place.name; //.place_id
+        }
+      }
+      function onPlaceSubmit() {
+        if ( typeof place === 'undefined' && !checkbox.checked ) {
+          reset_place_field()
+        }
+      }
+      function reset_place_field() {
+        position_text_input.placeholder = 'Enter a place';
+        position_text_input.value = "";
+        position_text_input.innerHTML = "select a place";
+      }
+
+      // se deseleziono il text_field, controllo di aver selezionato un luogo
+      position_text_input.addEventListener('blur', onPlaceSubmit);
+    })
+  </script>
+
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=<%=Rails.application.credentials[:google_api_key_places]%>&libraries=places"
+    async defer
+  ></script>
+  
+<% end %>
