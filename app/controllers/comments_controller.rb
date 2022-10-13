@@ -54,6 +54,12 @@ class CommentsController < ApplicationController
   # PATCH/PUT /comments/1 or /comments/1.json
   def update
     print 'updateeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+
+    print '|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||'
+    print params
+    STDOUT.flush
+
+    
     if user_signed_in?
       respond_to do |format|
         if !(current_user.id==@comment.user_id || current_user.role=='admin')
@@ -101,19 +107,15 @@ class CommentsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_comment
         
-      @comment = Comment.find(params[:event_id])
+      @comment = Comment.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def comment_params
 
-      if params[:id]
-        event= Event.find_by event_id: params[:id]
-        params.require(:comment).permit(:testo).merge(event_id: event.id, id: params[:event_id])
 
-      else
-        params.require(:comment).permit(:testo).merge(event_id: params[:event_id])
+      params.require(:comment).permit(:testo).merge(event_id: params[:event_id])
     
-      end
+      
     end
 end
