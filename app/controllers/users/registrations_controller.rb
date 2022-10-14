@@ -47,12 +47,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
 
 
-
-    #imagen=Base64.strict_encode64(image.to_s)
-    #print imagen
-    #current_user.immagine_profilo=imagen
-
-
   end
 
   # DELETE /resource

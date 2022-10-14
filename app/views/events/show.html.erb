@@ -33,6 +33,7 @@
 
 
   <% @event.comments.each do |comment| %>
+
     
     <%= render 'comments/comment', event: @event, comment: comment, user: User.find(comment.user_id) %>
 

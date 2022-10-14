@@ -31,11 +31,13 @@
 <div class="card shadow-0 border " style="height:100%; width:100%; background-color: #f0f2f5;">
 <% if !current_user.nil? && (current_user.id==comment.user_id || current_user.role=='admin') %>
 
-<textarea name="comment[testo]" id="comment_testo" class=" h6 fst-italic" style="background-color: #f0f2f5; border: none; width:100%; padding-bottom:19%; text-align:center" > 
-<%= comment.testo %>
-</textarea>
-<%= comment.id %>
-
+<form id="my_form<%=comment.id%>" action="<%=event_comment_path(event.id,comment.id) %>" method="post"> 
+<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>"> 
+<input type="hidden" name="_method" value="PATCH"> 
+<textarea name="comment[testo]" id="comment_testo" class=" h6 fst-italic" style="background-color: #f0f2f5; border: none; width:100%; padding-bottom:19%; text-align:center" >  
+<%= comment.testo %> 
+</textarea> 
+</form>
 <% else %>
 
 <h6 class="fst-italic" style="width:100%; border:none; padding-bottom:12%; text-align:center"> <%= comment.testo %> </h6>
@@ -108,8 +110,10 @@
 <% if !current_user.nil? && (current_user.id==comment.user_id || current_user.role=='admin') %>
 <nav>
 
-<%= button_to "modifica", event_comment_path(comment,event), method: :patch, class: "btn btn-primary", :onclick => "functio(0)" %>
-<%= button_to "elimina", event_comment_path(comment), method: :delete, class: "btn btn-danger", :onclick => "functio(0)"  %>
+<%# button_to "modifica", event_comment_path(event.id,comment.id),params:{comment:{testo: "kkkkkkkk"}}, method: :patch, class: "btn btn-primary", :onclick => "functio(0)" %>
+<button form="my_form<%=comment.id%>" type="submit" class="btn btn-primary" onclick="functio(0)" style="margin-bottom:5%; margin-top:10%; text-align:center" >modifica</button>
+
+<%= button_to "elimina", event_comment_path(event.id,comment.id), method: :delete, class: "btn btn-danger", :onclick => "functio(0)"  %>
 </nav>
 <% end %>
 </div>  
