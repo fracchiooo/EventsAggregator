@@ -17,7 +17,7 @@ class Predicthq
             else 
                 end_d = "" 
             end
-            if category.to_s.present? && category!="nessuno" then
+            if category.to_s.present? then
                 cat = "category=#{category.downcase.parameterize(separator:'-')}&"
             else
                 cat = ""

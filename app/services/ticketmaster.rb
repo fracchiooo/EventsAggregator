@@ -17,7 +17,7 @@ class Ticketmaster
             else 
                 end_d = "" 
             end
-            if category.to_s.present? && category!="nessuno" then
+            if category.to_s.present? then
                 cat = "classificationName=#{CGI.escape(category).to_s}&"
             else
                 cat = ""

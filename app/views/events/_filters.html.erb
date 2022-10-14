@@ -3,30 +3,23 @@
   <div class="container mt-4 mb-4">
     <div class="row d-flex justify-content-center">
       <div class="col-md-10">
-        <div class="card p-3  py-4">
+        <div class="card card-filters p-3 py-4">
 
           <div class="row g-3">
             <div class="col-md-4">
               <h3>Event Filters</h3>
             </div>
 
-            <div class="col-md-8">
-              <%= form.text_field :q , class:"form-control", placeholder:"Keyword"%>  <%# predicthq: "q", ticketmaster: "keyword" %>
+            <div class="col-md-8 key">
+              <%= form.text_field :q , class:"form-control", id:"query-key"%>  <%# predicthq: "q", ticketmaster: "keyword". :value => params[:q] %>
+              <label for="" class="key-label" id="key-label">Keyword</label>
             </div>
           </div>
 
           <div class="row g-3 mt-1">
             <div class="col-md-4">
               <%= form.select(:category, ["Academic", "Sports", "Conferences", "Expos", 
-                              "Concerts", "Festivals", "Performing-arts", "Community", 
-                                "Concerts", "Festivals", "Performing-arts", "Community", 
-                              "Concerts", "Festivals", "Performing-arts", "Community", 
-                                "Concerts", "Festivals", "Performing-arts", "Community", 
-                              "Concerts", "Festivals", "Performing-arts", "Community", 
-                              "Live TV Events", "Public Holidays", "School Holidays", 
-                                "Live TV Events", "Public Holidays", "School Holidays", 
-                              "Live TV Events", "Public Holidays", "School Holidays", 
-                                "Live TV Events", "Public Holidays", "School Holidays", 
+                              "Concerts", "Festivals", "Performing-arts", "Community",    
                               "Live TV Events", "Public Holidays", "School Holidays", 
                               "Observances", "Politics", "Daylight Savings", "Severe Weather",
                               "Disasters", "Airport Delays", "Health Warnings", "Terror"], 
@@ -37,7 +30,7 @@
               <%= form.text_field :loc, id:"autocomplete", class:"form-control controls", placeholder:"Enter city name", autocomplete:"off" %> <%# predicthq: "within=Xkm@lat,long", ticketmaster: "geoPoint" %>
             </div>
 
-            <div class="col-md-2">
+            <div class="col-lg-2 d-flex flex-column">
               <%= form.submit "Find Events" , onclick: "", id: "submit-button", class: "btn btn-secondary btn-block"%>
             </div>       
           </div>
@@ -91,6 +84,33 @@
     // aspetta che si carichi la pagina, poi fai partire lo script
     document.addEventListener("turbo:load", ()=>{
       
+      // label on keyword
+      let query_key = document.getElementById("query-key");
+      let query_label = document.getElementById("key-label");
+      if (query_key.value != ""){
+        query_label.classList.add("topping")
+      } else {
+        query_label.classList.remove("topping")
+      }
+      query_key.addEventListener('input', function(event) {
+        if (query_key.value != "" || document.activeElement===query_key){
+          query_label.classList.add("topping")
+        } else {
+          query_label.classList.remove("topping")
+        }
+      })
+      query_key.addEventListener('focus', function(event) {
+        if (document.activeElement===query_key){
+          query_label.classList.add("topping")
+        }
+      })
+      query_key.addEventListener('focusout', function(event) {
+        if (query_key.value == ""){
+          query_label.classList.remove("topping")
+        }
+      })
+
+      /*** location ***/
       let check_label = document.getElementById("form-check-label");
       let checkbox = document.getElementById("flexSwitchCheckDefault");
       let position_text_input = document.getElementById("autocomplete");
@@ -120,8 +140,8 @@
       function showPosition(position) {
         const coordinates = position.coords.latitude + "," + position.coords.longitude;
         position_text_input.value = coordinates;
-        check_label.value = coordinates;
-        check_label.innerHTML = coordinates;
+        check_label.value = "Found your location";
+        check_label.innerHTML = "Found your location";
         document.getElementById("submit-button").disabled = false
       }
       function showError(error) {
@@ -215,17 +235,51 @@
 
 
 <style>
+  :root {
+    --inside-filters: #00838F /* var(--background-color)= #00838F */
+  }
+
+  .card-filters {
+    box-shadow: 0em 0em 1em rgba(0,0,0,0.5)
+  }
+
   .btn-secondary,
   .btn-secondary:focus,
   .btn-secondary:active {
       color: #fff;
-      background-color: var(--background-color) !important;
-      border-color: var(--background-color) !important;
+      background-color: var(--inside-filters) !important;
+      border-color: var(--inside-filters) !important;
       box-shadow: none;
   }
 
   .form-control:focus {
       box-shadow: none;
-      border: 1px solid var(--background-color);
+      border: 1px solid var(--inside-filters);
+  }
+
+  /* label animation keyword search */
+  .key {
+    position: relative
+  }
+  .key input {
+      background: transparent;
+      outline: none;
+  }
+  .key label{
+    position: absolute;
+      top: 7px;
+      left:15px;
+      color: #6c757d;
+      text-transform: capitalize;
+      font-size: 16px;
+      transition: top .3s, font-size .3s, background-color .2s, color .3s;
+      padding: 0 5px;
+      pointer-events: none;
+  }
+  .topping { /* key input:focus ~ label */
+    top:-9px !important;
+    background-color: white;
+    font-size: 10px !important;
+    color: var(--inside-filters) !important;
   }
 </style>

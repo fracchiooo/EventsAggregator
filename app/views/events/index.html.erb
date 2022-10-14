@@ -2,6 +2,12 @@
 
 <%= render "filters", event: @event %>
 
+<% if @cerco.to_s != "" %>
+  <div class="d-flex justify-content-center align-items-baseline mt-1 mb-2">
+    <h6 style="margin-right: 0.5em">Results for: </h6><h5><%= @cerco%></h5>
+  </div>
+<%end%>
+
 <div id="events" class="h-5">
   <%# se la ricerca ha almeno un risultato %>
   <% if @events.present? %>
@@ -9,7 +15,7 @@
 
       <div class="row" style="padding-left:2em; padding-right:2em; padding-top:1em; padding-bottom:1em; max-height: 5%">
         <div class="col-sm-12">
-          <div class="card">
+          <div class="card card-event">
             <div class="card-body">
               <div class="row">
                 <div class="col-3">
@@ -38,7 +44,7 @@
 
       <div class="row" style="padding-left:2em; padding-right:2em; padding-top:1em; padding-bottom:1em; max-height: 5%">
         <div class="col-sm-12">
-          <div class="card">
+          <div class="card card-event">
             <div class="card-body">
               <div class="row">
                 <div class="col-3">
@@ -60,16 +66,18 @@
   <% end %>
 </div>
 
-<%= link_to "Torna alla Home", home_path %>
-
 
 
 <style>
   :root {
-    --background-color: #00838F;
+    --background-color: #f8f9fa; /* #00838F */
   }
 
   body {
     background-color: var(--background-color);
+  }
+
+  .card-event {
+    box-shadow: 0em 0em 1em rgba(0,0,0,0.5)
   }
 </style>
