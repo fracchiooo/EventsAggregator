@@ -1,22 +1,85 @@
 <%= form_with url: "?", id: "form_search", method: :get do |form| %>
-  <%= form.label :query, "Search for:" %>
-  <%= form.text_field :q %>  <%# predicthq: "q", ticketmaster: "keyword" %>
-  <%= form.date_field :start_date %>  <%# predicthq: "start.gte", ticketmaster: "startDateTime" %>
-  <%= form.date_field :end_date %>  <%# predicthq: "start.lte", ticketmaster: "endDateTime" %>
 
-  <%= form.label :luogo, "Where:" %>
-  <%= form.text_field :loc, id:"autocomplete", class:"controls", placeholder:"nowhere", autocomplete:"off" %> <%# predicthq: "within=Xkm@lat,long", ticketmaster: "geoPoint" %>
-  <div class="form-check form-switch">
-    <%= form.check_box :current_location, class: "form-check-input", role: "switch", id: "flexSwitchCheckDefault" %>
-    <label class="form-check-label" id="form-check-label" for="flexSwitchCheckDefault">Utilizza la tua posizione corrente</label>
+  <div class="container mt-4 mb-4">
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-10">
+        <div class="card p-3  py-4">
+
+          <div class="row g-3">
+            <div class="col-md-4">
+              <h3>Event Filters</h3>
+            </div>
+
+            <div class="col-md-8">
+              <%= form.text_field :q , class:"form-control", placeholder:"Keyword"%>  <%# predicthq: "q", ticketmaster: "keyword" %>
+            </div>
+          </div>
+
+          <div class="row g-3 mt-1">
+            <div class="col-md-4">
+              <%= form.select(:category, ["Academic", "Sports", "Conferences", "Expos", 
+                              "Concerts", "Festivals", "Performing-arts", "Community", 
+                                "Concerts", "Festivals", "Performing-arts", "Community", 
+                              "Concerts", "Festivals", "Performing-arts", "Community", 
+                                "Concerts", "Festivals", "Performing-arts", "Community", 
+                              "Concerts", "Festivals", "Performing-arts", "Community", 
+                              "Live TV Events", "Public Holidays", "School Holidays", 
+                                "Live TV Events", "Public Holidays", "School Holidays", 
+                              "Live TV Events", "Public Holidays", "School Holidays", 
+                                "Live TV Events", "Public Holidays", "School Holidays", 
+                              "Live TV Events", "Public Holidays", "School Holidays", 
+                              "Observances", "Politics", "Daylight Savings", "Severe Weather",
+                              "Disasters", "Airport Delays", "Health Warnings", "Terror"], 
+                              {include_blank: "Select category"}, { :class => 'form-select btn btn-secondary dropdown-toggle' }) %>       
+            </div>
+
+            <div class="col-md-6">
+              <%= form.text_field :loc, id:"autocomplete", class:"form-control controls", placeholder:"Enter city name", autocomplete:"off" %> <%# predicthq: "within=Xkm@lat,long", ticketmaster: "geoPoint" %>
+            </div>
+
+            <div class="col-md-2">
+              <%= form.submit "Find Events" , onclick: "", id: "submit-button", class: "btn btn-secondary btn-block"%>
+            </div>       
+          </div>
+
+          <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-6">
+              <div class="card mt-2 border-0">
+              <div class="form-check form-switch">
+                <%= form.check_box :current_location, class: "form-check-input", role: "switch", id: "flexSwitchCheckDefault" %>
+                <label class="form-check-label" id="form-check-label" for="flexSwitchCheckDefault">Use your current geolocation</label>
+              </div>
+            </div>
+            </div>
+          </div>
+
+          <div class="mt-3">
+            <div class="card-header">
+              <h6><span class="fa fa-calendar mr-3"></span> Filter by date</h6>
+            </div>
+            <div class="card rounded-top card-body">
+              <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-4" style="display:flex">
+                  <h6>Start date</h6>
+                  <%= form.date_field :start_date, class: "form-control" %>  <%# predicthq: "start.gte", ticketmaster: "startDateTime" %>
+                </div>
+                <div class="col-md-2"></div>
+                <div class="col-md-4" style="display:flex">
+                  <h6>End date</h6>
+                  <%= form.date_field :end_date, class: "form-control" %>  <%# predicthq: "start.lte", ticketmaster: "endDateTime" %>
+                </div>
+                <div class="col-md-1"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>         
+      </div>      
+    </div>
   </div>
 
-  <%= form.select :category, ["nessuno", "Academic", "Sports", "Conferences", "Expos", 
-                                "Concerts", "Festivals", "Performing-arts", "Community", 
-                                "Live TV Events", "Public Holidays", "School Holidays", 
-                                "Observances", "Politics", "Daylight Savings", "Severe Weather",
-                                "Disasters", "Airport Delays", "Health Warnings", "Terror"], selected: "nessuno" %>
-  <%= form.submit "Search" , onclick: "", id: "submit-button"%>
 <% end %>
 
 
@@ -97,14 +160,23 @@
       let autocomplete;
       let place;
       // callback su maps.googleapis eseguita onload
-      autocomplete = new google.maps.places.Autocomplete(
-        position_text_input,
-        {
-          types: ['(cities)'],
-          fields: ['place_id', 'geometry', 'name']
-        });
-      autocomplete.addListener('place_changed', onPlaceChanged);
+      var script = document.querySelector('#google-places-library');
+      script.addEventListener('load', function() {
+        initAutocomplete()
+      });
+      initAutocomplete()
 
+      function initAutocomplete() {
+        if (typeof google === 'object' && typeof google.maps === 'object') {
+          autocomplete = new google.maps.places.Autocomplete(
+            position_text_input,
+            {
+              types: ['(cities)'],
+              fields: ['place_id', 'geometry', 'name']
+            });
+          autocomplete.addListener('place_changed', onPlaceChanged);
+        }
+      }
       function onPlaceChanged() { 
         place = autocomplete.getPlace();
         if ( !place.geometry ) {
@@ -121,20 +193,39 @@
           reset_place_field()
         }
       }
+
       function reset_place_field() {
-        position_text_input.placeholder = 'Enter a place';
+        position_text_input.placeholder = 'Enter city name';
         position_text_input.value = "";
-        position_text_input.innerHTML = "select a place";
       }
 
       // se deseleziono il text_field, controllo di aver selezionato un luogo
       position_text_input.addEventListener('blur', onPlaceSubmit);
     })
-  </script>
+    </script>
 
   <script
     src="https://maps.googleapis.com/maps/api/js?key=<%=Rails.application.credentials[:google_api_key_places]%>&libraries=places"
     async defer
+    id="google-places-library"
   ></script>
   
 <% end %>
+
+
+
+<style>
+  .btn-secondary,
+  .btn-secondary:focus,
+  .btn-secondary:active {
+      color: #fff;
+      background-color: var(--background-color) !important;
+      border-color: var(--background-color) !important;
+      box-shadow: none;
+  }
+
+  .form-control:focus {
+      box-shadow: none;
+      border: 1px solid var(--background-color);
+  }
+</style>
