@@ -64,10 +64,10 @@ class Ticketmaster
                 # se non si trova già nel database
                 if Event.where(event_id: event['id']).blank? then
                     # lo aggiungo al database
+                    if event['promoter'].present? then promoter = event['promoter']['id'] end
                     e = Event.new(  event_id: event['id'], 
-                                    organizer_id: "event['promoter']['id']", 
-                                    coordinates: "test" )
-                                    # TODO: promoter non sempre presente... coordinate non presenti
+                                    organizer_id: promoter, 
+                                    coordinates: event['_embedded']['venues'][0]['location']['longitude'].to_s + "," + event['_embedded']['venues'][0]['location']['latitude'].to_s )
                     e.save!
                 end
             end

@@ -64,12 +64,9 @@ class Predicthq
                 # se non si trova già nel database
                 if Event.where(event_id: event['id']).blank? then
                     # lo aggiungo al database
-
-                    #   TODO: controllare se organizer_id e coordinates sono presenti
-                    # organizer_id:event['entities'][0]['entity_id']
-                    # coordinates: event['geo']['geometry']['coordinates'].join(",")
+                    if event['entities'].present? then entity = event['entities'][0]['entity_id'] end
                     e = Event.new(  event_id:event['id'], 
-                                    organizer_id:"event['entities'][0]['entity_id']", 
+                                    organizer_id: entity, 
                                     coordinates: event['geo']['geometry']['coordinates'][1].to_s + "," + event['geo']['geometry']['coordinates'][0].to_s )
                     e.save!
                 end
