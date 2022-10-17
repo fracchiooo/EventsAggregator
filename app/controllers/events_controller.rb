@@ -6,16 +6,16 @@ class EventsController < ApplicationController
     @events = Predicthq.getEvents(params[:q], params[:start_date], params[:end_date], params[:current_location], params[:loc], params[:category])
     @events2 = Ticketmaster.getEvents(params[:q], params[:start_date], params[:end_date], params[:current_location], params[:loc], params[:category])
 
-    key = params[:q].to_s.present? ? "#{params[:q].capitalize()}, " : ""
+    key = params[:q].to_s.present? ? "#{params[:q].capitalize()}" : ""
     if params[:current_location].to_i == 0 then
-      luogo = params[:loc].to_s.present? ? "in #{params[:loc]} " : ""
+      luogo = params[:loc].to_s.present? ? " in #{params[:loc]}" : ""
     else
-      luogo = params[:loc].to_s.present? ? "in #{Geocoder.search(params[:loc]).first.city} " : ""
+      luogo = params[:loc].to_s.present? ? " in #{Geocoder.search(params[:loc]).first.city} " : ""
     end
-    categ = params[:category].to_s.present? ? "regarding #{params[:category]} " : ""
-    if params[:start_date].to_s.present? || params[:end_date].to_s.present? then int= "on the date " else int="" end
-    da = params[:start_date].to_s.present? ? "from #{params[:start_date]} " : ""
-    fino = params[:end_date].to_s.present? ? "to #{params[:end_date]} " : ""
+    categ = params[:category].to_s.present? ? " regarding #{params[:category]}" : ""
+    if params[:start_date].to_s.present? || params[:end_date].to_s.present? then int= " on the dates" else int="" end
+    da = params[:start_date].to_s.present? ? " from #{params[:start_date]}" : ""
+    fino = params[:end_date].to_s.present? ? " to #{params[:end_date]}" : ""
     @cerco = key+luogo+categ+int+da+fino
   end
 
