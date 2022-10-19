@@ -40,7 +40,7 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.0]
       t.integer :sesso, default: 0
 
 
-
+      t.boolean :account_active, default: true
 
       t.integer :role , default: 0
 

@@ -53,8 +53,16 @@ class User < ApplicationRecord
 
   end
 
-       
-       
+
+
+  def active_for_authentication?
+    super && self.account_active
+  end
+  def inactive_message
+    account_active? ? super : :locked
+  end
+
+
        
   def self.from_omniauth(auth) 
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user| 

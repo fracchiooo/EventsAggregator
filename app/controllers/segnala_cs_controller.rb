@@ -1,5 +1,5 @@
 class SegnalaCsController < ApplicationController
-    before_action :authorized
+    before_action :authorized, except: :create
     before_action :set_segnala_c, only: %i[ show edit update destroy elimina_commento blocca_utente ]
 
     def index
@@ -47,9 +47,7 @@ class SegnalaCsController < ApplicationController
     end
 
     def blocca_utente
-        # bloccare l'utente
-        puts @seg
-        # 
+        User.find(@seg.user_id).update_attribute(:account_active, false)
 
         respond_to do |format|
             format.html { redirect_to segnala_cs_url, notice: "L'utente è stato bloccato con successo." }
