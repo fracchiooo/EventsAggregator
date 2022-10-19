@@ -89,6 +89,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_19_092443) do
     t.string "nome", default: "", null: false
     t.string "cognome", default: "", null: false
     t.integer "sesso", default: 0
+    t.boolean "account_active", default: true
     t.integer "role", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
