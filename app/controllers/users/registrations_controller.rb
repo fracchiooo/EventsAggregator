@@ -2,14 +2,14 @@
 
 class Users::RegistrationsController < Devise::RegistrationsController
 
-  before_action :set_user
+  #before_action :set_user
   # before_action :configure_sign_up_params, only: [:create]
   # before_action :configure_account_update_params, only: [:update]
 
   # GET /resource/sign_up
-  # def new
-  #   super
-  # end
+  def new
+    super
+  end
 
   # POST /resource
   # def create
@@ -23,10 +23,16 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # PUT /resource
   def update
-    print 'updateeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+    @user = User.find(current_user.id)
+    
+    if params[:user][:immagine_profilo].present?
+      image_path=params[:user][:immagine_profilo].path
+      File.open(image_path,"rb") do |f|
 
-    image_path=params[:user][:immagine_profilo].path
-
+        @user.update(immagine_profilo: Base64.strict_encode64(f.read))
+  
+      end
+    end
 
     params[:user].delete :password_confirmation
     params[:user].delete :password
@@ -34,16 +40,15 @@ class Users::RegistrationsController < Devise::RegistrationsController
     params[:user].delete :immagine_profilo
 
 
+    
 
-
-    super
-
-
-    File.open(image_path,"rb") do |f|
-
-      @user.update(immagine_profilo: Base64.strict_encode64(f.read))
-
+    @user = User.find(current_user.id)
+    if @user.update(params.require(:user).permit(:nome, :cognome, :data_nascita, :immagine_profilo, :username, :email, :password, :sesso))
+     redirect_to '/home'
     end
+
+
+
 
 
 
@@ -91,7 +96,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   def set_user
         
-    @user = User.find(current_user.id)
   end
 
 

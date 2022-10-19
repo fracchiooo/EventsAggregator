@@ -7,7 +7,7 @@
   <label class="col-sm-4 col-form-label">Immagine Profilo:
     <img src="data:image/png;base64,<%= current_user.immagine_profilo %>" alt="avatar" width="45" height="45", class="rounded-circle" />
   </label>
-  <div class="col-sm-8">Carica foto<%= f.file_field :immagine_profilo, class: "form-control" %></div>
+  <div class="col-sm-3">Carica foto<%= f.file_field :immagine_profilo, class: "form-control" %></div>
 </div>
   <div class="field">
     <%= f.label :nome %>
@@ -26,7 +26,7 @@
 
   <div class="field">
     <%= f.label :data_nascita %>
-    <%= f.text_field :data_nascita, autofocus: true %>
+    <%= f.date_field :data_nascita, autofocus: true %>
   </div>
 
   <div class="field">
