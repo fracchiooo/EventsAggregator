@@ -1,0 +1,25 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Reported Comments</h1>
+
+<div id="reported_comments" class="row">
+    <% @reported_comments.each do |rc| %>
+
+        <img src="data:image/png;base64,<%= rc.user.immagine_profilo %>" alt="avatar" width="45" height="45", class="rounded-circle col-2" />
+        <p class="col-2"><%= rc.user.nome %></p>
+        <p class="col-5"><%= rc.comment.testo %></p>
+        
+        <div class="btn-group col-3" role="group" aria-label="Basic example">
+            <div class="btn btn-primary">
+                <%= button_to "Blocca", blocca_utente_segnala_c_path(rc), data: {:turbo_confirm => 'Sei sicuro di voler bloccare l\'utente?'}, :method => :patch, class: "btn btn-primary" %>
+            </div>
+            <div class="btn btn-primary">
+                <%= button_to "Elimina commento", elimina_commento_segnala_c_path(rc), data: {:turbo_confirm => 'Sei sicuro di voler eliminare il commento?'}, :method => :patch, class: "btn btn-primary" %>
+            </div>
+            <div class="btn btn-primary">
+                <%= button_to "X", segnala_c_path(rc), data: {:turbo_confirm => 'Sei sicuro di voler ignorare la segnalazione?'}, :method => :delete, class: "btn btn-primary" %>
+            </div>
+        </div>
+
+    <%end%>
+</div>

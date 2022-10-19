@@ -5,12 +5,17 @@ Rails.application.routes.draw do
   get '/contatti', to: "pages#contatti"
 
   devise_for :users, :controllers => {
-    
-  :registrations => "users/registrations",
-  :sessions => "users/sessions",
-  :passwords => "users/passwords",
-  :omniauth_callbacks => "users/omniauth_callbacks"}
+    :registrations => "users/registrations",
+    :sessions => "users/sessions",
+    :passwords => "users/passwords",
+    :omniauth_callbacks => "users/omniauth_callbacks"
+  }
 
+  resources :segnala_cs do
+    member do
+      patch :elimina_commento, :blocca_utente
+    end
+  end
 
   resources :events do
     resources :comments, only: [:create, :destroy, :update ] do
