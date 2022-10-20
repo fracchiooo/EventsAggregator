@@ -17,6 +17,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :users do
+    member do
+      patch :blocca_utente, :rendi_amministratore
+    end
+  end
+
   resources :events do
     resources :comments, only: [:create, :destroy, :update ] do
       resources :like_comments, only: [:create, :destroy]

@@ -1,0 +1,96 @@
+<p style="color: green"><%= notice %></p>
+
+<h1 class='d-flex justify-content-center pb-4'>Users</h1>
+
+<div class="container users">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                <th scope="col">User</th>
+                                <th scope="col">Created</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Role</th>
+                                <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <% @users.each do |user| %>
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex flex-row">
+                                                <img src="data:image/png;base64,<%= user.immagine_profilo %>" alt="avatar" width="45" height="45", class="rounded-circle p-2" />
+                                                <p class="p-2"><%= user.nome %> <%=user.cognome%></p>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <p><%= user.created_at %></p>
+                                        </td>
+                                        <td>
+                                            <p><%= user.email %></p>
+
+                                        </td>
+                                        <td>
+                                            <p><%= user.role %></p>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group" role="group" aria-label="Actions on user">
+                                                <div class="">
+                                                    <%if user==@current%>
+                                                        <%= button_to "Blocca", users_path, method: :get, class: "btn btn-primary", :disabled => true %>
+                                                    <%else%>
+                                                        <%= button_to "Blocca", blocca_utente_user_path(user), data: {:turbo_confirm => 'Sei sicuro di voler bloccare l\'utente?'}, :method => :patch, class: "btn btn-outline-primary" %>
+                                                    <%end%>
+                                                </div>
+                                                <div class="ps-2">
+                                                    <%if user==@current%>
+                                                        <%= button_to "Elimina", users_path, method: :get, class: "btn btn-danger", :disabled => true %>
+                                                    <%else%>
+                                                        <%= button_to "Elimina", user_path(user), data: {:turbo_confirm => 'Sei sicuro di voler eliminare l\'utente?'}, :method => :delete, class: "btn btn-outline-danger" %>
+                                                    <%end%>
+                                                </div>
+                                                <div class="ps-2">
+                                                    <%if user==@current%>
+                                                        <%= button_to "Rendi Amministratore", users_path, method: :get, class: "btn btn-dark", :disabled => true %>
+                                                    <%else%>
+                                                        <%= button_to "Rendi Amministratore", rendi_amministratore_user_path(user), data: {:turbo_confirm => 'Sei sicuro di voler rendere questo utente un amministratore?'}, :method => :patch, class: "btn btn-outline-dark" %>
+                                                    <%end%>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <%end%>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    :root {
+        --background-color: #f8f9fa; /* #00838F */
+    }
+
+    body {
+        background-color: var(--background-color);
+    }
+
+    .card{
+        -webkit-box-shadow: 0em 0em 1em rgba(0,0,0,0.5);
+        -moz-box-shadow: 0em 0em 1em rgba(0,0,0,0.5);
+        -o-box-shadow: 0em 0em 1em rgba(0,0,0,0.5);
+        -ms-box-shadow: 0em 0em 1em rgba(0,0,0,0.5);
+        box-shadow: 0em 0em 1em rgba(0,0,0,0.5);
+    }
+</style>

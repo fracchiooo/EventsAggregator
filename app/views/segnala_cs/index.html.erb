@@ -1,25 +1,75 @@
 <p style="color: green"><%= notice %></p>
 
-<h1>Reported Comments</h1>
+<h1 class='d-flex justify-content-center pb-4'>Reported Comments</h1>
 
-<div id="reported_comments" class="row">
-    <% @reported_comments.each do |rc| %>
+<div class="container reported_comments">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
 
-        <img src="data:image/png;base64,<%= rc.user.immagine_profilo %>" alt="avatar" width="45" height="45", class="rounded-circle col-2" />
-        <p class="col-2"><%= rc.user.nome %></p>
-        <p class="col-5"><%= rc.comment.testo %></p>
-        
-        <div class="btn-group col-3" role="group" aria-label="Basic example">
-            <div class="btn btn-primary">
-                <%= button_to "Blocca", blocca_utente_segnala_c_path(rc), data: {:turbo_confirm => 'Sei sicuro di voler bloccare l\'utente?'}, :method => :patch, class: "btn btn-primary" %>
-            </div>
-            <div class="btn btn-primary">
-                <%= button_to "Elimina commento", elimina_commento_segnala_c_path(rc), data: {:turbo_confirm => 'Sei sicuro di voler eliminare il commento?'}, :method => :patch, class: "btn btn-primary" %>
-            </div>
-            <div class="btn btn-primary">
-                <%= button_to "X", segnala_c_path(rc), data: {:turbo_confirm => 'Sei sicuro di voler ignorare la segnalazione?'}, :method => :delete, class: "btn btn-primary" %>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                <th scope="col" class="col-3">User</th>
+                                <th scope="col" class="col-5">Comment</th>
+                                <th scope="col" class="col-4">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <% @reported_comments.each do |rc| %>
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex flex-row">
+                                                <img src="data:image/png;base64,<%= rc.user.immagine_profilo %>" alt="avatar" width="45" height="45", class="rounded-circle p-2" />
+                                                <p class="p-2"><%= rc.user.nome %> <%=rc.user.cognome%></p>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <p>"<%= rc.comment.testo %>"</p>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group" role="group" aria-label="Basic example">
+                                                <div class="">
+                                                    <%= button_to "Blocca", blocca_utente_segnala_c_path(rc), data: {:turbo_confirm => 'Sei sicuro di voler bloccare l\'utente?'}, :method => :patch, class: "btn btn-primary" %>
+                                                </div>
+                                                <div class="ps-2">
+                                                    <%= button_to "Elimina commento", elimina_commento_segnala_c_path(rc), data: {:turbo_confirm => 'Sei sicuro di voler eliminare il commento?'}, :method => :patch, class: "btn btn-primary" %>
+                                                </div>
+                                                <div class="ps-2">
+                                                    <%= button_to "X", segnala_c_path(rc), data: {:turbo_confirm => 'Sei sicuro di voler ignorare la segnalazione?'}, :method => :delete, class: "btn btn-primary" %>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <%end%>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
             </div>
         </div>
-
-    <%end%>
+    </div>
 </div>
+
+<style>
+    :root {
+        --background-color: #f8f9fa; /* #00838F */
+    }
+
+    body {
+        background-color: var(--background-color);
+    }
+
+    .card{
+        -webkit-box-shadow: 0em 0em 1em rgba(0,0,0,0.5);
+        -moz-box-shadow: 0em 0em 1em rgba(0,0,0,0.5);
+        -o-box-shadow: 0em 0em 1em rgba(0,0,0,0.5);
+        -ms-box-shadow: 0em 0em 1em rgba(0,0,0,0.5);
+        box-shadow: 0em 0em 1em rgba(0,0,0,0.5);
+    }
+</style>
