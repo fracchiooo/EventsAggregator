@@ -63,7 +63,7 @@ class SegnalaCsController < ApplicationController
     end
 
     def authorized
-        unless current_user.role == 'admin'
+        if current_user.blank? || current_user.role != 'admin'
             render :file => "public/404.html", :status => :unauthorized
         end 
     end
