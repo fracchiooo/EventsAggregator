@@ -8,8 +8,6 @@ class SegnalaCsController < ApplicationController
 
 
     def create
-
-        print '99999999999999999999999999999999999999999999999999999'
         if user_signed_in?
             @segnala_c = current_user.segnala_cs.new(segnala_c_params)
 
@@ -20,7 +18,6 @@ class SegnalaCsController < ApplicationController
         #redirect_to @segnala_c.comment
             redirect_back(fallback_location: root_path)
         else
-            print "non logggattooooooooooooooooooooooooooooooooo"
             flash.now[:alert] = 'iscriviti per poter segnalare i commenti'
             redirect_to event_path(segnala_c_params[:comment_id]), alert: 'iscriviti per poter segnalare i commenti'
         end
@@ -66,6 +63,8 @@ class SegnalaCsController < ApplicationController
     end
 
     def authorized
-        
+        unless current_user.role == 'admin'
+            render :file => "public/404.html", :status => :unauthorized
+        end 
     end
 end
