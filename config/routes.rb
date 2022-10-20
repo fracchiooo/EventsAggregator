@@ -23,6 +23,8 @@ Rails.application.routes.draw do
     end
   end
 
+  post '/like_events', to: "like_events#create"
+
   resources :events do
     resources :comments, only: [:create, :destroy, :update ] do
       resources :like_comments, only: [:create, :destroy]

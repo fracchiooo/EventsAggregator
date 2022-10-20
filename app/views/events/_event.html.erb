@@ -39,6 +39,60 @@
 
 </div>
 
+
+
+
+
+
+<div id="like_events">
+  <% if @user_like == true %>
+    <label> 
+      <%= button_to like_events_path, :method => :post, class: "like-event btn link-primary target", params: { like_event: {event_id: event.id, promoter: event.organizer_id, like: true} } do %>
+        <i class="fa-regular fa-thumbs-up fa-6" style="font-size: 10em; color: yellow !important"></i>
+      <%end%>
+    </label>
+    <label>
+      <%= button_to like_events_path, :method => :post, class: "like-event btn link-primary target", params: { like_event: {event_id: event.id, promoter: event.organizer_id, like: false} } do %>
+        <i class="fa-regular fa-thumbs-down fa-6" style="font-size: 10em;"></i>
+      <%end%>
+    </label>
+
+  <%elsif @user_like == false %>
+    <label> 
+      <%= button_to like_events_path, :method => :post, class: "like-event btn link-primary target", params: { like_event: {event_id: event.id, promoter: event.organizer_id, like: true} } do %>
+        <i class="fa-regular fa-thumbs-up fa-6" style="font-size: 10em;"></i>
+      <%end%>
+    </label>
+    <label>
+      <%= button_to like_events_path, :method => :post, class: "like-event btn link-primary target", params: { like_event: {event_id: event.id, promoter: event.organizer_id, like: false} } do %>
+        <i class="fa-regular fa-thumbs-down fa-6" style="font-size: 10em; color: yellow !important"></i>
+      <%end%>
+    </label>
+  
+  <%else%>
+    <label> 
+      <%= button_to like_events_path, :method => :post, class: "like-event btn link-primary target", params: { like_event: {event_id: event.id, promoter: event.organizer_id, like: true} } do %>
+        <i class="fa-regular fa-thumbs-up fa-6" style="font-size: 10em;"></i>
+      <%end%>
+    </label>
+    <label>
+      <%= button_to like_events_path, :method => :post, class: "like-event btn link-primary target", params: { like_event: {event_id: event.id, promoter: event.organizer_id, like: false} } do %>
+        <i class="fa-regular fa-thumbs-down fa-6" style="font-size: 10em;"></i>
+      <%end%>
+    </label>
+  <%end%>
+
+  <div id="likes-totali">
+    Numero di mi piace che ha questo evento: <%=@sum_likes%>
+  </div>
+</div>
+
+
+
+
+
+
+
 <script>
   document.querySelectorAll('.share').forEach(function(link) {
     link.href = link.href + location.href;

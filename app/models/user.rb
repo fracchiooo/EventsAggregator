@@ -5,6 +5,7 @@ class User < ApplicationRecord
   #has_many :eventi_preferiti
   require 'open-uri'
   has_many :like_comments
+  has_many :like_events
   has_many :comments, dependent: :destroy
   has_many :segnala_cs
 
