@@ -18,6 +18,11 @@
     <a target="_blank" href="https://www.google.it/maps/search/Hotels/@<%= event.coordinates %>,17z/data=!3m1!4b1">Visualizza Hotel nelle vicinanze</a>
   </p>
 
+  <p>
+    <!-- VARIABILI TEMPORANEE -->
+    <a target="_blank" href="<%= calendar_add_event_url %>?event_name=<%= event.event_id %>&location=<%= event.coordinates %>&start_date=2022-10-22T09:00:00-07:00&end_date=2022-10-28T09:00:00-07:00">Aggiungi a Google Calendar</a>
+  </p>
+
   <div class="row">
     <div class="col">
       <p>Condividi: </p>

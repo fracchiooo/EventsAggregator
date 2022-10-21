@@ -32,6 +32,10 @@ Rails.application.routes.draw do
     end
   end
 
+  get '/calendar/redirect', to: 'calendar#redirect', as: 'calendar_redirect'
+  get '/calendar/callback', to: 'calendar#callback', as: 'calendar_callback'
+  get '/calendar/add_event', to: 'calendar#add_event', as: 'calendar_add_event'
+
   #resources :like_comments, only: [:create, :destroy]
   #resources :segnala_cs, only: [:create]
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
