@@ -67,7 +67,7 @@ class Predicthq
                     if event['entities'].present? then entity = event['entities'][0]['entity_id'] end
                     e = Event.new(  event_id:event['id'], 
                                     organizer_id: entity, 
-                                    coordinates: event['geo']['geometry']['coordinates'][1].to_s + "," + event['geo']['geometry']['coordinates'][0].to_s )
+                                    coordinates: event['location'][1].to_s+", "+event['location'][0].to_s )
                     e.save!
                 end
             end
