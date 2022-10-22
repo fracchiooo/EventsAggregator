@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_19_092443) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_20_111043) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -67,6 +67,18 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_19_092443) do
     t.index ["user_id"], name: "index_like_comments_on_user_id"
   end
 
+  create_table "like_events", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "event_id", null: false
+    t.string "promoter"
+    t.boolean "like"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id"], name: "index_like_events_on_event_id"
+    t.index ["user_id", "event_id"], name: "index_like_events_on_user_id_and_event_id", unique: true
+    t.index ["user_id"], name: "index_like_events_on_user_id"
+  end
+
   create_table "segnala_cs", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "comment_id", null: false
@@ -114,6 +126,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_19_092443) do
   add_foreign_key "like_comments", "comments", on_delete: :cascade
   add_foreign_key "like_comments", "users"
   add_foreign_key "like_comments", "users", on_delete: :cascade
+  add_foreign_key "like_events", "events"
+  add_foreign_key "like_events", "users"
   add_foreign_key "segnala_cs", "comments"
   add_foreign_key "segnala_cs", "comments", on_delete: :cascade
   add_foreign_key "segnala_cs", "users"

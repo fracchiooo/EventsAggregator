@@ -21,6 +21,23 @@ class EventsController < ApplicationController
 
   # GET /events/1 or /events/1.json
   def show
+    @sum_likes = 0
+    
+    if LikeEvent.where(event_id: @event.id.to_s).exists?
+      event_likes = LikeEvent.where(event_id: @event.id.to_s)
+
+      if user_signed_in? && event_likes.where(user_id: current_user.id).exists?
+        @user_like = event_likes.find_by(user_id: current_user.id).like
+      end
+      
+      event_likes.each do |like|
+        if like.like
+          @sum_likes = @sum_likes + 1
+        elsif like.like == false
+          @sum_likes = @sum_likes - 1
+        end
+      end
+    end
   end
 
   # GET /events/new

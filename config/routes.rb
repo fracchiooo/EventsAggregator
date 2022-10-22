@@ -23,12 +23,18 @@ Rails.application.routes.draw do
     end
   end
 
+  post '/like_events', to: "like_events#create"
+
   resources :events do
     resources :comments, only: [:create, :destroy, :update ] do
       resources :like_comments, only: [:create, :destroy]
       resources :segnala_cs, only: [:create]
     end
   end
+
+  get '/calendar/redirect', to: 'calendar#redirect', as: 'calendar_redirect'
+  get '/calendar/callback', to: 'calendar#callback', as: 'calendar_callback'
+  get '/calendar/add_event', to: 'calendar#add_event', as: 'calendar_add_event'
 
   #resources :like_comments, only: [:create, :destroy]
   #resources :segnala_cs, only: [:create]

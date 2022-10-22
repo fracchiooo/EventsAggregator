@@ -18,6 +18,11 @@
     <a target="_blank" href="https://www.google.it/maps/search/Hotels/@<%= event.coordinates %>,17z/data=!3m1!4b1">Visualizza Hotel nelle vicinanze</a>
   </p>
 
+  <p>
+    <!-- VARIABILI TEMPORANEE -->
+    <a target="_blank" href="<%= calendar_add_event_url %>?event_name=<%= event.event_id %>&location=<%= event.coordinates %>&start_date=2022-10-22T09:00:00-07:00&end_date=2022-10-28T09:00:00-07:00">Aggiungi a Google Calendar</a>
+  </p>
+
   <div class="row">
     <div class="col">
       <p>Condividi: </p>
@@ -38,6 +43,78 @@
   <br>
 
 </div>
+
+
+
+
+
+
+<div id="like_events">
+  <%if user_signed_in? %>
+    <% if @user_like == true %>
+      <label> 
+        <%= button_to like_events_path, :method => :post, class: "like-event btn link-primary", params: { like_event: {event_id: event.id, promoter: event.organizer_id, like: true} } do %>
+          <i class="fa-regular fa-thumbs-up fa-6" style="font-size: 10em; color: yellow !important"></i>
+        <%end%>
+      </label>
+      <label>
+        <%= button_to like_events_path, :method => :post, class: "like-event btn link-primary", params: { like_event: {event_id: event.id, promoter: event.organizer_id, like: false} } do %>
+          <i class="fa-regular fa-thumbs-down fa-6" style="font-size: 10em;"></i>
+        <%end%>
+      </label>
+
+    <%elsif @user_like == false %>
+      <label> 
+        <%= button_to like_events_path, :method => :post, class: "like-event btn link-primary", params: { like_event: {event_id: event.id, promoter: event.organizer_id, like: true} } do %>
+          <i class="fa-regular fa-thumbs-up fa-6" style="font-size: 10em;"></i>
+        <%end%>
+      </label>
+      <label>
+        <%= button_to like_events_path, :method => :post, class: "like-event btn link-primary", params: { like_event: {event_id: event.id, promoter: event.organizer_id, like: false} } do %>
+          <i class="fa-regular fa-thumbs-down fa-6" style="font-size: 10em; color: yellow !important"></i>
+        <%end%>
+      </label>
+    
+    <%else%>
+      <label> 
+        <%= button_to like_events_path, :method => :post, class: "like-event btn link-primary", params: { like_event: {event_id: event.id, promoter: event.organizer_id, like: true} } do %>
+          <i class="fa-regular fa-thumbs-up fa-6" style="font-size: 10em;"></i>
+        <%end%>
+      </label>
+      <label>
+        <%= button_to like_events_path, :method => :post, class: "like-event btn link-primary", params: { like_event: {event_id: event.id, promoter: event.organizer_id, like: false} } do %>
+          <i class="fa-regular fa-thumbs-down fa-6" style="font-size: 10em;"></i>
+        <%end%>
+      </label>
+    <%end%>
+
+  <%else%>
+    <label class="user-not-logged-in"> 
+      <button class="like-event btn link-primary" style="border:none;" disabled>
+        <i class="fa fa-thumbs-up fa-6" style="font-size: 10em;" disabled></i>
+      </button>
+    </label>
+    <label class="user-not-logged-in">
+      <button class="like-event btn link-primary" style="border:none;" disabled>
+        <i class="fa fa-thumbs-down fa-6" style="font-size: 10em;" disabled></i>
+      </button>
+    </label>
+  <%end%>
+
+  <div id="likes-totali">
+    Numero di mi piace che ha questo evento: <%=@sum_likes%>
+  </div>
+</div>
+
+<style>
+  .user-not-logged-in{
+    pointer-events: none;
+    opacity: 0.5;
+  }
+</style>
+
+
+
 
 <script>
   document.querySelectorAll('.share').forEach(function(link) {
