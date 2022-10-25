@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  get 'favorites/update'
   root 'pages#home'
   get '/home', to: "pages#home"
   get '/faq', to: "pages#faq"
@@ -25,6 +24,7 @@ Rails.application.routes.draw do
   end
 
   post '/like_events', to: "like_events#create"
+  post '/favorite_events', to: "favorites#update"
 
   resources :events do
     resources :comments, only: [:create, :destroy, :update ] do

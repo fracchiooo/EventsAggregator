@@ -8,10 +8,7 @@
 
 <div>
   <%= link_to "Edit this event", edit_event_path(@event) %> |
-  <%= link_to "Back to events", events_path %> |
-  <%= link_to  @favorite_text, favorites_update_path(:event => @event), id: "favorite_link" %>
-
-
+  <%= link_to "Back to events", events_path %>
   <%= button_to "Destroy this event", @event, method: :delete %>
 </div>
 
