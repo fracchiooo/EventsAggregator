@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'favorites/update'
   root 'pages#home'
   get '/home', to: "pages#home"
   get '/faq', to: "pages#faq"
