@@ -67,13 +67,49 @@ class Predicthq
                     if event['entities'].present? then entity = event['entities'][0]['entity_id'] end
                     e = Event.new(  event_id:event['id'], 
                                     organizer_id: entity, 
-                                    coordinates: event['location'][1].to_s+", "+event['location'][0].to_s )
+                                    coordinates: event['location'][1].to_s+", "+event['location'][0].to_s,
+                                    origin: "predicthq" )
                     e.save!
                 end
             end
         end
 
         return results
+    end
+
+    def self.getEvent(event_id)
+        begin
+            url="https://api.predicthq.com/v1/events/?id=" + event_id
+            uri=URI.parse(url)
+            http= Net::HTTP.new(uri.host,uri.port)
+            http.use_ssl=true
+            http.verify_mode= OpenSSL::SSL::VERIFY_NONE
+            request= Net::HTTP::Get.new(uri.request_uri)
+            request['Authorization'] = "Bearer #{Rails.application.credentials[:predicthq_access_token]}"
+            response=http.request(request)
+            res=JSON.parse(response.body)
+        rescue => exception
+            return "errore: ", (response).to_json, (exception).to_json
+        end
+
+        res = res['results'][0]
+
+        result = Hash.new
+        
+        result[:title] = res['title']
+        result[:description] = res['description']
+        start_date = Date::strptime(res['start'], '%Y-%m-%dT%H:%M:%SZ').strftime('%d/%m/%Y')
+        end_date = Date::strptime(res['end'], '%Y-%m-%dT%H:%M:%SZ').strftime('%d/%m/%Y')
+        if start_date == end_date 
+            result[:date] = start_date
+        else
+            result[:date] = start_date + " - " + end_date
+        end 
+        latlong_img = res['location'][0].to_s + "," + res['location'][1].to_s
+        result[:image] = "https://maps.geoapify.com/v1/staticmap?style=osm-bright&width=2048&height=1152&center=lonlat:#{latlong_img}&zoom=11.7625&marker=lonlat:#{latlong_img};type:awesome;color:%23bb3f73;size:x-large;icon:glass-martini&apiKey=#{Rails.application.credentials[:geoapify_api_key]}"
+
+        return result
+    
     end
 
 end

@@ -8,19 +8,7 @@
 <p style="color: green"><%= notice %></p>
 <p style="color: red"><%= alert %></p>
 
-<%= @event.id %>
-
-
 <%= render @event %>
-
-<div>
-  <%= link_to "Edit this event", edit_event_path(@event) %> |
-  <%= link_to "Back to events", events_path %>
-  <%= button_to "Destroy this event", @event, method: :delete %>
-</div>
-
-
-
 
 <div id="event_comments">
 
@@ -68,3 +56,23 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 
 </script>
+
+<style>
+ body {
+    background-color: #f8f9fa;
+  }
+
+  .card-event {
+    box-shadow: 0em 0em 1em rgba(0,0,0,0.5)
+  }
+
+  .btn-secondary,
+  .btn-secondary:focus,
+  .btn-secondary:active {
+      color: #fff;
+      background-color: #00838F !important;
+      border-color: #00838F !important;
+      box-shadow: none;
+  }
+
+</style>

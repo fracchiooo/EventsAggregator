@@ -21,6 +21,13 @@ class EventsController < ApplicationController
 
   # GET /events/1 or /events/1.json
   def show
+    if @event.origin == "predicthq"
+      @event_data = Predicthq.getEvent(@event.event_id)
+    elsif @event.origin == "ticketmaster"
+      @event_data = Ticketmaster.getEvent(@event.event_id)
+    end
+
+
     @sum_likes = 0
     
     if LikeEvent.where(event_id: @event.id.to_s).exists?

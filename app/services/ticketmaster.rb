@@ -67,13 +67,40 @@ class Ticketmaster
                     if event['promoter'].present? then promoter = event['promoter']['id'] end
                     e = Event.new(  event_id: event['id'], 
                                     organizer_id: promoter, 
-                                    coordinates: event['_embedded']['venues'][0]['location']['longitude'].to_s + "," + event['_embedded']['venues'][0]['location']['latitude'].to_s )
+                                    coordinates: event['_embedded']['venues'][0]['location']['longitude'].to_s + "," + event['_embedded']['venues'][0]['location']['latitude'].to_s,
+                                    origin: "ticketmaster" )
                     e.save!
                 end
             end
         end
 
         return results
+    end
+
+    def self.getEvent(event_id)
+        begin
+            url="https://app.ticketmaster.com/discovery/v2/events/#{event_id}.json?apikey=#{Rails.application.credentials[:ticketmaster][:api_key]}"
+            uri=URI.parse(url)
+            http= Net::HTTP.new(uri.host,uri.port)
+            http.use_ssl=true
+            http.verify_mode= OpenSSL::SSL::VERIFY_NONE
+            request= Net::HTTP::Get.new(uri.request_uri)
+            response=http.request(request)
+            res=JSON.parse(response.body)
+        rescue => exception
+            return "errore: ", @keyword, (response).to_json, (exception).to_json
+        end
+
+        result = Hash.new
+        
+        result[:title] = res['name']
+        result[:description] = res['info']
+        result[:date] = Date::strptime(res['dates']['start']['localDate'], '%Y-%m-%d').strftime('%d/%m/%Y') + " - " + res['dates']['start']['localTime']
+        result[:image] = res['images'][2]['url']
+        result[:price] = res['priceRanges'][0]['min'].to_s + " - " + res['priceRanges'][0]['max'].to_s + " " + res['priceRanges'][0]['currency']
+        result[:url] = res['url']
+        
+        return result
     end
 
 end
