@@ -10,7 +10,7 @@ class FavoritesController < ApplicationController
       favorite_exists = true 
       respond_to do |format|
         if fav.save
-          format.html {redirect_to edit_user_registration_path}
+          format.html {redirect_to event_path(selected_event.event_id)}
           format.json {head :no_content}
         else
           format.html { redirect_to events_path, status: :unprocessable_entity }
