@@ -41,27 +41,39 @@
                                         </td>
                                         <td>
                                             <div class="btn-group" role="group" aria-label="Actions on user">
-                                                <div class="">
-                                                    <%if user==@current%>
+
+                                                <%if user==@current%> <%# admin che visualizza la lista %>
+                                                    <div class="">
                                                         <%= button_to "Blocca", users_path, method: :get, class: "btn btn-primary", :disabled => true %>
-                                                    <%else%>
-                                                        <%= button_to "Blocca", blocca_utente_user_path(user), data: {:turbo_confirm => 'Sei sicuro di voler bloccare l\'utente?'}, :method => :patch, class: "btn btn-outline-primary" %>
-                                                    <%end%>
-                                                </div>
-                                                <div class="ps-2">
-                                                    <%if user==@current%>
+                                                    </div>
+                                                    <div class="ps-2">
                                                         <%= button_to "Elimina", users_path, method: :get, class: "btn btn-danger", :disabled => true %>
-                                                    <%else%>
-                                                        <%= button_to "Elimina", user_path(user), data: {:turbo_confirm => 'Sei sicuro di voler eliminare l\'utente?'}, :method => :delete, class: "btn btn-outline-danger" %>
-                                                    <%end%>
-                                                </div>
-                                                <div class="ps-2">
-                                                    <%if user==@current%>
+                                                    </div>
+                                                    <div class="ps-2">
                                                         <%= button_to "Rendi Amministratore", users_path, method: :get, class: "btn btn-dark", :disabled => true %>
-                                                    <%else%>
+                                                    </div>
+                                                <% elsif !user.account_active %> <%# utente già bloccato %>
+                                                    <div class="">
+                                                        <%= button_to "Sblocca", blocca_utente_user_path(user), data: {:turbo_confirm => 'Sei sicuro di voler sbloccare l\'utente?'}, :method => :patch, class: "btn btn-outline-primary" %>
+                                                    </div>
+                                                    <div class="ps-2">
+                                                        <%= button_to "Elimina", user_path(user), data: {:turbo_confirm => 'Sei sicuro di voler eliminare l\'utente?'}, :method => :delete, class: "btn btn-outline-danger" %>
+                                                    </div>
+                                                    <div class="ps-2">
+                                                        <%= button_to "Rendi Amministratore", users_path, method: :get, class: "btn btn-dark", :disabled => true %>
+                                                    </div>
+                                                <%else%> <%# generico utente %>
+                                                    <div class="">
+                                                        <%= button_to "Blocca", blocca_utente_user_path(user), data: {:turbo_confirm => 'Sei sicuro di voler bloccare l\'utente?'}, :method => :patch, class: "btn btn-outline-primary" %>
+                                                    </div>
+                                                    <div class="ps-2">
+                                                        <%= button_to "Elimina", user_path(user), data: {:turbo_confirm => 'Sei sicuro di voler eliminare l\'utente?'}, :method => :delete, class: "btn btn-outline-danger" %>
+                                                    </div>
+                                                    <div class="ps-2">
                                                         <%= button_to "Rendi Amministratore", rendi_amministratore_user_path(user), data: {:turbo_confirm => 'Sei sicuro di voler rendere questo utente un amministratore?'}, :method => :patch, class: "btn btn-outline-dark" %>
-                                                    <%end%>
-                                                </div>
+                                                    </div>
+                                                <%end%>
+
                                             </div>
                                         </td>
                                     </tr>

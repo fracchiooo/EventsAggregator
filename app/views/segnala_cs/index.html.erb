@@ -32,9 +32,16 @@
                                         </td>
                                         <td>
                                             <div class="btn-group" role="group" aria-label="Basic example">
-                                                <div class="">
-                                                    <%= button_to "Blocca", blocca_utente_segnala_c_path(rc), data: {:turbo_confirm => 'Sei sicuro di voler bloccare l\'utente?'}, :method => :patch, class: "btn btn-primary" %>
-                                                </div>
+                                                <% if rc.user == @current || !rc.user.account_active%> <%# admin che visualizza o utente già bloccato %>
+                                                    <div class="">
+                                                        <%= button_to "Blocca", segnala_cs_path, :method => :get, class: "btn btn-primary", :disabled => true %>
+                                                    </div>
+                                                <% else %>
+                                                    <div class="">
+                                                        <%= button_to "Blocca", blocca_utente_segnala_c_path(rc), data: {:turbo_confirm => 'Sei sicuro di voler bloccare l\'utente?'}, :method => :patch, class: "btn btn-primary" %>
+                                                    </div>
+                                                <% end %>
+                                                
                                                 <div class="ps-2">
                                                     <%= button_to "Elimina commento", elimina_commento_segnala_c_path(rc), data: {:turbo_confirm => 'Sei sicuro di voler eliminare il commento?'}, :method => :patch, class: "btn btn-primary" %>
                                                 </div>

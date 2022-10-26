@@ -17,11 +17,22 @@ class UsersController < ApplicationController
   end
 
   def blocca_utente
-    @user.update_attribute(:account_active, false)
+    # utente non bloccato -> da bloccare
+    if @user.account_active
+      @user.update_attribute(:account_active, false)
 
-    respond_to do |format|
-        format.html { redirect_to users_url, notice: "L'utente è stato bloccato con successo." }
-        format.json { head :no_content }
+      respond_to do |format|
+          format.html { redirect_to users_url, notice: "L'utente è stato bloccato con successo." }
+          format.json { head :no_content }
+      end
+    # utente bloccato -> da sbloccare
+    else
+      @user.update_attribute(:account_active, true)
+
+      respond_to do |format|
+          format.html { redirect_to users_url, notice: "L'utente è stato sbloccato con successo." }
+          format.json { head :no_content }
+      end
     end
   end
 

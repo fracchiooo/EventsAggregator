@@ -4,6 +4,7 @@ class SegnalaCsController < ApplicationController
 
     def index
         @reported_comments = SegnalaC.all
+        @current = current_user
     end
 
 
