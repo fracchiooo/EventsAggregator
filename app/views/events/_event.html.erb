@@ -91,8 +91,15 @@
 
               <p class="mt-2">
                 <!-- VARIABILI TEMPORANEE -->
-                <a class="btn btn-secondary btn-block" target="_blank" href="<%= calendar_add_event_url %>?event_name=<%= event.event_id %>&location=<%= event.coordinates %>&start_date=2022-10-22T09:00:00-07:00&end_date=2022-10-28T09:00:00-07:00">Aggiungi a Google Calendar</a>
+                <%= link_to "Aggiungi a Google Calendar", "#{calendar_add_event_url}?event_name=#{@event_data[:title]}&location=#{event.coordinates}&start_date=2022-10-22T09:00:00-07:00&end_date=2022-10-28T09:00:00-07:00", class: "btn btn-secondary btn-block", target:"_blank"%>
               </p>
+
+              <% if user_signed_in? %>
+                <div class="mt-2">
+                  <input type="file" id="media" accept="image/*,video/*">
+                  <%= link_to "Carica foto/video su Google Drive", drive_add_media_url, class: "mt-2 btn btn-secondary btn-block", target:"_blank"%>
+                </div>
+              <% end %>
 
               <%= button_to "Partecipa", "#", class: "mt-2 btn btn-secondary btn-block", disabled: !user_signed_in?, method: :post, params: { event: @event.id } %>
 
@@ -120,26 +127,12 @@
   </div>
 
 
-
-
-<div id="<%= dom_id event %>">
-
-  
-
-  <br>
-
-</div>
-
-
 <style>
   .user-not-logged-in{
     pointer-events: none;
     opacity: 0.5;
   }
 </style>
-
-
-
 
 <script>
   document.querySelectorAll('.share').forEach(function(link) {

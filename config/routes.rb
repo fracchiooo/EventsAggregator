@@ -33,9 +33,10 @@ Rails.application.routes.draw do
     end
   end
 
-  get '/calendar/redirect', to: 'calendar#redirect', as: 'calendar_redirect'
-  get '/calendar/callback', to: 'calendar#callback', as: 'calendar_callback'
+  get '/oauth2/redirect', to: 'oauth2#redirect', as: 'oauth2_redirect'
+  get '/oauth2/callback', to: 'oauth2#callback', as: 'oauth2_callback'
   get '/calendar/add_event', to: 'calendar#add_event', as: 'calendar_add_event'
+  get '/drive/add_media', to: 'drive#add_media', as: 'drive_add_media'
 
   #resources :like_comments, only: [:create, :destroy]
   #resources :segnala_cs, only: [:create]
