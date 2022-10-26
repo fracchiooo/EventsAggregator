@@ -95,14 +95,20 @@ class Users::RegistrationsController < Devise::RegistrationsController
   private
 
   def set_user
-    if !params[:user][:id].nil? && current_user.role=='admin'
+    
+    if (params[:user].present? && params[:user][:id].present?) && current_user.role=='admin'
       
       @user=User.find(params[:user][:id])
            
     else
+
+      if current_user.nil?
+
+      else
       
-       @user = User.find(current_user.id)
+        @user = User.find(current_user.id)
       
+      end
     end
     
         

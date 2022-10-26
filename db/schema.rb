@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_24_102815) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_26_135918) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -133,12 +133,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_24_102815) do
   add_foreign_key "comments", "users", on_delete: :cascade
   add_foreign_key "favorites", "events"
   add_foreign_key "favorites", "users"
+  add_foreign_key "favorites", "users", on_delete: :cascade
   add_foreign_key "like_comments", "comments"
   add_foreign_key "like_comments", "comments", on_delete: :cascade
   add_foreign_key "like_comments", "users"
   add_foreign_key "like_comments", "users", on_delete: :cascade
   add_foreign_key "like_events", "events"
   add_foreign_key "like_events", "users"
+  add_foreign_key "like_events", "users", on_delete: :cascade
   add_foreign_key "segnala_cs", "comments"
   add_foreign_key "segnala_cs", "comments", on_delete: :cascade
   add_foreign_key "segnala_cs", "users"

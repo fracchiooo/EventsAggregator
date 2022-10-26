@@ -4,6 +4,7 @@ class User < ApplicationRecord
   #has_many :eventi_partecipo
   #has_many :eventi_preferiti
   require 'open-uri'
+  has_many :favorites
   has_many :like_comments
   has_many :like_events
   has_many :comments, dependent: :destroy
@@ -15,8 +16,8 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable,
-         :lockable, :omniauthable, :omniauth_providers => [:facebook, :google_oauth2]
+         :rememberable, :validatable,
+         :omniauthable, :omniauth_providers => [:facebook, :google_oauth2]
 
 
 

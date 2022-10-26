@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
     def error_c_render(err)
         respond_to do |format|
             print err
-            format.html { redirect_to new_registration_path(resource_name), alert: "username già preso." }
+            format.html { redirect_to home, alert: "errore nel database" }
             format.json { head :no_content }
         end
     end
