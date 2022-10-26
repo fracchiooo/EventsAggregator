@@ -106,6 +106,8 @@
   </div>
 </div>
 
+<%= button_to @favorite_text, favorite_events_path, class: "btn btn-primary", disabled: !user_signed_in?, method: :post, params: { event: @event.id } %>
+
 <style>
   .user-not-logged-in{
     pointer-events: none;

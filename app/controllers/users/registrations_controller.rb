@@ -2,7 +2,7 @@
 
 class Users::RegistrationsController < Devise::RegistrationsController
 
-  #before_action :set_user
+  before_action :set_user
   # before_action :configure_sign_up_params, only: [:create]
   # before_action :configure_account_update_params, only: [:update]
 
@@ -18,12 +18,12 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # GET /resource/edit
   def edit
+    @favorites = Favorite.where(user: current_user.id)
     super
   end
 
   # PUT /resource
   def update
-    @user = User.find(current_user.id)
     
     if params[:user][:immagine_profilo].present?
       image_path=params[:user][:immagine_profilo].path
@@ -95,6 +95,16 @@ class Users::RegistrationsController < Devise::RegistrationsController
   private
 
   def set_user
+    if !params[:user][:id].nil? && current_user.role=='admin'
+      
+      @user=User.find(params[:user][:id])
+           
+    else
+      
+       @user = User.find(current_user.id)
+      
+    end
+    
         
   end
 
@@ -104,7 +114,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def user_params
 
 
-    params.require(:user).permit(:nome, :cognome, :data_nascita, :immagine_profilo, :username, :email, :password, :sesso)
+    params.require(:user).permit(:id, :nome, :cognome, :data_nascita, :immagine_profilo, :username, :email, :password, :sesso)
   
     
   end
