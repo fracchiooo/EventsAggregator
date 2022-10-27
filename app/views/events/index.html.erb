@@ -17,58 +17,6 @@
 
 <div id="events" class="h-5">
   <%# se la ricerca ha almeno un risultato %>
-  <% if @events.present? %>
-    <% @events.each do |event| %>
-
-      <div class="row" style="padding-left:2em; padding-right:2em; padding-top:1em; padding-bottom:1em; max-height: 5%">
-        <div class="col-sm-12">
-          <div class="card card-event">
-            <div class="card-body">
-              <div class="row">
-                <div class="col-3">
-                  <% latlong_img = event['location'][0].to_s + "," + event['location'][1].to_s %>
-                  <img src="https://maps.geoapify.com/v1/staticmap?style=osm-bright&width=640&height=360&center=lonlat:<%=latlong_img%>&zoom=11.7625&marker=lonlat:<%=latlong_img%>;type:awesome;color:%23bb3f73;size:x-large;icon:glass-martini&apiKey=<%=Rails.application.credentials[:geoapify_api_key]%>" alt="map event" class="img-fluid"/>
-                </div>
-                
-                <div class="col">
-                  <h5 class="card-title"> <%= event['title'] %> </h5>
-                  
-                  <p class="card-text">
-                    Date: <%= Date::strptime(event['start'], '%Y-%m-%dT%H:%M:%SZ').strftime('%Y-%m-%d at %H:%M')%>
-                    <% if event['timezone'].present? %>, timezone: <%= event['timezone'].to_s %> <%end%>
-                  </p>
-                  <p class="card-text">
-                    <div>Category: <%= event['category'].capitalize() %></div>
-                    <div>
-                      Labels: 
-                      <% event['labels'].each do |label| %>
-                        <%= label.capitalize() + " " %> 
-                      <%end%>
-                    </div>
-                  </p>
-                  <p class="card-text">
-                    Location: <%= event['location'][1].to_s+", "+event['location'][0].to_s %>
-                  </p>
-                  <% if event['description']!= "" %>
-                    <p class="card-text">
-                      Description: <%= event['description'] %>
-                    </p>
-                  <%end%>
-
-                  <a href="<%= event_path(event['id']) %>" class="btn btn-primary">apri l'evento</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    <% end %>
-  <% end %>
-</div>
-
-<div id="events" class="h-5">
-  <%# se la ricerca ha almeno un risultato %>
   <% if @events2.present? %>
     <% @events2.each do |event| %>
 
@@ -90,7 +38,7 @@
                   <h5 class="card-title"> <%= event['name'] %> </h5>
 
                   <p class="card-text">
-                    Date: <%= Date::strptime(event['dates']['start']['dateTime'], '%Y-%m-%dT%H:%M:%SZ').strftime('%Y-%m-%d at %H:%M')%>, timezone: <%= event['dates']['timezone'].to_s %>
+                    Date: <%= Date::strptime(event['dates']['start']['localDate'], '%Y-%m-%d').strftime('%d/%m/%Y') + " - " + event['dates']['start']['localTime'][0...-3]%>, timezone: <%= event['dates']['timezone'].to_s %>
                   </p>
                   <p class="card-text">
                     Category: <%= event['classifications'][0]['segment']['name'] + ", " + event['classifications'][0]['genre']['name'] %>
@@ -116,7 +64,58 @@
   <% end %>
 </div>
 
+<div id="events" class="h-5">
+  <%# se la ricerca ha almeno un risultato %>
+  <% if @events.present? %>
+    <% @events.each do |event| %>
 
+      <div class="row" style="padding-left:2em; padding-right:2em; padding-top:1em; padding-bottom:1em; max-height: 5%">
+        <div class="col-sm-12">
+          <div class="card card-event">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-3">
+                  <% latlong_img = event['location'][0].to_s + "," + event['location'][1].to_s %>
+                  <img src="https://maps.geoapify.com/v1/staticmap?style=osm-bright&width=640&height=360&center=lonlat:<%=latlong_img%>&zoom=11.7625&marker=lonlat:<%=latlong_img%>;type:awesome;color:%23bb3f73;size:x-large;icon:glass-martini&apiKey=<%=Rails.application.credentials[:geoapify_api_key]%>" alt="map event" class="img-fluid"/>
+                </div>
+                
+                <div class="col">
+                  <h5 class="card-title"> <%= event['title'] %> </h5>
+                  
+                  <p class="card-text">
+                    Date: <%= Date::strptime(event['start'], '%Y-%m-%dT%H:%M:%SZ').strftime('%d/%m/%Y') %>
+                    <% if event['timezone'].present? %>, timezone: <%= event['timezone'].to_s %> <%end%>
+                  </p>
+                  <p class="card-text">
+                    <div>Category: <%= event['category'].capitalize() %></div>
+                    <div>
+                      Labels: 
+                      <% event['labels'].each do |label| %>
+                        <%= label.capitalize() + " " %> 
+                      <%end%>
+                    </div>
+                  </p>
+                  <p class="card-text">
+                    <% location = Geocoder.search(event['location'][1].to_s + ", " + event['location'][0].to_s).first %>
+                    Location: <%= location.city %>, <%= location.street %>
+                  </p>
+                  <% if event['description']!= "" %>
+                    <p class="card-text">
+                      Description: <%= event['description'] %>
+                    </p>
+                  <%end%>
+
+                  <a href="<%= event_path(event['id']) %>" class="btn btn-primary">apri l'evento</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <% end %>
+  <% end %>
+</div>
 
 <style>
   :root {

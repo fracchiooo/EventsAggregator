@@ -26,8 +26,6 @@ class EventsController < ApplicationController
     elsif @event.origin == "ticketmaster"
       @event_data = Ticketmaster.getEvent(@event.event_id)
     end
-    event_location = Geocoder.search(@event_data[:coordinates]).first
-    @where_event = event_location.city + ", " + event_location.country
 
     @sum_likes = 0
     
