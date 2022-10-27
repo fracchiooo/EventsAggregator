@@ -10,6 +10,53 @@
                 <h1><%= @event_data[:title] %></h1>
                 <p><%= @event_data[:description] %></p>
               </div>
+              
+              <% if @photos.present? %>
+                <div class="slider-container">
+                  <div class="slider">
+                    <div class="slides">
+
+                      <% temp = 1 %>
+                      <% max = @photos.count %>
+                      <% @photos.each do |photo| %>
+
+                        <div id="slides__<%= temp %>" class="slide">
+                          <img src="<%= photo.drive_url %>" class="drive-photo" alt="Drive Photo #<%= temp %>">
+
+                          <span class="slide__text"> <%= photo.user.nome %> </span>
+
+                          <% if max == 1 %>
+                          <% elsif temp == 1 %>
+                            <a class="slide__prev" href="#slides__<%= max %>" title="Prev">
+                              <i class="fa fa-angle-left icon-arrow-photos" aria-hidden="true"></i>
+                            </a>
+                            <a class="slide__next" href="#slides__<%= temp + 1 %>" title="Next">
+                              <i class="fa fa-angle-right icon-arrow-photos" aria-hidden="true"></i>  
+                            </a>
+                          <% elsif temp == max %>
+                            <a class="slide__prev" href="#slides__<%= temp - 1 %>" title="Prev">
+                              <i class="fa fa-angle-left icon-arrow-photos" aria-hidden="true"></i>
+                            </a>
+                            <a class="slide__next" href="#slides__<%= 1 %>" title="Next">
+                              <i class="fa fa-angle-right icon-arrow-photos" aria-hidden="true"></i>  
+                            </a>
+                          <% else %>
+                            <a class="slide__prev" href="#slides__<%= temp - 1 %>" title="Prev">
+                              <i class="fa fa-angle-left icon-arrow-photos" aria-hidden="true"></i>
+                            </a>
+                            <a class="slide__next" href="#slides__<%= temp + 1 %>" title="Next">
+                              <i class="fa fa-angle-right icon-arrow-photos" aria-hidden="true"></i>  
+                            </a>
+                          <% end %>
+                        </div>
+
+                        <% temp += 1 %>
+                      <%end%>
+
+                    </div>
+                  </div>
+                </div>
+              <%end%> 
             </div>
 
             <div class="col-md-4 text-center">
@@ -143,3 +190,104 @@
     document.getElementById("upload_button").hidden = false;
   });
 </script>
+
+<style>
+.icon-arrow-photos {
+  font-size:5em;
+}
+
+.drive-photo {
+  border-radius: 25px; 
+  width:100%; 
+  height:100%; 
+  object-fit: contain;
+}
+
+.slider-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slider {
+  width: 100%;
+  max-width: 600px;
+  height: 400px;
+  margin: 5px;
+  text-align: center;
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+}
+
+.slides {
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+}
+
+/* .slide:nth-of-type(even) {
+  background-color: rgb(250, 246, 212);
+} */
+
+.slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  width: 100%;
+  height: 400px;
+  scroll-snap-align: center;
+  margin-right: 0px;
+  box-sizing: border-box;
+  background: white;
+  transform-origin: center center;
+  transform: scale(1);
+}
+
+.slide__text {
+  position: absolute;
+  z-index: 10;
+  font-size: 40px;
+  font-weight: bold;
+  font-family: sans-serif;
+  top: 80%;
+  display: flex;
+  justify-content: center;
+  text-shadow: -2px 0 white, 0 2px white, 2px 0 white, 0 -2px white;
+}
+
+.slide a {
+  background: none;
+  border: none;
+}
+
+a.slide__prev,
+.slider::before {
+  left: 5%;
+}
+a.slide__next,
+.slider::after {
+  right: 5%;
+}
+.slider::before,
+.slider::after,
+.slide__prev,
+.slide__next {
+  position: absolute;
+  top: 41%;
+  padding: 3px;
+  z-index: 100;
+  text-shadow: -2px 0 white, 0 2px white, 2px 0 white, 0 -2px white;
+}
+
+.slider::before,
+.slider::after {
+  content: "";
+  z-index: 1;
+  background: none;
+  pointer-events: none;
+}
+</style>

@@ -26,9 +26,11 @@ class EventsController < ApplicationController
     elsif @event.origin == "ticketmaster"
       @event_data = Ticketmaster.getEvent(@event.event_id)
     end
+    event_location = Geocoder.search(@event_data[:coordinates]).first
+    @where_event = event_location.city + ", " + event_location.country
+
 
     @sum_likes = 0
-    
     if LikeEvent.where(event_id: @event.id.to_s).exists?
       event_likes = LikeEvent.where(event_id: @event.id.to_s)
 
@@ -45,13 +47,17 @@ class EventsController < ApplicationController
       end
     end
     
+
     favorite_exists = Favorite.where(event: @event, user: current_user) == [] ? false : true
     @favorite_text = favorite_exists ? "Togli dai preferiti" : "Aggiungi ai preferiti"
 
+
     partecipant_exists = Partecipant.where(event: @event, user: current_user) == [] ? false : true
     @partecipant_text = partecipant_exists ? "Rimuovi Partecipazione" : "Segnala Partecipazione"
-
     @partecipants = Partecipant.where(event: @event).count
+
+
+    @photos = DrivePhoto.where(event: @event)
   end
 
   # GET /events/new
