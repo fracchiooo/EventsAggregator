@@ -60,6 +60,15 @@ gem 'signet'
 gem 'google-apis-calendar_v3'
 gem 'google-apis-drive_v3'
 
+gem "devise"
+gem "omniauth-facebook"
+gem "omniauth-rails_csrf_protection" 
+gem "sass-rails"
+gem "omniauth"
+gem "omniauth-google-oauth2"
+# gem "canard", "~> 0.6.2.pre"
+# gem "cancan"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
@@ -76,22 +85,13 @@ group :development do
   # gem "spring"
 end
 
-
-group :development do
-
-  gem "devise"
-  gem "omniauth-facebook"
-  gem "omniauth-rails_csrf_protection" 
-  gem "sass-rails"
-  gem "omniauth"
-  gem "omniauth-google-oauth2"
- # gem "canard", "~> 0.6.2.pre"
- # gem "cancan"
-end
-
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
   gem "webdrivers"
+
+  gem 'cucumber-rails', require: false
+  gem 'database_cleaner'
+  gem 'rspec-rails'
 end
