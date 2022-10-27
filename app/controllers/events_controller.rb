@@ -55,6 +55,26 @@ class EventsController < ApplicationController
     @partecipants = Partecipant.where(event: @event).count
 
 
+    check_photos_existants = DrivePhoto.where(event: @event)
+    if check_photos_existants.present? 
+      check_photos_existants.each do |photo|
+        begin
+          uri=URI.parse(photo.drive_url)
+          http= Net::HTTP.new(uri.host,uri.port)
+          http.use_ssl=true
+          http.verify_mode= OpenSSL::SSL::VERIFY_NONE     
+          request= Net::HTTP::Get.new(uri.request_uri)
+          response=http.request(request)
+          if response.code == "404"
+            # link non più valido, elimino entry
+            DrivePhoto.where(event: @event, drive_url: photo.drive_url).destroy_all
+            puts "#{res.code} error - #{photo.drive_url} does not exists anymore."
+          end
+        rescue
+            puts "breaking for #{photo.drive_url}"
+        end
+      end
+    end
     @photos = DrivePhoto.where(event: @event)
   end
 
