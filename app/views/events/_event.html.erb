@@ -21,7 +21,13 @@
                       <% @photos.each do |photo| %>
 
                         <div id="slides__<%= temp %>" class="slide">
-                          <img src="<%= photo.drive_url %>" class="drive-photo" alt="Drive Photo #<%= temp %>">
+                          <% if photo.drive_url.include? '&type=video' %>
+                            <video class="drive-photo" controls>
+                              <source src="<%= photo.drive_url %>" type="video/mp4">
+                            </video>
+                          <% else %>
+                            <img src="<%= photo.drive_url %>" class="drive-photo" alt="Drive Photo #<%= temp %>">
+                          <% end %>
 
                           <span class="slide__text"> <%= photo.user.nome %> </span>
 

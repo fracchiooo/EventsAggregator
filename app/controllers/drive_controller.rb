@@ -39,6 +39,10 @@ class DriveController < ApplicationController
       file = service.get_file(file.id, fields: 'webContentLink')
       file_url = file.web_content_link
 
+      if params[:media].content_type.start_with?('video')
+        file_url += '&type=video'
+      end
+
       drive_photo = DrivePhoto.new(event_id: params[:event], user_id: current_user.id, drive_url: file_url)
       drive_photo.save
 
