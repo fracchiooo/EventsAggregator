@@ -100,10 +100,13 @@ class Predicthq
         result[:description] = res['description']
         start_date = Date::strptime(res['start'], '%Y-%m-%dT%H:%M:%SZ').strftime('%d/%m/%Y')
         end_date = Date::strptime(res['end'], '%Y-%m-%dT%H:%M:%SZ').strftime('%d/%m/%Y')
+        result[:calendar_start] = Date::strptime(res['start'], '%Y-%m-%dT%H:%M:%S%Z').strftime('%Y-%m-%dT%H:%M:%S')
         if start_date == end_date 
             result[:date] = start_date
+            result[:calendar_end] = result[:calendar_start]
         else
             result[:date] = start_date + " - " + end_date
+            result[:calendar_end] = Date::strptime(res['end'], '%Y-%m-%dT%H:%M:%S%Z').strftime('%Y-%m-%dT%H:%M:%S')
         end 
         latlong_img = res['location'][0].to_s + "," + res['location'][1].to_s
         result[:image] = "https://maps.geoapify.com/v1/staticmap?style=osm-bright&width=2048&height=1152&center=lonlat:#{latlong_img}&zoom=11.7625&marker=lonlat:#{latlong_img};type:awesome;color:%23bb3f73;size:x-large;icon:glass-martini&apiKey=#{Rails.application.credentials[:geoapify_api_key]}"

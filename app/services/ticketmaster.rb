@@ -86,6 +86,7 @@ class Ticketmaster
             http.verify_mode= OpenSSL::SSL::VERIFY_NONE
             request= Net::HTTP::Get.new(uri.request_uri)
             response=http.request(request)
+            print(response.body)
             res=JSON.parse(response.body)
         rescue => exception
             return "errore: ", @keyword, (response).to_json, (exception).to_json
@@ -96,6 +97,8 @@ class Ticketmaster
         result[:title] = res['name']
         result[:description] = res['info']
         result[:date] = Date::strptime(res['dates']['start']['localDate'], '%Y-%m-%d').strftime('%d/%m/%Y') + " - " + res['dates']['start']['localTime']
+        result[:calendar_start] = res['dates']['start']['dateTime']
+        result[:calendar_end] = result[:calendar_start]
         result[:image] = res['images'][2]['url']
         result[:price] = res['priceRanges'][0]['min'].to_s + " - " + res['priceRanges'][0]['max'].to_s + " " + res['priceRanges'][0]['currency']
         result[:url] = res['url']

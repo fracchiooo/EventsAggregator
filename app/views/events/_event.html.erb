@@ -90,8 +90,7 @@
               </p>
 
               <p class="mt-2">
-                <!-- VARIABILI TEMPORANEE -->
-                <%= link_to "Aggiungi a Google Calendar", "#{calendar_add_event_url}?event_name=#{@event_data[:title]}&location=#{@where_event}&start_date=2022-10-22T09:00:00-07:00&end_date=2022-10-28T09:00:00-07:00", class: "btn btn-secondary btn-block", target:"_blank"%>
+                <%= link_to "Aggiungi a Google Calendar", "#{calendar_add_event_url}?event_name=#{@event_data[:title]}&location=#{@where_event}&start_date=#{@event_data[:calendar_start]}&end_date=#{@event_data[:calendar_end]}", class: "btn btn-secondary btn-block", target:"_blank"%>
               </p>
 
               <% if user_signed_in? %>
