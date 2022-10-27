@@ -1,11 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  user_id: one
-  event_id: one
+  user: one
+  event: one
   drive_url: MyString
 
 two:
-  user_id: two
-  event_id: two
+  user: two
+  event: two
   drive_url: MyString
