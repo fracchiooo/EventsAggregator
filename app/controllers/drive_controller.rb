@@ -42,7 +42,10 @@ class DriveController < ApplicationController
       drive_photo = DrivePhoto.new(event_id: params[:event], user_id: current_user.id, drive_url: file_url)
       drive_photo.save
 
-      return render json: { status: 'ok' }
+      respond_to do |format|
+        format.html {redirect_to request.referer}
+        format.json {head :no_content}
+      end
     rescue
       return render json: { error: 'Can\'t upload file' }
     end
