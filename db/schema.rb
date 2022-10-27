@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_26_135918) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_27_085351) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -47,6 +47,17 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_26_135918) do
     t.datetime "updated_at", null: false
     t.index ["event_id"], name: "index_comments_on_event_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
+  create_table "drive_photos", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "event_id", null: false
+    t.string "drive_url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id"], name: "index_drive_photos_on_event_id"
+    t.index ["user_id", "event_id"], name: "index_drive_photos_on_user_id_and_event_id", unique: true
+    t.index ["user_id"], name: "index_drive_photos_on_user_id"
   end
 
   create_table "events", force: :cascade do |t|
@@ -132,6 +143,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_26_135918) do
   add_foreign_key "comments", "events", on_delete: :cascade
   add_foreign_key "comments", "users"
   add_foreign_key "comments", "users", on_delete: :cascade
+  add_foreign_key "drive_photos", "events", on_delete: :cascade
+  add_foreign_key "drive_photos", "users", on_delete: :cascade
   add_foreign_key "favorites", "events"
   add_foreign_key "favorites", "users"
   add_foreign_key "favorites", "users", on_delete: :cascade
