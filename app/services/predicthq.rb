@@ -107,6 +107,7 @@ class Predicthq
         end 
         latlong_img = res['location'][0].to_s + "," + res['location'][1].to_s
         result[:image] = "https://maps.geoapify.com/v1/staticmap?style=osm-bright&width=2048&height=1152&center=lonlat:#{latlong_img}&zoom=11.7625&marker=lonlat:#{latlong_img};type:awesome;color:%23bb3f73;size:x-large;icon:glass-martini&apiKey=#{Rails.application.credentials[:geoapify_api_key]}"
+        result[:coordinates] = res['location'][1].to_s+", "+res['location'][0].to_s
 
         return result
     
