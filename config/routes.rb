@@ -25,6 +25,7 @@ Rails.application.routes.draw do
 
   post '/like_events', to: "like_events#create"
   post '/favorite_events', to: "favorites#update"
+  post '/partecipant_events', to: "partecipants#update"
 
   resources :events do
     resources :comments, only: [:create, :destroy, :update ] do

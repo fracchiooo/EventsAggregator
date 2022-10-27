@@ -77,6 +77,15 @@
     <%= favorite.event.id %>
     <%= link_to favorite.event.event_id, event_path(favorite.event.event_id) %>
   </div>
+<% end %>
+
+<br/>
+<h3><div class="text-center">Eventi a cui Partecipo</h3></div>
+<% @partecipants.each do |partecipant| %>
+  <div class="text-center">
+    <%= partecipant.event.id %>
+    <%= link_to partecipant.event.event_id, event_path(partecipant.event.event_id) %>
+  </div>
 <% end %> 
 
 <br/>

@@ -49,6 +49,11 @@ class EventsController < ApplicationController
     
     favorite_exists = Favorite.where(event: @event, user: current_user) == [] ? false : true
     @favorite_text = favorite_exists ? "Togli dai preferiti" : "Aggiungi ai preferiti"
+
+    partecipant_exists = Partecipant.where(event: @event, user: current_user) == [] ? false : true
+    @partecipant_text = partecipant_exists ? "Rimuovi Partecipazione" : "Segnala Partecipazione"
+
+    @partecipants = Partecipant.where(event: @event).count
   end
 
   # GET /events/new

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_27_085351) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_27_153552) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -100,6 +100,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_27_085351) do
     t.index ["user_id"], name: "index_like_events_on_user_id"
   end
 
+  create_table "partecipants", force: :cascade do |t|
+    t.integer "event_id", null: false
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id"], name: "index_partecipants_on_event_id"
+    t.index ["user_id"], name: "index_partecipants_on_user_id"
+  end
+
   create_table "segnala_cs", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "comment_id", null: false
@@ -155,6 +164,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_27_085351) do
   add_foreign_key "like_events", "events"
   add_foreign_key "like_events", "users"
   add_foreign_key "like_events", "users", on_delete: :cascade
+  add_foreign_key "partecipants", "events"
+  add_foreign_key "partecipants", "users"
+  add_foreign_key "partecipants", "users", on_delete: :cascade
   add_foreign_key "segnala_cs", "comments"
   add_foreign_key "segnala_cs", "comments", on_delete: :cascade
   add_foreign_key "segnala_cs", "users"

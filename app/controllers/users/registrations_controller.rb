@@ -18,8 +18,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # GET /resource/edit
   def edit
-    @favorites = Favorite.where(user: current_user.id)
-    super
+    @favorites = Favorite.where(user: current_user)
+
+    @partecipants = Partecipant.where(user: current_user)
   end
 
   # PUT /resource
