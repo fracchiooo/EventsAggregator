@@ -67,7 +67,7 @@ class Ticketmaster
                     if event['promoter'].present? then promoter = event['promoter']['id'] end
                     e = Event.new(  event_id: event['id'], 
                                     organizer_id: promoter, 
-                                    coordinates: event['_embedded']['venues'][0]['location']['longitude'].to_s + "," + event['_embedded']['venues'][0]['location']['latitude'].to_s,
+                                    coordinates: event['_embedded']['venues'][0]['location']['latitude'].to_s + "," + event['_embedded']['venues'][0]['location']['longitude'].to_s,
                                     origin: "ticketmaster" )
                     e.save!
                 end
