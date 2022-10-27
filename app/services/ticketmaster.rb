@@ -99,6 +99,7 @@ class Ticketmaster
         result[:image] = res['images'][2]['url']
         result[:price] = res['priceRanges'][0]['min'].to_s + " - " + res['priceRanges'][0]['max'].to_s + " " + res['priceRanges'][0]['currency']
         result[:url] = res['url']
+        result[:coordinates] = res['_embedded']['venues'][0]['location']['latitude'].to_s + "," + res['_embedded']['venues'][0]['location']['longitude'].to_s
         
         return result
     end
