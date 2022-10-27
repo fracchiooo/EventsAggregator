@@ -10,6 +10,8 @@ class User < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :segnala_cs
 
+  validates :username, :nome, :cognome, presence: true
+
   #validates :avatar, :data_nascita, :username, :nome, :cognome, :sesso, presence: true
   
   
@@ -111,7 +113,7 @@ class User < ApplicationRecord
         #f.write(Base64.decode64(base_64_encoded_data))
         user.immagine_profilo=Base64.strict_encode64(f.string)
       end
-      user.username= "profilo-#{SecureRandom.hex(10)}"
+      user.username= "profilo-#{SecureRandom.hex(7)}"
       user.nome=auth.info.first_name
       user.cognome=auth.info.last_name
     end 

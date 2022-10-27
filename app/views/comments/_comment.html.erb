@@ -7,7 +7,7 @@
    end
 %>
 
-<div class="card" style="max-height:0%; max-width: 80%">
+<div class="card" style="max-height:0%; max-width: 100%; border: 1px solid #9C9C9C;">
 
 
 
@@ -19,7 +19,7 @@
 <% if user.immagine_profilo.nil? %>
 <h4> immagine non presente </h4>
 <% else %>
-<img src="data:image/png;base64,<%= user.immagine_profilo %>" alt="avatar" width="45" height="45" />
+<img class="rounded-circle" src="data:image/png;base64,<%= user.immagine_profilo %>" alt="avatar" width="45" height="45" />
 <% end %>
 </div>
 <div id="username" class="row">

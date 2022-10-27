@@ -34,9 +34,9 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.0]
 
       t.datetime :data_nascita, default: nil
       t.string :immagine_profilo, default: nil
-      t.string :username, null: false, default: ""
-      t.string :nome, null: false, default: ""
-      t.string :cognome, null: false, default: ""
+      t.string :username, null: false
+      t.string :nome, null: false
+      t.string :cognome, null: false
       t.integer :sesso, default: 0
 
 
@@ -48,7 +48,7 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.0]
     end
 
     add_index :users, :email,                unique: true
-    add_index :users, :reset_password_token, unique: true
+    #add_index :users, :reset_password_token, unique: true
     add_index :users, :username,             unique: true
     # add_index :users, :confirmation_token,   unique: true
   end
