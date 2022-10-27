@@ -1,12 +1,4 @@
 
-
-<% begin
-        like_c=current_user.like_comments.find_by(comment: comment)
-   rescue
-        like_c=nil
-   end
-%>
-
 <div class="card" style="max-height:0%; max-width: 100%; border: 1px solid #9C9C9C;">
 
 
@@ -51,9 +43,15 @@
 
 <div id="like_e_num" class="col-sm-1">
 <div id="like" class="row">
-<% if like_c.nil? %>
+
+<% if current_user.nil? %>
+
+<button class= "btn btn-trasparent" onclick="functio(1)"><i class="bi bi-hand-thumbs-up-fill" style="font-size:150%;"></i></button>
 
 
+<% elsif current_user.like_comments.find_by(comment: comment).nil? %>
+
+<% like_c=nil %>
 
 <div id='like_div'>
 
@@ -65,6 +63,9 @@
 
 
 <% else %>
+
+<% like_c=current_user.like_comments.find_by(comment: comment) %>
+
 
 <div id='dislike_div'>
 <div id='butt_dislike'>
@@ -81,26 +82,38 @@
 
 <div id="segna_e_num" class="col-sm-1">
 <div id="segnala" class="row">
-<% if current_user.nil? || current_user.segnala_cs.find_by(comment: comment).nil? %>
+<% if current_user.nil?%>
+
+
+<%# button_to raw('<i class="bi bi-exclamation-triangle-fill" style="font-size:150%;">  </i>'),event_comment_segnala_cs_path(comment, event), class: "btn btn-trasparent", :onclick => "functio(0)" %>
+
+<button class= "btn btn-trasparent" onclick="functio(1)"><i class="bi bi-exclamation-triangle-fill" style="font-size:150%;"></i></button>
 
 
 
-<%= button_to raw('<i class="bi bi-exclamation-triangle-fill" style="font-size:150%;">  </i>'),event_comment_segnala_cs_path(comment, event) , params: {segnala_c: {comment_id: comment.id}}, class: "btn btn-trasparent", remote: true, data: {turbo_method: :post}, method: :post, :onclick => "functio(0)" %>
+
+<% elsif current_user.segnala_cs.find_by(comment: comment).nil?  %>
+
+<%= button_to raw('<i class="bi bi-exclamation-triangle-fill" style="font-size:150%;">  </i>'),event_comment_segnala_cs_path(comment, event) , params: {segnala_c: {comment_id: comment.id}}, class: "btn btn-trasparent", data: {turbo_method: :post}, method: :post, :onclick => "functio(0)" %>
+
+
+<div class="row">
+<p class="small text-muted"> Segnala!  </p>
+</div>
+
 
 <% else %>
 
 
-<div class="form">
-<button enable=false class="btn btn-trasparent" style="background:none; border:none; padding:0" >
-<i class="bi bi-exclamation-triangle-fill" style="font-size:150%;">  </i>
-</button>
+
+
+<div class="row">
+<p class="small text-muted"> Segnalato!  </p>
 </div>
 
 <% end %>
 </div>
-<div id="num_s" class="row">
-<p class="small text-muted"><%= comment.segnala_cs.count %>  </p>
-</div>
+
 </div>
 
 

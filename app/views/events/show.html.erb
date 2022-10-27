@@ -13,17 +13,25 @@
 <div id="event_comments">
 
 
+<div class="row">
 
+<div class="col-sm-3">
 <form id="form_create" action="<%= event_comments_path(@event) %>" method="post">
 <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
 <input type="hidden" name="_method" value="CREATE">
 <textarea name="comment[testo]" id="comment_testo" placeholder="scrivi un commento..." class=" h6 fst-italic" style="background-color: #f0f2f5; text-align:center" > 
 </textarea>
 </form>
+</div>
 
-<button form="form_create" type="submit" onclick="functio(1)" class="btn btn-primary" style=" text-align:center" >commenta</button>
+<div class="col-sm-2">
+
+<button form="form_create" type="submit" onclick="functio(1)" class="btn btn-primary" style=" text-align:center;" >commenta</button>
+</div>
+</div>
 
 
+<div style="padding:2%" ></div>
 
 
   <% @event.comments.each do |comment| %>
@@ -41,6 +49,14 @@ document.getElementById('comment_testo').value='';
 
 
 function functio(n){
+
+if(n==1){
+  if(! <%=current_user.present?%>){
+      alert("accedi per completare l'azione!");
+      document.location.href="<%=new_user_session_path()%>";
+      return;
+  }
+}
 
 document.location.reload(false);
 }
