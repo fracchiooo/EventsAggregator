@@ -16,7 +16,7 @@ class Oauth2Controller < ApplicationController
     if session[:google_type] == 'calendar'
       redirect_to calendar_add_event_url
     elsif session[:google_type] == 'drive'
-      redirect_to drive_add_media_path
+      redirect_to session[:referer]
     else
       redirect_to root_url
     end
