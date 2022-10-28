@@ -5,6 +5,7 @@
 # files.
 
 require 'cucumber/rails'
+require 'capybara/rails'
 
 # frozen_string_literal: true
 

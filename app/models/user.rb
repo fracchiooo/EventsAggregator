@@ -1,3 +1,5 @@
+require 'factory_bot'
+
 class User < ApplicationRecord
   #alias_attribute :events, :eventi_partecipo
   #alias_attribute ::events, :eventi_preferiti
@@ -128,4 +130,20 @@ class User < ApplicationRecord
       end 
     end 
   end
+
+
+  FactoryBot.define do
+    factory :user do
+      nome { 'Ciccio' }
+  
+      factory :user_random do
+        sequence(:nome) { |n| "User #{n}" }
+        username {'dd'}
+        cognome {'ww'}
+        email {'f@f'}
+        password {'weqasd'}
+      end
+    end
+  end
+  
 end
