@@ -30,7 +30,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       image_path=params[:user][:immagine_profilo].path
       File.open(image_path,"rb") do |f|
 
-        @user.update(immagine_profilo: Base64.strict_encode64(f.read))
+        @user_registration.update(immagine_profilo: Base64.strict_encode64(f.read))
   
       end
     end
@@ -43,8 +43,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
     
 
-    @user = User.find(current_user.id)
-    if @user.update(params.require(:user).permit(:nome, :cognome, :data_nascita, :immagine_profilo, :username, :email, :password, :sesso))
+    @user_registration = User.find(current_user.id)
+    if @user_registration.update(params.require(:user).permit(:nome, :cognome, :data_nascita, :immagine_profilo, :username, :email, :password, :sesso))
      redirect_to '/home'
     end
 
@@ -99,7 +99,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     
     if (params[:user].present? && params[:user][:id].present?) && current_user.role=='admin'
       
-      @user=User.find(params[:user][:id])
+      @user_registration=User.find(params[:user][:id])
            
     else
 
@@ -107,7 +107,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
       else
       
-        @user = User.find(current_user.id)
+        @user_registration = User.find(current_user.id)
       
       end
     end

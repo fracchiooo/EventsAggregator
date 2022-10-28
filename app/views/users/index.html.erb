@@ -73,7 +73,7 @@
                                                         <%= button_to "Rendi Amministratore", rendi_amministratore_user_path(user), data: {:turbo_confirm => 'Sei sicuro di voler rendere questo utente un amministratore?'}, :method => :patch, class: "btn btn-outline-dark" %>
                                                     </div>
                                                     <div class="ps-2">
-                                                        <%= button_to "Test", edit_user_registration_path, :method => :get, params: { user: {id: user.id} }, class: "btn btn-outline-dark" %>
+                                                        <%= button_to "Modera Utente", edit_user_registration_path, :method => :get, params: { user: {id: user.id} }, class: "btn btn-outline-warning" %>
                                                     </div>
                                                 <%end%>
 

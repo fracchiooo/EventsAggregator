@@ -128,9 +128,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_27_174113) do
     t.datetime "remember_created_at"
     t.datetime "data_nascita"
     t.string "immagine_profilo"
-    t.string "username", default: "", null: false
-    t.string "nome", default: "", null: false
-    t.string "cognome", default: "", null: false
+    t.string "username", null: false
+    t.string "nome", null: false
+    t.string "cognome", null: false
     t.integer "sesso", default: 0
     t.boolean "account_active", default: true
     t.integer "role", default: 0
@@ -142,7 +142,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_27_174113) do
     t.string "unlock_token"
     t.datetime "locked_at"
     t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
   end
