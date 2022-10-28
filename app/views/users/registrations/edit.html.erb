@@ -2,6 +2,7 @@
 
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
   <%= render "users/shared/error_messages", resource: resource %>
+  <%= f.hidden_field :id, value: @user_registration.id  %>
   <div class="container rounded bg-white mt-5 mb-5">
     <div class="row">
         <div class="col-md-5 border-right">
@@ -16,25 +17,26 @@
               <div class="row mt-2">
                 <div class="col-md-6">
                   <%= f.label :nome %>
-                  <%= f.text_field :nome, autofocus: true %>
+                  <%= f.text_field :nome, autofocus: true, value: @user_registration.nome %>
                 </div>
                 <div class="col-md-6">
                   <%= f.label :cognome %>
-                  <%= f.text_field :cognome, autofocus: true %>
+                  <%= f.text_field :cognome, autofocus: true, value: @user_registration.cognome %>
                 </div>
               </div>
               <div class="row mt-3">
                 <div class="col-md-12"><br />
                   <%= f.label :username %>
-                  <%= f.text_field :username, autofocus: true %>
+                  <%= f.text_field :username, autofocus: true, value: @user_registration.username %>
                 </div>
                 <div class="col-md-12"><br />
                   <%= f.label :data_nascita %>
-                  <%= f.date_field :data_nascita, autofocus: true %>
+                  <%= f.date_field :data_nascita, autofocus: true, value: @user_registration.data_nascita.present? ? @user_registration.data_nascita.strftime("%Y-%m-%d") : nil %>
+
                 </div>
                 <div class="col-md-12"><br />
                   <%= f.label :email %>
-                  <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+                  <%= f.email_field :email, autofocus: true, autocomplete: "email", value: @user_registration.email %>
                 </div>
                 <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
                   <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
@@ -92,10 +94,13 @@
 <br/>
 
 <div class="text-center">
+<% if !@edit_mode %>
+
 <h3>Cancella Account</h3>
 
 <p>
   <%= button_to "Cancel my account", registration_path(resource_name), class: "btn btn-primary", data: { confirm: "Are you sure?" }, method: :delete %>
+  <% end %>
   <br/>
   <%= link_to "Back", :back, class: "btn btn-primary" %>
 </p>

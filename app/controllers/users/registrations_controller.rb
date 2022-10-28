@@ -18,13 +18,18 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # GET /resource/edit
   def edit
-    @favorites = Favorite.where(user: current_user)
-
-    @partecipants = Partecipant.where(user: current_user)
+    @favorites = Favorite.where(user: @user_registration)
+    @partecipants = Partecipant.where(user: @user_registration)
   end
 
   # PUT /resource
   def update
+
+
+    if params[:user][:id].present?
+      params[:user].delete :id
+    end
+
     
     if params[:user][:immagine_profilo].present?
       image_path=params[:user][:immagine_profilo].path
@@ -40,13 +45,19 @@ class Users::RegistrationsController < Devise::RegistrationsController
     params[:user].delete :current_password
     params[:user].delete :immagine_profilo
 
+    #if @user_registration.update(user_params)
+     #redirect_to '/home'
+    #end
+    if @user_registration.update(params.require(:user).permit(:id, :nome, :cognome, :data_nascita, :immagine_profilo, :username, :email, :password, :sesso))
+      redirect_to '/home'
 
-    
-
-    @user_registration = User.find(current_user.id)
-    if @user_registration.update(params.require(:user).permit(:nome, :cognome, :data_nascita, :immagine_profilo, :username, :email, :password, :sesso))
-     redirect_to '/home'
+    else
+      print 'errore nell updateeeeeeeeeeeeeeeeeeee'  
     end
+
+
+
+ 
 
 
 
@@ -97,11 +108,13 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   def set_user
     
-    if (params[:user].present? && params[:user][:id].present?) && current_user.role=='admin'
-      
+    if current_user.role=='admin' && (params[:user].present? && (params[:user][:id].present?)) 
+      @edit_mode=true;
       @user_registration=User.find(params[:user][:id])
            
     else
+
+      @edit_mode=false
 
       if current_user.nil?
 
@@ -121,8 +134,19 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def user_params
 
 
-    params.require(:user).permit(:id, :nome, :cognome, :data_nascita, :immagine_profilo, :username, :email, :password, :sesso)
+    params.require(:user).permit(:nome, :cognome, :data_nascita, :immagine_profilo, :username, :email, :password, :sesso, :password_confirmation, :current_password, :commit)
   
     
+  end
+
+  def set_default_immagine_profilo
+
+
+    File.open("#{Rails.root}/public/images.jpeg","rb") do |f|
+
+      @user_registration.immagine_profilo ||= Base64.strict_encode64(f.read)
+    end
+
+
   end
 end
