@@ -1,4 +1,8 @@
 
+<p class="notice" style="color: green"> <%= notice %> </p>
+<p class="alert" style="color: red" > <%= alert %> </p>
+
+
 
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
   <%= render "users/shared/error_messages", resource: resource %>
@@ -41,22 +45,6 @@
                 <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
                   <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
                 <% end %>
-                <div class="col-md-12"><br/>
-                  <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
-                    <%= f.password_field :password, autocomplete: "new-password" %>
-                    <% if @minimum_password_length %>
-                      <br />
-                      <em><%= @minimum_password_length %> characters minimum</em>
-                    <% end %>
-                </div>
-                <div class="col-md-12"><br/>
-                  <%= f.label :password_confirmation %><br />
-                  <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-                </div>
-                <div class="col-md-12"><br/>
-                  <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
-                  <%= f.password_field :current_password, autocomplete: "current-password" %>
-                </div>
               </div>
               <br/>
               <div class="actions">
@@ -73,6 +61,40 @@
 <% end %>
 
 <br/>
+
+<% if @user_registration.provider.nil? %>
+<%= form_for(resource, as: resource_name, url: user_password_path(resource_name), html: { method: :put }) do |f| %>
+  <%= f.hidden_field :id, value: @user_registration.id  %>
+
+  <div class="col-md-12"><br/>
+  <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
+    <%= f.password_field :password, autocomplete: "new-password" %>
+    <% if @minimum_password_length %>
+      <br />
+      <em><%= @minimum_password_length %> characters minimum</em>
+    <% end %>
+</div>
+<div class="col-md-12"><br/>
+  <%= f.label :password_confirmation %><br />
+  <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+</div>
+<div class="col-md-12"><br/>
+  <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
+  <%= f.password_field :current_password, autocomplete: "current-password" %>
+</div>
+
+<br/>
+<div class="actions">
+  <div class="text-center">
+    <%= f.submit "Modifica Password", class:"btn btn-primary" %>
+  </div>
+ </div>
+
+
+<% end %> 
+
+<br/>
+<% end %>
 <h3><div class="text-center">Eventi Preferiti</h3></div>
 <% @favorites.each do |favorite| %>
   <div class="text-center">
