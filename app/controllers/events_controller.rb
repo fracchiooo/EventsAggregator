@@ -51,7 +51,7 @@ class EventsController < ApplicationController
 
 
     partecipant_exists = Partecipant.where(event: @event, user: current_user) == [] ? false : true
-    @partecipant_text = partecipant_exists ? "Rimuovi Partecipazione" : "Segnala Partecipazione"
+    @partecipant_text = partecipant_exists ? "Rimuovi Partecipazione" : "Segna Partecipazione"
     @partecipants = Partecipant.where(event: @event).count
 
 

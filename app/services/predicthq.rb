@@ -113,9 +113,30 @@ class Predicthq
 
         event_location = Geocoder.search(res['location'][1].to_s + ", " + res['location'][0].to_s).first
         result[:location] = event_location.city + ', ' + event_location.street
+        result[:organizer] = res['entities'][0]['name']
 
         return result
     
     end
+
+    def self.getEventsByOrganizer(organizer_id)
+        begin
+            url="https://api.predicthq.com/v1/events/?entity.id=" + organizer_id
+            uri=URI.parse(url)
+            http= Net::HTTP.new(uri.host,uri.port)
+            http.use_ssl=true
+            http.verify_mode= OpenSSL::SSL::VERIFY_NONE
+            request= Net::HTTP::Get.new(uri.request_uri)
+            request['Authorization'] = "Bearer #{Rails.application.credentials[:predicthq_access_token]}"
+            response=http.request(request)
+            print(response)
+            res=JSON.parse(response.body)
+        rescue => exception
+            return "errore: ", (response).to_json, (exception).to_json
+        end
+
+        return res['results']
+    end
+
 
 end

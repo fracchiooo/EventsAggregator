@@ -4,7 +4,7 @@ class PartecipantsController < ApplicationController
     partecipant = Partecipant.where(event: selected_event, user: current_user)
 
     if partecipant.empty? 
-      partecipant = Partecipant.create(event: selected_event, user: current_user)
+      partecipant = Partecipant.create(event: selected_event, user: current_user, organizer_id: params[:organizer_id])
       respond_to do |format|
         if partecipant.save
           format.html {redirect_to event_path(selected_event.event_id)}
