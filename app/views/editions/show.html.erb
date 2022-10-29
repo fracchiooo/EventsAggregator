@@ -7,25 +7,6 @@
   </div>
 <%end%>
 
-<% if @organizer.present? then %>
-  <div class="container mt-4 mb-4">
-    <div class="row d-flex justify-content-center">
-      <div class="col-md-6">
-        <div class="card card-event p-3 py-4">
-
-          <div class="mt-1 mb-2 text-center">
-            <h4> <%= @organizer %> </h4>
-            <h5><i class="fa-solid fa-list"></i> Eventi: <%= @total_events %></h5>
-            <h5><i class="fa-solid fa-user-group"></i> Partecipanti: <%= @total_partecipants %></h5>
-            <h5><i class="fa-solid fa-thumbs-up"></i> Like: <%= @total_likes %></h5>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </div>
-<%end%>
-
 <div id="events" class="h-5">
   <%# se la ricerca ha almeno un risultato %>
   <% if @events2.present? %>

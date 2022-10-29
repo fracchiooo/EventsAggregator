@@ -1,0 +1,39 @@
+<div class="row" style="padding-left:2em; padding-right:2em; padding-top:1em; padding-bottom:1em; max-height: 5%">
+  <div class="col-sm-12">
+    <div class="card card-event">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-3">
+            <% event['images'].each do |image| %>
+              <% if image['ratio'].to_s == "16_9" && image['width'].to_i>1000 then %>
+                <img src="<%= image['url'].to_s %>" alt="<%= image['url'].to_s%>" class="img-fluid"> <%# event['images'][X]['url'] %>
+                <%break%>
+              <%end%>
+            <%end%>
+          </div>
+          
+          <div class="col">
+            <h5 class="card-title"> <%= event['name'] %> </h5>
+
+            <p class="card-text">
+              Date: <%= Date::strptime(event['dates']['start']['localDate'], '%Y-%m-%d').strftime('%d/%m/%Y') + " - " + event['dates']['start']['localTime'][0...-3]%>, timezone: <%= event['dates']['timezone'].to_s %>
+            </p>
+            <p class="card-text">
+              Category: <%= event['classifications'][0]['segment']['name'] + ", " + event['classifications'][0]['genre']['name'] %>
+            </p>
+            <% if event['priceRanges'].present? %>
+              <p class="card-text">
+                Price range:  <%= event['priceRanges'][0]['min'].to_s+event['priceRanges'][0]['currency'] %> - <%= event['priceRanges'][0]['max'].to_s+event['priceRanges'][0]['currency'] %>
+              </p>
+            <%end%>
+            <p class="card-text">
+              Location: <%= event['_embedded']['venues'][0]['city']['name'] %>, <%= event['_embedded']['venues'][0]['address']['line1'] %>
+            </p>
+
+            <a href="<%= event_path(event['id']) %>" class="btn btn-primary">apri l'evento</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

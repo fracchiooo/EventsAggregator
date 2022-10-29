@@ -127,4 +127,25 @@ class Ticketmaster
             return []
         end
     end
+
+    def self.getOtherEditions(event_name)
+        begin
+            url="https://app.ticketmaster.com/discovery/v2/events.json?keyword=#{event_name}&apikey=#{Rails.application.credentials[:ticketmaster][:api_key]}"
+            uri=URI.parse(url)
+            http= Net::HTTP.new(uri.host,uri.port)
+            http.use_ssl=true
+            http.verify_mode= OpenSSL::SSL::VERIFY_NONE
+            request= Net::HTTP::Get.new(uri.request_uri)
+            response=http.request(request)
+            res=JSON.parse(response.body)
+        rescue => exception
+            return "errore: ", @keyword, (response).to_json, (exception).to_json
+        end
+
+        if res['_embedded'].present?
+            return res['_embedded']['events']
+        else
+            return []
+        end
+    end
 end

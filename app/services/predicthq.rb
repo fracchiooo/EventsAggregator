@@ -112,7 +112,15 @@ class Predicthq
         result[:image] = "https://maps.geoapify.com/v1/staticmap?style=osm-bright&width=2048&height=1152&center=lonlat:#{latlong_img}&zoom=11.7625&marker=lonlat:#{latlong_img};type:awesome;color:%23bb3f73;size:x-large;icon:glass-martini&apiKey=#{Rails.application.credentials[:geoapify_api_key]}"
 
         event_location = Geocoder.search(res['location'][1].to_s + ", " + res['location'][0].to_s).first
-        result[:location] = event_location.city + ', ' + event_location.street
+        if !event_location.city.nil?
+            result[:location] = event_location.city
+            if !event_location.street.nil?
+                result[:location] += ", " + event_location.street
+            end
+        else
+            result[:location] = "Location not found"
+        end
+        
         if res['entities'].present? then result[:organizer] = res['entities'][0]['name'] end
 
         return result
@@ -138,5 +146,22 @@ class Predicthq
         return res['results']
     end
 
+    def self.getOtherEditions(event_name)
+        begin
+            url="https://api.predicthq.com/v1/events/?q=#{event_name}"
+            uri=URI.parse(url)
+            http= Net::HTTP.new(uri.host,uri.port)
+            http.use_ssl=true
+            http.verify_mode= OpenSSL::SSL::VERIFY_NONE
+            request= Net::HTTP::Get.new(uri.request_uri)
+            request['Authorization'] = "Bearer #{Rails.application.credentials[:predicthq_access_token]}"
+            response=http.request(request)
+            res=JSON.parse(response.body)
+        rescue => exception
+            return "errore: ", (response).to_json, (exception).to_json
+        end
+
+        return res['results']
+    end
 
 end

@@ -36,6 +36,8 @@ Rails.application.routes.draw do
 
   get '/organizer/:organizer_id', to: "organizers#show", as: "organizer"
 
+  get '/editions/:query', to: "editions#show", as: "editions", constraints: { query: /[^\/]+/ }
+
   get '/oauth2/redirect', to: 'oauth2#redirect', as: 'oauth2_redirect'
   get '/oauth2/callback', to: 'oauth2#callback', as: 'oauth2_callback'
   

@@ -130,6 +130,8 @@
                 </div>
               </div>
 
+              <a href="<%= editions_path(CGI.escape(@event_data[:title])) %>" class="mt-3 btn btn-secondary btn-block">Cerca altre Edizioni</a>
+
               <%= button_to @favorite_text, favorite_events_path, class: "mt-3 btn btn-secondary btn-block", disabled: !user_signed_in?, method: :post, params: { event: @event.id } %>
 
               <p class="mt-2"><strong><%= @event_data[:location] %></strong></p>
@@ -178,7 +180,6 @@
                   <%= link_to "Acquista", @event_data[:url], class: "btn btn-secondary btn-block", target: "_blank" %>
                 </p>
               <% end %>
-
             </div>
           </div>
 
