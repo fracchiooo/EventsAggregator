@@ -66,7 +66,9 @@
             </div>
 
             <div class="col-md-4 text-center">
-              <a href="<%= organizer_path(event.organizer_id) %>"><h4><strong><%= @event_data[:organizer] %></strong></h4></a>
+              <% if event.organizer_id.present? %> 
+                <a href="<%= organizer_path(event.organizer_id) %>"><h4><strong><%= @event_data[:organizer] %></strong></h4></a>
+              <% end %>
               <div class="row mt-1">
                 <div>
                   <% if @user_like == true %>

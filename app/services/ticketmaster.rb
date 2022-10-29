@@ -102,7 +102,7 @@ class Ticketmaster
         result[:price] = res['priceRanges'][0]['min'].to_s + " - " + res['priceRanges'][0]['max'].to_s + " " + res['priceRanges'][0]['currency']
         result[:url] = res['url']
         result[:location] = res['_embedded']['venues'][0]['city']['name'] + ', ' + res['_embedded']['venues'][0]['address']['line1']
-        result[:organizer] = res['promoter']['name']
+        if res['promoter'].present? then result[:organizer] = res['promoter']['name'] end
 
         return result
     end

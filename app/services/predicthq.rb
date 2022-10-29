@@ -113,7 +113,7 @@ class Predicthq
 
         event_location = Geocoder.search(res['location'][1].to_s + ", " + res['location'][0].to_s).first
         result[:location] = event_location.city + ', ' + event_location.street
-        result[:organizer] = res['entities'][0]['name']
+        if res['entities'].present? then result[:organizer] = res['entities'][0]['name'] end
 
         return result
     
