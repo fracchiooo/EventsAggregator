@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Users::PasswordsController < Devise::PasswordsController
+
+  before_action :set_user
+
   # GET /resource/password/new
   # def new
   #   super
@@ -17,9 +20,28 @@ class Users::PasswordsController < Devise::PasswordsController
   # end
 
   # PUT /resource/password
-  # def update
-  #   super
-  # end
+  def update
+
+    if params[:user][:password].present? && params[:user][:password_confirmation].present? && (@edit_mode || params[:user][:current_password].present?)
+
+      if @edit_mode || @user_registration.valid_password?(params[:user][:current_password])
+
+
+        if @user_registration.update(password: params[:user][:password],password_confirmation:  params[:user][:password_confirmation])
+          redirect_to '/'
+        else
+          redirect_to edit_user_registration_path(@user_registration), alert: 'errore aggiornamento password'
+        end
+      else
+        redirect_to edit_user_registration_path(@user_registration), alert: 'password corrente sbagliata'
+      end
+
+    else
+      redirect_to edit_user_registration_path(@user_registration), alert: 'errore aggiornamento password'
+    end
+    #super
+
+  end
 
   # protected
 
@@ -31,4 +53,32 @@ class Users::PasswordsController < Devise::PasswordsController
   # def after_sending_reset_password_instructions_path_for(resource_name)
   #   super(resource_name)
   # end
+  private
+
+  def set_user
+
+    
+    if current_user.role=='admin' && (params[:user].present? && (params[:user][:id].present?)) 
+      @edit_mode=true;
+      @user_registration=User.find(params[:user][:id])
+           
+    else
+
+      @edit_mode=false
+
+      if current_user.nil?
+
+      else
+      
+        @user_registration = User.find(current_user.id)
+      
+      end
+    end
+           
+  end
+
+  def user_pass_params
+    params.require(:user).permit(:password, :password_confirmation, :current_password)
+  end
+
 end
