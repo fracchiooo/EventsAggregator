@@ -1,5 +1,5 @@
 class OrganizersController < ApplicationController
-  def index
+  def show
     @events = Predicthq.getEventsByOrganizer(params[:organizer_id])
     @events2 = Ticketmaster.getEventsByOrganizer(params[:organizer_id])
 
@@ -10,7 +10,7 @@ class OrganizersController < ApplicationController
       @organizer = @events2.first['promoter']['name']
       @total_events = @events2.length
     end
-    
+
     @total_partecipants = Partecipant.where(organizer_id: params[:organizer_id]).count
 
     @total_likes = 0

@@ -34,7 +34,7 @@ Rails.application.routes.draw do
     end
   end
 
-  get '/organizer/:organizer_id', to: "organizers#index", as: "organizer"
+  get '/organizer/:organizer_id', to: "organizers#show", as: "organizer"
 
   get '/oauth2/redirect', to: 'oauth2#redirect', as: 'oauth2_redirect'
   get '/oauth2/callback', to: 'oauth2#callback', as: 'oauth2_callback'
