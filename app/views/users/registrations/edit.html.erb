@@ -101,29 +101,35 @@
 
 <br/>
 <% end %>
-<h3><div class="text-center">Eventi Preferiti</h3></div>
-<% @favorites.each do |favorite| %>
-  <div class="text-center">
-    <%= favorite.event.id %>
-    <%= link_to favorite.event.event_id, event_path(favorite.event.event_id) %>
+
+
+<br/>
+<br/> 
+<div class="container rounded bg-white">
+  <div class="row">
+      <div class="col">
+        <h3>Eventi Preferiti</h3>
+        <% @favorites.each do |favorite| %>
+          
+          <%= favorite.event.id %>
+          <%= link_to favorite.event.event_id, event_path(favorite.event.event_id) %>
+          
+        <% end %>
+      </div>
+      <div class="col">
+        <h3>Eventi a cui Partecipo</h3>
+        <% @partecipants.each do |partecipant| %>
+          
+          <%= partecipant.event.id %>
+          <%= link_to partecipant.event.event_id, event_path(partecipant.event.event_id) %>
+          
+        <% end %> 
+      </div>
   </div>
-<% end %>
-
-<br/>
-<h3><div class="text-center">Eventi a cui Partecipo</h3></div>
-<% @partecipants.each do |partecipant| %>
-  <div class="text-center">
-    <%= partecipant.event.id %>
-    <%= link_to partecipant.event.event_id, event_path(partecipant.event.event_id) %>
-  </div>
-<% end %> 
-
-<br/>
-<br/>
-
+</div>
 <div class="text-center">
 <% if !@edit_mode %>
-
+<br/>
 <h3>Cancella Account</h3>
 
 <p>
