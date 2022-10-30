@@ -21,26 +21,26 @@
               <div class="row mt-2">
                 <div class="col-md-6">
                   <%= f.label :nome %>
-                  <%= f.text_field :nome, autofocus: true, value: @user_registration.nome %>
+                  <%= f.text_field :nome, autofocus: true, value: @user_registration.nome, class: "form-control" %>
                 </div>
                 <div class="col-md-6">
                   <%= f.label :cognome %>
-                  <%= f.text_field :cognome, autofocus: true, value: @user_registration.cognome %>
+                  <%= f.text_field :cognome, autofocus: true, value: @user_registration.cognome, class: "form-control" %>
                 </div>
               </div>
               <div class="row mt-3">
                 <div class="col-md-12"><br />
                   <%= f.label :username %>
-                  <%= f.text_field :username, autofocus: true, value: @user_registration.username %>
+                  <%= f.text_field :username, autofocus: true, value: @user_registration.username, class: "form-control" %>
                 </div>
                 <div class="col-md-12"><br />
                   <%= f.label :data_nascita %>
-                  <%= f.date_field :data_nascita, autofocus: true, value: @user_registration.data_nascita.present? ? @user_registration.data_nascita.strftime("%Y-%m-%d") : nil %>
+                  <%= f.date_field :data_nascita, autofocus: true, value: @user_registration.data_nascita.present? ? @user_registration.data_nascita.strftime("%Y-%m-%d") : nil, class: "form-control" %>
 
                 </div>
                 <div class="col-md-12"><br />
                   <%= f.label :email %>
-                  <%= f.email_field :email, autofocus: true, autocomplete: "email", value: @user_registration.email %>
+                  <%= f.email_field :email, autofocus: true, autocomplete: "email", value: @user_registration.email, class: "form-control" %>
                 </div>
                 <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
                   <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
@@ -66,22 +66,30 @@
 <%= form_for(resource, as: resource_name, url: user_password_path(resource_name), html: { method: :put }) do |f| %>
   <%= f.hidden_field :id, value: @user_registration.id  %>
 
-  <div class="col-md-12"><br/>
-  <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
-    <%= f.password_field :password, autocomplete: "new-password" %>
-    <% if @minimum_password_length %>
+  <div class="container">
+	<div class="row">
+		<div class="col-sm-4">
+		  <div class="form-group pass_show"> 
+        <%= f.label :current_password %> <i>(Inserire la password per applicare i cambiamenti)</i><br />
+        <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control" %>
+      </div> 
       <br />
-      <em><%= @minimum_password_length %> characters minimum</em>
-    <% end %>
-</div>
-<div class="col-md-12"><br/>
-  <%= f.label :password_confirmation %><br />
-  <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-</div>
-<div class="col-md-12"><br/>
-  <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
-  <%= f.password_field :current_password, autocomplete: "current-password" %>
-</div>
+      <div class="form-group pass_show"> 
+        <%= f.label :Nuova_Password %> <i>(Lascia in bianco se non vuoi modificare)</i><br />
+        <%= f.password_field :password, autocomplete: "new-password", class: "form-control" %>
+        <% if @minimum_password_length %>
+          <em><%= @minimum_password_length %> caratteri minimi</em>
+        <% end %>
+      </div> 
+      <br />
+      <div class="form-group pass_show"> 
+        <%= f.label :Conferma_password %><br />
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %> 
+      </div> 
+            
+		</div>  
+	</div>
+  </div>
 
 <br/>
 <div class="actions">
