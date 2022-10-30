@@ -2,7 +2,10 @@
 
 class Users::PasswordsController < Devise::PasswordsController
 
+  #verificare anche che provider==nil !!!!!!!!!!!!!!!!!!!!!
+  before_action :authenticate_user!, :only => :update
   before_action :set_user
+  before_action :check_provider, :only => :update
 
   # GET /resource/password/new
   # def new
@@ -22,13 +25,14 @@ class Users::PasswordsController < Devise::PasswordsController
   # PUT /resource/password
   def update
 
+
     if params[:user][:password].present? && params[:user][:password_confirmation].present? && (@edit_mode || params[:user][:current_password].present?)
 
       if @edit_mode || @user_registration.valid_password?(params[:user][:current_password])
 
 
         if @user_registration.update(password: params[:user][:password],password_confirmation:  params[:user][:password_confirmation])
-          redirect_to '/'
+          redirect_to '/home', notice: 'password aggiornata con successo'
         else
           redirect_to edit_user_registration_path(@user_registration), alert: 'errore aggiornamento password'
         end
@@ -59,26 +63,29 @@ class Users::PasswordsController < Devise::PasswordsController
 
     
     if current_user.role=='admin' && (params[:user].present? && (params[:user][:id].present?)) 
+      print 'EDIT MODE!!!'
       @edit_mode=true;
       @user_registration=User.find(params[:user][:id])
            
     else
-
       @edit_mode=false
-
-      if current_user.nil?
-
-      else
-      
-        @user_registration = User.find(current_user.id)
-      
-      end
+      @user_registration = User.find(current_user.id)    
     end
            
   end
 
   def user_pass_params
     params.require(:user).permit(:password, :password_confirmation, :current_password)
+  end
+
+  def check_provider
+    if @user_registration.provider.nil?
+      return true
+    else
+      redirect_to '/'
+      return false
+    
+    end
   end
 
 end

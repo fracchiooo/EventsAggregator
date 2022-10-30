@@ -10,71 +10,94 @@
 
 <%= render @event %>
 
-<div id="event_comments">
+<section style="background-color: #eee;">
+  <div class="container my-5 py-5">
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-12 col-lg-10 col-xl-8">      
+        <div class="card">
 
+          <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
+            <div class="d-flex flex-start w-100">
+              <% if !current_user.nil? %> 
+                <img class="rounded-circle shadow-1-strong me-3"
+                  src="data:image/png;base64,<%= current_user.immagine_profilo %>" alt="avatar" width="40"
+                  height="40" />
+              <% else %>
+                <img class="rounded-circle shadow-1-strong me-3"
+                  src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAHkAeQMBIgACEQEDEQH/xAAbAAEAAgMBAQAAAAAAAAAAAAAAAQUDBAYCB//EAC8QAAICAQIFAgUCBwAAAAAAAAABAgMRBAUSITFRYUFxEyIjQlIUYjNTgYKSobH/xAAYAQEBAQEBAAAAAAAAAAAAAAAAAgMBBP/EABwRAQEAAwADAQAAAAAAAAAAAAABAhExA0FRIf/aAAwDAQACEQMRAD8A+iAA9LIAAAAy0UW3z4K4tv1fojmxiPUYym8Ri2/CLnTbVVBJ3Sc32XJI36641rEIqK8LBF8k9LmP1z0dBqWs/Ba92kazTUmn6M6m2pWVyg3hSWMo53V6O3SzSfOD6SXqdxz31yxgABaQAAAAAAAAAAZKKnfdGqPWXr2OkophRWoQWEv9lTskU9ROT+2P/S7Mc7+6XjAAEKDxZCNkHGayn6HsAc1rdO9Ne4fa+cX4Nct99gsVT9ctFQb43cZ3oACnAAAAAAAAFnsf8a1ftLpFHsal+plLHy8GM+eRdroYZ9aY8SACXQAPoBV76/pVL9zKYt99UmqWl8qzl9uhULpk2w4jLoAC0gAAAAASQALnYpL4NkOzLQoNp1HwdRwNcrOXsy+Rhl1pjxIAJdAABo7xLGia/JpFAuhZ71qOKyNC6R+ZsrDbDjPLoAC3AAAAAAAAHqE3CcZLqnlHUVTVlcZro1k5UudkslKqyDeVFrHjJn5J7XitAAZKCG8Jt9CTQ3eyUNI1F44pJP2EFNqrfjaiyfd8vYxAHpZgADgAAAAAAACS62auUKZucWnKXLPbBT1QdlkYJc5PB1EYpRS7cjPyX0rF6ABksNLdK3ZpJKKbkmmkvc3SMAco+XIgz62v4Wqsi192V7GA9Eu2QADoAAADPp9JbqX9NfL+T6Fpp9pqhztfG+3REXKR3Snrqstlw1Qcn4LHT7ROXO+XCu0epbRrjCPDCMYrskeyLnVaYaNNVQsVwS845mYAhQAAAAAx3U13RxZBSXlFZqNo58Wnn/bItwdlscsctdTbQ8Wwcf6GM6txUk1JJp9zS1G102c4fTl46FzyfU2VQg2tTobtNlyXFD8omty/JGk/XHVRhGMUorCXREoBHnaJAAAAAAAAAAAAACGSGBDSaMP6Wj+TD/EzEBzT/9k=" alt="avatar" width="40"
+                  height="40" />
+              <% end %>
+              <div class="form-outline w-100">
+                <%= form_with url: event_comments_path(@event), scope: :create do |form| %>
+                  <%= text_area_tag "comment[testo]", nil, class: "form-control", id: "comment_testo", placeholder: "Scrivi un commento...", rows: 4, style: "background: #fff;" %>
+                  <%= button_to "Commenta", '', class: "float-end mt-2 pt-1 btn btn-primary btn-sm", onclick: "functio(1)", method: :create %>
+                <% end %>
+              </div>
+            </div>
+          </div>
 
-<div class="row">
+          <% @event.comments.order(pinned: :desc).each do |comment| %>
+            <div style="">
+            <%= render 'comments/comment', event: @event, comment: comment, user: User.find(comment.user_id) %>
+            </div>
+          <% end %>
 
-<div class="col-sm-3">
-<form id="form_create" action="<%= event_comments_path(@event) %>" method="post">
-<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-<input type="hidden" name="_method" value="CREATE">
-<textarea name="comment[testo]" id="comment_testo" placeholder="scrivi un commento..." class=" h6 fst-italic" style="background-color: #f0f2f5; text-align:center" > 
-</textarea>
-</form>
-</div>
-
-<div class="col-sm-2">
-
-<button form="form_create" type="submit" onclick="functio(1)" class="btn btn-primary" style=" text-align:center;" >commenta</button>
-</div>
-</div>
-
-
-<div style="padding:2%" ></div>
-
-
-  <% @event.comments.each do |comment| %>
-
-    <div style="">
-    <%= render 'comments/comment', event: @event, comment: comment, user: User.find(comment.user_id) %>
+        </div>
+      </div>
     </div>
-  <% end %>
-</div>
-
+  </div>
+</section>
 
 <script>
-
-document.getElementById('comment_testo').value='';
-
-
-function functio(n){
-
-if(n==1){
-  if(! <%=current_user.present?%>){
-      alert("accedi per completare l'azione!");
-      document.location.href="<%=new_user_session_path()%>";
-      return;
+  function edit(comment_id) {
+    var form = document.getElementById("edit_comment" + comment_id);
+    var comment = document.getElementById("comment_" + comment_id);
+    var button = document.getElementById("button_" + comment_id);
+    
+    form.hidden = false;
+    comment.hidden = true;
+    button.hidden = true;
   }
-}
 
-document.location.reload(false);
-}
+  function cancel_edit(comment_id) {
+    var form = document.getElementById("edit_comment" + comment_id);
+    var comment = document.getElementById("comment_" + comment_id);
+    var button = document.getElementById("button_" + comment_id);
+    
+    form.hidden = true;
+    comment.hidden = false;
+    button.hidden = false;
 
-document.addEventListener("DOMContentLoaded", function(event) {  
-            var scrollpos = localStorage.getItem('scrollpos'); 
-            if (scrollpos) window.scrollTo(0, scrollpos); 
-        }); 
-
-        window.onbeforeunload = function(e) { 
-            localStorage.setItem('scrollpos', window.scrollY); 
-        };
+    document.getElementById("modifica_comment_testo").value = comment.innerText;
+  }
 
 
+  document.getElementById('comment_testo').value='';
+
+  function functio(n) {
+    if(n==1){
+      if(!<%=current_user.present?%>){
+        alert("accedi per completare l'azione!");
+        document.location.href="<%=new_user_session_path()%>";
+        return;
+      }
+    }
+
+    document.location.reload(false);
+  }
+
+  document.addEventListener("DOMContentLoaded", function(event) {  
+    var scrollpos = localStorage.getItem('scrollpos'); 
+    if (scrollpos) window.scrollTo(0, scrollpos); 
+  }); 
+
+  window.onbeforeunload = function(e) { 
+    localStorage.setItem('scrollpos', window.scrollY); 
+  };
 </script>
 
 <style>
- body {
+  body {
     background-color: #f8f9fa;
   }
 
@@ -90,5 +113,4 @@ document.addEventListener("DOMContentLoaded", function(event) {
       border-color: #00838F !important;
       box-shadow: none;
   }
-
 </style>

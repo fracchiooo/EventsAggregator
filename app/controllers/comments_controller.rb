@@ -31,6 +31,13 @@ class CommentsController < ApplicationController
 
     params[:comment][:testo]=(params[:comment][:testo]).gsub(/[\n]/,'')
 
+    #se il commento è vuoto
+    if params[:comment][:testo].empty?
+      event=Event.find_by id: comment_params[:event_id]
+      redirect_to event_path(event.event_id), alert: "il commento non può essere vuoto!" 
+      return
+    end
+
 
     if user_signed_in?
       @user=current_user
@@ -41,7 +48,7 @@ class CommentsController < ApplicationController
         if @comment.save
         #format.html { redirect_to comment_url(@comment), notice: "Comment was successfully created." }
         #format.json { render :show, status: :created, location: @comment }
-          format.html { redirect_to event_path(@comment.event_id), notice: "Comment was successfully created." }
+          format.html { redirect_to event_path(@comment.event.event_id), notice: "Comment was successfully created." }
           format.json { head :no_content }
         else
           format.html { render :pages/home, status: :unprocessable_entity }
@@ -56,7 +63,15 @@ class CommentsController < ApplicationController
 
   # PATCH/PUT /comments/1 or /comments/1.json
   def update
-    print 'updateeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+    if params[:pin] && current_user.role == "admin"
+      @comment.update(pinned: !@comment.pinned)
+      respond_to do |format|
+        format.html { redirect_to event_path(@comment.event.event_id), notice: "Comment was successfully updated." }
+        format.json { head :no_content }
+      end
+      return
+    end
+
     params[:comment][:testo]=(params[:comment][:testo]).gsub(/[\n]/,'')
     if user_signed_in?
 
@@ -70,15 +85,14 @@ class CommentsController < ApplicationController
         elsif @comment.update(comment_params)
         #format.html { redirect_to comment_url(@comment), notice: "Comment was successfully updated." }
         #format.json { render :show, status: :ok, location: @comment }
-          format.html { redirect_to event_path(@comment.event_id), notice: "Comment was successfully updated." }
+          format.html { redirect_to event_path(@comment.event.event_id), notice: "Comment was successfully updated." }
           format.json { head :no_content }
         else
           format.html { render :edit, status: :unprocessable_entity }
           format.json { render json: @comment.errors, status: :unprocessable_entity }
         end
       end
-    else     
-      print 'non entratooooooooooooooooooooooo'
+    else
       event=Event.find_by id: comment_params[:event_id]
       redirect_to event_path(event.event_id), alert: "è necessario iscriversi per poter aggiornare un commento"
     end
@@ -96,7 +110,7 @@ class CommentsController < ApplicationController
         @comment.destroy
       #format.html { redirect_to comments_url, notice: "Comment was successfully destroyed." }
       #format.json { head :no_content }
-        format.html { redirect_to event_path(@comment.event_id), notice: "Comment was successfully destroyed." }
+        format.html { redirect_to event_path(@comment.event.event_id), notice: "Comment was successfully destroyed." }
         format.json { head :no_content }
         end
       end
