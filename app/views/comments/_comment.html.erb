@@ -1,170 +1,52 @@
+<div class="card-body">
+  <div class="d-flex flex-start align-items-center">
+    <img class="rounded-circle shadow-1-strong me-3"
+      src="data:image/png;base64,<%= user.immagine_profilo %>" alt="avatar" width="60"
+      height="60" />
+    <div>
+      <h6 class="fw-bold text-primary mb-1"><%= user.username %></h6>
+      <p class="text-muted small mb-0">
+        <%= comment.created_at %> 
+      </p>
+    </div>
+  </div>
 
-<div class="card" style="max-height:0%; max-width: 100%; border: 1px solid #9C9C9C;">
+  <% if !current_user.nil? && (current_user.id==comment.user_id || current_user.role=='admin') %>
+    <%= form_with url: event_comment_path(event.id, comment.id), class: "mt-2", html: {id: "edit_comment" + comment.id.to_s, hidden: true}, scope: :patch do |form| %>
+      <%= text_area_tag "comment[testo]", comment.testo, class: "form-control", id: "modifica_comment_testo", placeholder: "Modifica il commento...", rows: 4, style: "background: #fff;" %>
+      <div class="float-end mt-2 pt-1 ">
+        <%= button_to "Salva", '', class: "btn btn-primary btn-sm", onclick: "functio(0)", method: :patch %>
+        <button type="reset" class="btn btn-danger btn-sm" onclick="cancel_edit(<%= comment.id %>)">Annulla</button>
+      </div>
+    <% end %>
+  <% end %>
 
+  <p id="comment_<%= comment.id %>" class="mt-3 mb-4 pb-2">
+    <%= comment.testo %> 
+  </p>
+  
+  <div class="small d-flex justify-content-start">
+    <button class= "btn btn-trasparent"><%= comment.like_comments.count %></button>
+    <% if current_user.nil? %>
+      <button class= "btn btn-trasparent" onclick="functio(1)"><i class="far fa-thumbs-up me-2"></i>Mi Piace</button>
+      <button class= "btn btn-trasparent" onclick="functio(1)"><i class="fa-solid fa-triangle-exclamation me-2"></i>Segnala</button>
+    <% else %>
+      <% if current_user.like_comments.find_by(comment: comment).nil? %>
+        <%= button_to raw('<i class="far fa-thumbs-up me-2"></i>Mi Piace'), event_comment_like_comments_path(comment, event), onclick: "functio(0)", params: {like_comment: {comment_id: comment.id}}, class: "btn btn-trasparent", remote: true, data: {turbo_method: :post}, method: :post %>
+      <% else %>
+        <%= button_to raw('<i class="far fa-thumbs-up me-2"></i>Non Mi Piace Più'), event_comment_like_comment_path(comment, event, current_user.like_comments.find_by(comment: comment)), onclick: "functio(0)", params: {like_comment: {comment_id: comment.id}}, class: "btn btn-trasparent", remote: true, data: {turbo_method: :delete}, method: :delete %>
+      <% end %>
 
+      <% if current_user.segnala_cs.find_by(comment: comment).nil?  %>
+        <%= button_to raw('<i class="fa-solid fa-triangle-exclamation me-2"></i>Segnala'), event_comment_segnala_cs_path(comment, event), onclick: "functio(0)", params: {segnala_c: {comment_id: comment.id}}, class: "btn btn-trasparent", data: {turbo_method: :post}, method: :post %>
+      <% else %>
+        <button class= "btn btn-trasparent" onclick="functio(0)"><i class="fa-solid fa-triangle-exclamation me-2"></i>Segnalato!</button>
+      <% end %>
 
-<div id="generale" class="row justify-content-center" >
-
-<div id="foto_e_nome" class="col-sm-2">
-<div id="foto" class="row w-50" >
-
-<% if user.immagine_profilo.nil? %>
-<h4> immagine non presente </h4>
-<% else %>
-<img class="rounded-circle" src="data:image/png;base64,<%= user.immagine_profilo %>" alt="avatar" width="45" height="45" />
-<% end %>
+      <% if current_user.id==comment.user_id || current_user.role=='admin' %>
+        <button class= "btn btn-trasparent" id="button_<%= comment.id %>" onclick="edit(<%= comment.id %>)"><i class="fa-solid fa-pen-to-square me-2"></i>Modifica</button>
+        <%= button_to raw('<i class="fa-solid fa-trash me-2"></i>Elimina'), event_comment_path(event.id, comment.id), onclick: "functio(0)", class: "btn btn-trasparent", method: :delete %>
+      <% end %>
+    <% end %>
+  </div>
 </div>
-<div id="username" class="row">
-<p class="small fw-lighter" style="margin-top:10%"><%= user.username %></p>
-</div>
-</div>
-
-<div id="testo" class="col-sm-5 ">
-<div class="card shadow-0 border " style="height:100%; width:100%; background-color: #f0f2f5;">
-<% if !current_user.nil? && (current_user.id==comment.user_id || current_user.role=='admin') %>
-
-<form id="my_form<%=comment.id%>" action="<%=event_comment_path(event.id,comment.id) %>" method="post"> 
-<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>"> 
-<input type="hidden" name="_method" value="PATCH"> 
-<textarea name="comment[testo]" id="comment_testo" class=" h6 fst-italic" style="background-color: #f0f2f5; border: none; width:100%; padding-bottom:19%; text-align:center" >  
-<%= comment.testo %> 
-</textarea> 
-</form>
-<% else %>
-
-<h6 class="fst-italic" style="width:100%; border:none; padding-bottom:12%; text-align:center"> <%= comment.testo %> </h6>
-
-
-<% end %>
-
-</div>
-</div>
-
-
-<div id="like_e_num" class="col-sm-1">
-<div id="like" class="row">
-
-<% if current_user.nil? %>
-
-<button class= "btn btn-trasparent" onclick="functio(1)"><i class="bi bi-hand-thumbs-up-fill" style="font-size:150%;"></i></button>
-
-
-<% elsif current_user.like_comments.find_by(comment: comment).nil? %>
-
-<% like_c=nil %>
-
-<div id='like_div'>
-
-<div id='butt_like'>
-<%= button_to raw('<i class="bi bi-hand-thumbs-up-fill" style="font-size:150%;">  </i>'), event_comment_like_comments_path(comment, event) , params: {like_comment: {comment_id: comment.id}}, class: "btn btn-trasparent", remote: true, data: {turbo_method: :post}, method: :post, :onclick => "functio(0)" %>
-</div>
-</div>
-
-
-
-<% else %>
-
-<% like_c=current_user.like_comments.find_by(comment: comment) %>
-
-
-<div id='dislike_div'>
-<div id='butt_dislike'>
-<%= button_to raw('<i class="bi bi-hand-thumbs-down-fill" style="font-size:150%;">  </i>'), event_comment_like_comment_path(comment, event, like_c) , params: {like_comment: {comment_id: comment.id}}, class: "btn btn-trasparent", remote: true, data: {turbo_method: :delete}, method: :delete, :onclick => "functio(0)" %>
-</div>
-</div>
-
-<% end %> 
-</div>
-<div id="num_l" class="row">
-<p class="small text-muted"><%= comment.like_comments.count %> </p>
-</div>
-</div>
-
-<div id="segna_e_num" class="col-sm-1">
-<div id="segnala" class="row">
-<% if current_user.nil?%>
-
-
-<%# button_to raw('<i class="bi bi-exclamation-triangle-fill" style="font-size:150%;">  </i>'),event_comment_segnala_cs_path(comment, event), class: "btn btn-trasparent", :onclick => "functio(0)" %>
-
-<button class= "btn btn-trasparent" onclick="functio(1)"><i class="bi bi-exclamation-triangle-fill" style="font-size:150%;"></i></button>
-
-
-
-
-<% elsif current_user.segnala_cs.find_by(comment: comment).nil?  %>
-
-<%= button_to raw('<i class="bi bi-exclamation-triangle-fill" style="font-size:150%;">  </i>'),event_comment_segnala_cs_path(comment, event) , params: {segnala_c: {comment_id: comment.id}}, class: "btn btn-trasparent", data: {turbo_method: :post}, method: :post, :onclick => "functio(0)" %>
-
-
-<div class="row">
-<p class="small text-muted"> Segnala!  </p>
-</div>
-
-
-<% else %>
-
-
-
-
-<div class="row">
-<p class="small text-muted"> Segnalato!  </p>
-</div>
-
-<% end %>
-</div>
-
-</div>
-
-
-
-<div id="links" class="col-sm-1" style="align:left" >
-
-<% if !current_user.nil? && (current_user.id==comment.user_id || current_user.role=='admin') %>
-<nav>
-
-<%# button_to "modifica", event_comment_path(event.id,comment.id),params:{comment:{testo: "kkkkkkkk"}}, method: :patch, class: "btn btn-primary", :onclick => "functio(0)" %>
-<button form="my_form<%=comment.id%>" type="submit" class="btn btn-primary" onclick="functio(0)" style="margin-bottom:5%; margin-top:10%; text-align:center" >modifica</button>
-
-<%= button_to "elimina", event_comment_path(event.id,comment.id), method: :delete, class: "btn btn-danger", :onclick => "functio(0)"  %>
-</nav>
-<% end %>
-</div>  
-
-</div>
-
-</div>
-
-
-
-<script>
-
-
-var like=document.getElementById('butt_like').innerHTML;
-var dislike=document.getElementById('butt_dislike').innerHTML;
-
-
-function aggiorna_like(n){
-
-
-
-if(n==0){
-
-document.getElementById('like_div').innerHTML= dislike;
-
-}
-
-else{
-document.getElementById('dislike_div').innerHTML=like;
-
-}
-
-
-
-
-}
-
-
-
-
-</script>
