@@ -3,7 +3,7 @@
 class Users::PasswordsController < Devise::PasswordsController
 
   #verificare anche che provider==nil !!!!!!!!!!!!!!!!!!!!!
-  before_action :authenticate_user!
+  before_action :authenticate_user!, :only => :update
   before_action :set_user
   before_action :check_provider, :only => :update
 
