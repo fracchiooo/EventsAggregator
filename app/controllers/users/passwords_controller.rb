@@ -24,7 +24,10 @@ class Users::PasswordsController < Devise::PasswordsController
 
   # PUT /resource/password
   def update
-
+    if params[:commit] == 'Change my password'
+      super
+      return
+    end
 
     if params[:user][:password].present? && params[:user][:password_confirmation].present? && (@edit_mode || params[:user][:current_password].present?)
 
@@ -60,9 +63,11 @@ class Users::PasswordsController < Devise::PasswordsController
   private
 
   def set_user
+    if params[:commit] == 'Change my password'
+      return
+    end
 
-    
-    if current_user.role=='admin' && (params[:user].present? && (params[:user][:id].present?)) 
+    if !current_user.nil? && current_user.role=='admin' && (params[:user].present? && (params[:user][:id].present?)) 
       print 'EDIT MODE!!!'
       @edit_mode=true;
       @user_registration=User.find(params[:user][:id])
@@ -79,6 +84,10 @@ class Users::PasswordsController < Devise::PasswordsController
   end
 
   def check_provider
+    if params[:commit] == 'Change my password'
+      return
+    end
+    
     if @user_registration.provider.nil?
       return true
     else
