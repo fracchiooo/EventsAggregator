@@ -36,7 +36,7 @@
             </div>
           </div>
 
-          <% @event.comments.each do |comment| %>
+          <% @event.comments.order(pinned: :desc).each do |comment| %>
             <div style="">
             <%= render 'comments/comment', event: @event, comment: comment, user: User.find(comment.user_id) %>
             </div>

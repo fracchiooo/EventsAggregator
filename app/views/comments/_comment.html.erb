@@ -1,4 +1,4 @@
-<div class="card-body">
+<div class="card-body" style="<% if comment.pinned? %>background-color: #F1E5AC;<% end %>">
   <div class="d-flex flex-start align-items-center">
     <img class="rounded-circle shadow-1-strong me-3"
       src="data:image/png;base64,<%= user.immagine_profilo %>" alt="avatar" width="60"
@@ -36,14 +36,24 @@
       <% else %>
         <%= button_to raw('<i class="far fa-thumbs-up me-2"></i>Non Mi Piace Più'), event_comment_like_comment_path(comment, event, current_user.like_comments.find_by(comment: comment)), onclick: "functio(0)", params: {like_comment: {comment_id: comment.id}}, class: "btn btn-trasparent", remote: true, data: {turbo_method: :delete}, method: :delete %>
       <% end %>
+
       <% if current_user.segnala_cs.find_by(comment: comment).nil?  %>
         <%= button_to raw('<i class="fa-solid fa-triangle-exclamation me-2"></i>Segnala'), event_comment_segnala_cs_path(comment, event), onclick: "functio(0)", params: {segnala_c: {comment_id: comment.id}}, class: "btn btn-trasparent", data: {turbo_method: :post}, method: :post %>
       <% else %>
-        <button enabled=false class= "btn btn-trasparent" onclick="functio(0)"><i class="fa-solid fa-triangle-exclamation me-2"></i>Segnalato!</button>
+        <button class= "btn btn-trasparent" onclick="functio(0)"><i class="fa-solid fa-triangle-exclamation me-2"></i>Segnalato!</button>
       <% end %>
+
       <% if current_user.id==comment.user_id || current_user.role=='admin' %>
         <button class= "btn btn-trasparent" id="button_<%= comment.id %>" onclick="edit(<%= comment.id %>)"><i class="fa-solid fa-pen-to-square me-2"></i>Modifica</button>
         <%= button_to raw('<i class="fa-solid fa-trash me-2"></i>Elimina'), event_comment_path(event.id, comment.id), onclick: "functio(0)", class: "btn btn-trasparent", method: :delete %>
+      <% end %>
+
+      <% if current_user.role=='admin' %>
+        <% if !comment.pinned  %>
+          <%= button_to raw('<i class="fa-solid fa-thumbtack me-2"></i>Pin'), event_comment_path(event.id, comment.id), onclick: "functio(0)", params: {pin: true}, class: "btn btn-trasparent", data: {turbo_method: :post}, method: :patch %>
+        <% else %>
+          <%= button_to raw('<i class="fa-solid fa-thumbtack me-2"></i>UnPin'), event_comment_path(event.id, comment.id), onclick: "functio(0)", params: {pin: false}, class: "btn btn-trasparent", data: {turbo_method: :post}, method: :patch %>
+        <% end %>
       <% end %>
     <% end %>
   </div>

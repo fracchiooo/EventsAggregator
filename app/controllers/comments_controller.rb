@@ -63,6 +63,15 @@ class CommentsController < ApplicationController
 
   # PATCH/PUT /comments/1 or /comments/1.json
   def update
+    if params[:pin] && current_user.role == "admin"
+      @comment.update(pinned: !@comment.pinned)
+      respond_to do |format|
+        format.html { redirect_to event_path(@comment.event.event_id), notice: "Comment was successfully updated." }
+        format.json { head :no_content }
+      end
+      return
+    end
+
     params[:comment][:testo]=(params[:comment][:testo]).gsub(/[\n]/,'')
     if user_signed_in?
 
