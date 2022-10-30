@@ -87,16 +87,14 @@
         <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %> 
       </div> 
             
-		</div>  
+		</div>
+    <div class="actions">
+      <div class="text align-left"><br />
+        <%= f.submit "Modifica Password", class:"btn btn-primary" %>
+      </div>
+    </div> 
 	</div>
   </div>
-
-<br/>
-<div class="actions">
-  <div class="text-center">
-    <%= f.submit "Modifica Password", class:"btn btn-primary" %>
-  </div>
- </div>
 
 
 <% end %> 
