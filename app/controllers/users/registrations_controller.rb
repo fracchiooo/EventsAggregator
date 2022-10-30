@@ -2,6 +2,7 @@
 
 class Users::RegistrationsController < Devise::RegistrationsController
 
+  before_action :authenticate_user!
   before_action :set_user, only: [:update, :edit]
   # before_action :configure_sign_up_params, only: [:create]
   # before_action :configure_account_update_params, only: [:update]
@@ -39,20 +40,16 @@ class Users::RegistrationsController < Devise::RegistrationsController
   
       end
     end
-
-    params[:user].delete :password_confirmation
-    params[:user].delete :password
-    params[:user].delete :current_password
     params[:user].delete :immagine_profilo
 
     #if @user_registration.update(user_params)
      #redirect_to '/home'
     #end
-    if @user_registration.update(params.require(:user).permit(:id, :nome, :cognome, :data_nascita, :immagine_profilo, :username, :email, :password, :sesso))
-      redirect_to '/home'
+    if @user_registration.update(user_params)
+      redirect_to '/home', notice: 'aggiornato con successo'
 
     else
-      print 'errore nell updateeeeeeeeeeeeeeeeeeee'  
+      redirect_to edit_user_registration_path(@user_registration), alert: 'errore aggiornamento profilo'
     end
 
 
@@ -109,20 +106,15 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def set_user
     
     if current_user.role=='admin' && (params[:user].present? && (params[:user][:id].present?)) 
-      @edit_mode=true;
+      print 'EDIT MODE!!!'
+
+      @edit_mode=true
       @user_registration=User.find(params[:user][:id])
            
     else
 
-      @edit_mode=false
-
-      if current_user.nil?
-
-      else
-      
-        @user_registration = User.find(current_user.id)
-      
-      end
+      @edit_mode=false      
+      @user_registration = User.find(current_user.id)
     end
     
         
@@ -133,20 +125,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   def user_params
 
-
-    params.require(:user).permit(:nome, :cognome, :data_nascita, :immagine_profilo, :username, :email, :password, :sesso, :password_confirmation, :current_password, :commit)
-  
+    params.require(:user).permit(:id, :nome, :cognome, :data_nascita, :immagine_profilo, :username, :email, :password, :sesso)
     
   end
 
-  def set_default_immagine_profilo
 
-
-    File.open("#{Rails.root}/public/images.jpeg","rb") do |f|
-
-      @user_registration.immagine_profilo ||= Base64.strict_encode64(f.read)
-    end
-
-
-  end
 end

@@ -80,17 +80,11 @@
 </div>
 </div>
 
-<div id="segna_e_num" class="col-sm-1">
+<div id="segna_e_num" class="col-sm-2">
 <div id="segnala" class="row">
 <% if current_user.nil?%>
 
-
-<%# button_to raw('<i class="bi bi-exclamation-triangle-fill" style="font-size:150%;">  </i>'),event_comment_segnala_cs_path(comment, event), class: "btn btn-trasparent", :onclick => "functio(0)" %>
-
 <button class= "btn btn-trasparent" onclick="functio(1)"><i class="bi bi-exclamation-triangle-fill" style="font-size:150%;"></i></button>
-
-
-
 
 <% elsif current_user.segnala_cs.find_by(comment: comment).nil?  %>
 
@@ -107,7 +101,7 @@
 
 
 
-<div class="row">
+<div class="row" style="padding-top: 1em;;">
 <p class="small text-muted"> Segnalato!  </p>
 </div>
 

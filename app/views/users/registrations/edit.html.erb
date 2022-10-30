@@ -6,7 +6,9 @@
 
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
   <%= render "users/shared/error_messages", resource: resource %>
+  <% if @edit_mode %>
   <%= f.hidden_field :id, value: @user_registration.id  %>
+  <% end %>
   <div class="container rounded bg-white mt-5 mb-5">
     <div class="row">
         <div class="col-md-5 border-right">
@@ -64,43 +66,66 @@
 
 <% if @user_registration.provider.nil? %>
 <%= form_for(resource, as: resource_name, url: user_password_path(resource_name), html: { method: :put }) do |f| %>
+  <% if @edit_mode %>
   <%= f.hidden_field :id, value: @user_registration.id  %>
+<% end %>
 
-  <div class="container">
+
+<div class="container rounded bg-white mt-5 mb-5">
+
+<div class="col-md-12 border-right">
+<div class="p-3 py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+      <h4 class="text-right">Impostazioni Password</h4>
+  </div>
+
 	<div class="row">
-		<div class="col-sm-4">
+		<div class="col-md-6">
 		  <div class="form-group pass_show"> 
-        <%= f.label :current_password %> <i>(Inserire la password per applicare i cambiamenti)</i><br />
+        <%= f.label :current_password %> <i>(Inserire per autorizzare la modifica)</i><br />
         <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control" %>
       </div> 
-      <br />
+      </div>
+      <div class="col-md-6">
       <div class="form-group pass_show"> 
         <%= f.label :Nuova_Password %> <i>(Lascia in bianco se non vuoi modificare)</i><br />
         <%= f.password_field :password, autocomplete: "new-password", class: "form-control" %>
         <% if @minimum_password_length %>
           <em><%= @minimum_password_length %> caratteri minimi</em>
         <% end %>
+      </div>
       </div> 
-      <br />
+      </div>
+      <div class="row">
+
+      <div class="col-md-6">
       <div class="form-group pass_show"> 
         <%= f.label :Conferma_password %><br />
         <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %> 
       </div> 
+     </div> 
             
-		</div>
-    <div class="actions">
-      <div class="text align-left"><br />
+    <div class="col-md-6">
+      <div class="text-center"><br />
         <%= f.submit "Modifica Password", class:"btn btn-primary" %>
       </div>
+      </div>
+
     </div> 
+    </div>
+
 	</div>
   </div>
 
 
+</div>
+</div>
 <% end %> 
 
 <br/>
 <% end %>
+
+<% if !@favorites.blank? %>
 <h3><div class="text-center">Eventi Preferiti</h3></div>
 <% @favorites.each do |favorite| %>
   <div class="text-center">
@@ -108,8 +133,10 @@
     <%= link_to favorite.event.event_id, event_path(favorite.event.event_id) %>
   </div>
 <% end %>
+<% end %>
 
 <br/>
+<% if !@partecipants.blank? %>
 <h3><div class="text-center">Eventi a cui Partecipo</h3></div>
 <% @partecipants.each do |partecipant| %>
   <div class="text-center">
@@ -117,6 +144,7 @@
     <%= link_to partecipant.event.event_id, event_path(partecipant.event.event_id) %>
   </div>
 <% end %> 
+<% end %>
 
 <br/>
 <br/>
