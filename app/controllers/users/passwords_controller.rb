@@ -5,6 +5,7 @@ class Users::PasswordsController < Devise::PasswordsController
   #verificare anche che provider==nil !!!!!!!!!!!!!!!!!!!!!
   before_action :authenticate_user!
   before_action :set_user
+  before_action :check_provider, :only => :update
 
   # GET /resource/password/new
   # def new
@@ -23,6 +24,7 @@ class Users::PasswordsController < Devise::PasswordsController
 
   # PUT /resource/password
   def update
+
 
     if params[:user][:password].present? && params[:user][:password_confirmation].present? && (@edit_mode || params[:user][:current_password].present?)
 
@@ -74,6 +76,16 @@ class Users::PasswordsController < Devise::PasswordsController
 
   def user_pass_params
     params.require(:user).permit(:password, :password_confirmation, :current_password)
+  end
+
+  def check_provider
+    if @user_registration.provider.nil?
+      return true
+    else
+      redirect_to '/'
+      return false
+    
+    end
   end
 
 end
