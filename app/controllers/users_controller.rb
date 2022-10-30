@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :authorized
-  before_action :set_user, only: %i[ show edit update destroy blocca_utente rendi_amministratore ]
+  before_action :set_user, only: %i[ show edit update destroy blocca_utente rendi_amministratore revoca_amministratore]
 
   def index
     @users = User.all
@@ -41,6 +41,14 @@ class UsersController < ApplicationController
   
     respond_to do |format|
       format.html { redirect_to users_url, notice: "L'utente è stato reso amministratore con successo." }
+      format.json { head :no_content }
+    end
+  end
+
+  def revoca_amministratore
+    @user.update_attribute(:role, 'user')
+    respond_to do |format|
+      format.html { redirect_to users_url, notice: "Revocati i privilegi di amministratore all utente." }
       format.json { head :no_content }
     end
   end

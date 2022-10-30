@@ -19,7 +19,7 @@ Rails.application.routes.draw do
 
   resources :users do
     member do
-      patch :blocca_utente, :rendi_amministratore
+      patch :blocca_utente, :rendi_amministratore, :revoca_amministratore
     end
   end
 
