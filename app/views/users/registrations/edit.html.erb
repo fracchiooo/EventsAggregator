@@ -132,10 +132,10 @@
   <div class="row">
       <div class="col">
         <h3>Eventi Preferiti</h3>
-        <% @favorites.each do |favorite| %>
+        <% @favorites.each do |favorite,index| %>
           
-          <%= favorite.event.id %>
-          <%= link_to favorite.event.event_id, event_path(favorite.event.event_id) %>
+          <%# favorite.event.id %>
+          <%= link_to @fav_event_data.at(index), event_path(favorite.event.event_id) %>
           
         <% end %>
       </div>
@@ -143,8 +143,8 @@
         <h3>Eventi a cui Partecipo</h3>
         <% @partecipants.each do |partecipant| %>
           
-          <%= partecipant.event.id %>
-          <%= link_to partecipant.event.event_id, event_path(partecipant.event.event_id) %>
+          <%# partecipant.event.id %>
+          <%= link_to @par_event_data.at(index), event_path(partecipant.event.event_id) %>
           
         <% end %> 
       </div>
