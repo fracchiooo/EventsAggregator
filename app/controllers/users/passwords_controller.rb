@@ -24,7 +24,7 @@ class Users::PasswordsController < Devise::PasswordsController
 
   # PUT /resource/password
   def update
-    if params[:commit] == 'Change my password'
+    if params[:user][:reset_password_token].present?
       super
       return
     end
@@ -63,7 +63,7 @@ class Users::PasswordsController < Devise::PasswordsController
   private
 
   def set_user
-    if params[:commit] == 'Change my password'
+    if params[:user][:reset_password_token].present?
       return
     end
 
@@ -84,7 +84,7 @@ class Users::PasswordsController < Devise::PasswordsController
   end
 
   def check_provider
-    if params[:commit] == 'Change my password'
+    if params[:user][:reset_password_token].present?
       return
     end
     
