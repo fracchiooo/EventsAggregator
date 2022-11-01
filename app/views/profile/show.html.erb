@@ -1,0 +1,86 @@
+
+<p class="notice" style="color: green"> <%= notice %> </p>
+<p class="alert" style="color: red" > <%= alert %> </p>
+
+<% if !@user.present? then %>
+  <div class="d-flex justify-content-center align-items-baseline mt-1 mb-2 row">
+    <h5 class="col-sm-6 d-flex justify-content-center"> Nessun risultato trovato! </h5><div class="w-100"></div>
+    <img class="col-sm-6" src="/assets/237-536x354.jpg" alt="no results">
+  </div>
+<% else %>
+
+<div class="container rounded bg-white text-dark mt-5 mb-5">
+  <div class="row">
+      <div class="col-md-5 border-right">
+          <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" src="data:image/png;base64,<%= @user.immagine_profilo %>" width="150px" ><span> </span></div>
+      </div>
+      <div class="col-md-5 border-right">
+          <div class="p-3 py-5">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="text-right">Profilo</h4>
+            </div>
+            <div class="row mt-2">
+              <div class="col-md-6">
+                <label class="labels">Nome</label>
+                <input type="text" class="form-control" value="<%= @user.nome %>" disabled>
+              </div>
+              <div class="col-md-6">
+                <label class="labels">Cognome</label>
+                <input type="text" class="form-control" value="<%= @user.cognome %>" disabled>
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-md-12"><br />
+                <label class="labels">Username</label>
+                <input type="text" class="form-control" value="<%= @user.username %>" disabled>
+              </div>
+              <div class="col-md-12"><br />
+                <label class="labels">Data di Nascita</label>
+                <input type="text" class="form-control" value="<%= @user.data_nascita.strftime("%Y-%m-%d") %>" disabled>
+              </div>
+              <div class="col-md-12"><br />
+                <label class="labels">Email</label>
+                <input type="text" class="form-control" value="<%= @user.email %>" disabled>
+              </div>
+            </div>
+            <br/>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container rounded bg-white text-center">
+  <div class="row">
+      <div class="col">
+        <h3>Eventi Preferiti</h3>
+        <% @favorites.each do |favorite| %>
+          <div>
+            <% if favorite.event.origin == 'predicthq' %>
+              <%= link_to Predicthq.getEvent(favorite.event.event_id)[:title], event_path(favorite.event.event_id) %>
+            <% else %>
+              <%= link_to Ticketmaster.getEvent(favorite.event.event_id)[:title], event_path(favorite.event.event_id) %>
+            <% end %>   
+          </div>
+        <% end %>
+      </div>
+      <div class="col">
+        <h3>Eventi a cui Partecipa</h3>
+        <% @partecipants.each do |partecipant| %>
+          <div>
+            <% if partecipant.event.origin == 'predicthq' %>
+              <%= link_to Predicthq.getEvent(partecipant.event.event_id)[:title], event_path(partecipant.event.event_id) %>
+            <% else %>
+              <%= link_to Ticketmaster.getEvent(partecipant.event.event_id)[:title], event_path(partecipant.event.event_id) %>
+            <% end %>
+          </div>
+        <% end %> 
+      </div>
+  </div>
+</div>
+
+<br>
+<br>
+<br>
+
+<% end %>

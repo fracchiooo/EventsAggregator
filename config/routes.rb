@@ -8,8 +8,10 @@ Rails.application.routes.draw do
     :registrations => "users/registrations",
     :sessions => "users/sessions",
     :passwords => "users/passwords",
-    :omniauth_callbacks => "users/omniauth_callbacks"
+    :omniauth_callbacks => "users/omniauth_callbacks",
   }
+
+  get 'profile/:id' => 'profile#show', as: :profile
 
   resources :segnala_cs do
     member do
