@@ -24,8 +24,7 @@
               </div>
             </p>
             <p class="card-text">
-              <% location = Geocoder.search(event['location'][1].to_s + ", " + event['location'][0].to_s).first %>
-              Location: <%= location.city %>, <%= location.street %>
+              Location: <%= Predicthq.getLocation(event['location'][1].to_s + ", " + event['location'][0].to_s) %>
             </p>
             <% if event['description']!= "" %>
               <p class="card-text">

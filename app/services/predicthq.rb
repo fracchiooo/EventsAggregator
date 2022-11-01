@@ -111,15 +111,7 @@ class Predicthq
         latlong_img = res['location'][0].to_s + "," + res['location'][1].to_s
         result[:image] = "https://maps.geoapify.com/v1/staticmap?style=osm-bright&width=2048&height=1152&center=lonlat:#{latlong_img}&zoom=11.7625&marker=lonlat:#{latlong_img};type:awesome;color:%23bb3f73;size:x-large;icon:glass-martini&apiKey=#{Rails.application.credentials[:geoapify_api_key]}"
 
-        event_location = Geocoder.search(res['location'][1].to_s + ", " + res['location'][0].to_s).first
-        if !event_location.city.nil?
-            result[:location] = event_location.city
-            if !event_location.street.nil?
-                result[:location] += ", " + event_location.street
-            end
-        else
-            result[:location] = "Location not found"
-        end
+        result[:location] = self.getLocation(res['location'][1].to_s + ", " + res['location'][0].to_s)
         
         if res['entities'].present? then result[:organizer] = res['entities'][0]['name'] end
 
@@ -164,4 +156,17 @@ class Predicthq
         return res['results']
     end
 
+    def self.getLocation(coordinates)
+        event_location = Geocoder.search(coordinates).first
+        if !event_location.nil? && !event_location.city.nil?
+            result = event_location.city
+            if !event_location.street.nil?
+                result += ", " + event_location.street
+            end
+        else
+            result = "Location not found"
+        end
+
+        return result
+    end
 end
