@@ -26,8 +26,8 @@ class Oauth2Controller < ApplicationController
 
   def client_options
     {
-      client_id: Rails.application.credentials[:calendar_google_id],
-      client_secret: Rails.application.credentials[:calendar_google_secret],
+      client_id: Rails.application.credentials[:google_id],
+      client_secret: Rails.application.credentials[:google_secret],
       authorization_uri: 'https://accounts.google.com/o/oauth2/auth',
       token_credential_uri: 'https://accounts.google.com/o/oauth2/token',
       scope: Google::Apis::CalendarV3::AUTH_CALENDAR + ' ' + Google::Apis::DriveV3::AUTH_DRIVE,
