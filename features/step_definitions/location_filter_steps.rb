@@ -2,9 +2,7 @@ require 'capybara/rails'
 
 Given(/^un utente registrato$/) do
     user = FactoryBot.create(:user_random)
-    # login_as(user) # non credo necessario qui, ma non capisco perché dice che non esiste..
-    # https://github.com/heartcombo/devise/wiki/How-To:-Test-with-Capybara
-    # https://sajadtorkamani.com/login-devise-user-in-capybara-tests/
+    login_as(user)
 end
 
 When(/^visita la pagina degli Eventi/) do
