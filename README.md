@@ -4,9 +4,9 @@ EventsAggregator è un’applicazione che punta ad aggregare gli eventi riportat
 
 ## Configurazione:
 
-* Inserire la master.key in config
+Inserire la master.key in config
 
-### Esecuzione:
+## Esecuzione:
 
 * bundle install
 * rails db:migrate 
