@@ -1,5 +1,7 @@
 require 'capybara/rails'
 
+button_id = 0
+
 Given(/^un utente amministratore$/) do
   admin_user = FactoryBot.create(:user_random_admin)
   login_as(admin_user)
@@ -7,6 +9,7 @@ end
 
 Given(/^un utente da moderare$/) do
   user = FactoryBot.create(:user_random)
+  button_id = user.id.to_s
 end
 
 When(/^visita la pagina utenti/) do
@@ -14,11 +17,11 @@ When(/^visita la pagina utenti/) do
 end
 
 When(/^vedo il pulsante "(.*?)"$/) do |text|
-  find("button", :text => text)
+  find("button", :id => button_id)
 end
 
 When(/^clicco il pulsante "Modera Utente"$/) do
-  click_button 'Modera Utente'
+  click_button button_id
 end
 
 When(/^vedo la pagina Impostazioni Profilo/) do
