@@ -106,7 +106,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def set_user
     
     if current_user.role=='admin' && (params[:user].present? && (params[:user][:id].present?)) 
-      print 'EDIT MODE!!!'
+      # print 'EDIT MODE!!!'
 
       @edit_mode=true
       @user_registration=User.find(params[:user][:id])

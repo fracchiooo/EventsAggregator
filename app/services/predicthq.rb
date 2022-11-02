@@ -52,7 +52,6 @@ class Predicthq
             response=http.request(request)
             res=JSON.parse(response.body)
         rescue => exception
-            # TODO: gestire l'errore
             return "errore: ", (response).to_json, (exception).to_json
         end
         count = res['count']

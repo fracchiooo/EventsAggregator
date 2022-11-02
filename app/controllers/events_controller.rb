@@ -17,6 +17,8 @@ class EventsController < ApplicationController
     da = params[:start_date].to_s.present? ? " from #{params[:start_date]}" : ""
     fino = params[:end_date].to_s.present? ? " to #{params[:end_date]}" : ""
     @cerco = key+luogo+categ+int+da+fino
+
+    flash.now[:alert] = 'Eventi acquisiti'
   end
 
   # GET /events/1 or /events/1.json

@@ -23,7 +23,6 @@ class Ticketmaster
                 cat = ""
             end
 
-            # TODO: se due RICHIESTE UGUALI di seguito, errore e non funziona più la ricerca città con google
             if loc.to_s.present?
                 if current_loc.to_i == 0
                     # non usa la posizione corrente (not checked)
@@ -51,8 +50,7 @@ class Ticketmaster
             response=http.request(request)
             res=JSON.parse(response.body)
         rescue => exception
-            # TODO: gestire l'errore
-            return "errore: ", @keyword, (response).to_json, (exception).to_json
+            return (response).to_json, (exception).to_json
         end
         num_res = res['page']['totalElements']
 
