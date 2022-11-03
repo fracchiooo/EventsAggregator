@@ -30,7 +30,7 @@
               <div class="form-outline w-100">
                 <%= form_with url: event_comments_path(@event), scope: :create do |form| %>
                   <%= text_area_tag "comment[testo]", nil, class: "form-control", id: "comment_testo", placeholder: "Scrivi un commento...", rows: 4, style: "background: #fff;" %>
-                  <%= button_to "Commenta", '', class: "float-end mt-2 pt-1 btn btn-primary btn-sm", onclick: "functio(1)", method: :create %>
+                  <%= form.submit "Commenta", class: "float-end mt-2 pt-1 btn btn-primary btn-sm", onclick: "functio(1)" %>
                 <% end %>
               </div>
             </div>
