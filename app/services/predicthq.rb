@@ -64,9 +64,14 @@ class Predicthq
                 if Event.where(event_id: event['id']).blank? then
                     # lo aggiungo al database
                     if event['entities'].present? then entity = event['entities'][0]['entity_id'] end
+                    if event['location'].nil?                        
+                        coor= "0,0"
+                    else
+                        coor=event['location'][1].to_s+", "+event['location'][0].to_s
+                    end
                     e = Event.new(  event_id:event['id'], 
                                     organizer_id: entity, 
-                                    coordinates: event['location'][1].to_s+", "+event['location'][0].to_s,
+                                    coordinates: coor,
                                     origin: "predicthq" )
                     e.save!
                 end

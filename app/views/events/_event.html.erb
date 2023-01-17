@@ -137,7 +137,13 @@
               <p class="mt-2"><strong><%= @event_data[:location] %></strong></p>
 
               <p class="mt-2">
+              <% if event.coordinates!="0,0" %>
                 <a class="btn btn-secondary btn-block" target="_blank" href="https://www.google.it/maps/search/Hotels/@<%= event.coordinates.gsub(' ', '') %>,17z/data=!3m1!4b1">Visualizza Hotel nelle vicinanze</a>
+              <% else %>
+              <a class="btn btn-block" style="background-color:grey" target="_blank" enabled=false>Visualizza Hotel nelle vicinanze</a>
+
+              <% end %>
+
               </p>
 
               <p class="mt-2">

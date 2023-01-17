@@ -63,9 +63,14 @@ class Ticketmaster
                 if Event.where(event_id: event['id']).blank? then
                     # lo aggiungo al database
                     if event['promoter'].present? then promoter = event['promoter']['id'] end
+                    if event['_embedded']['venues'][0]['location'].nil?                        
+                        coor= "0,0"
+                    else
+                        coor= event['_embedded']['venues'][0]['location']['latitude'].to_s + "," + event['_embedded']['venues'][0]['location']['longitude'].to_s
+                    end
                     e = Event.new(  event_id: event['id'], 
                                     organizer_id: promoter, 
-                                    coordinates: event['_embedded']['venues'][0]['location']['latitude'].to_s + "," + event['_embedded']['venues'][0]['location']['longitude'].to_s,
+                                    coordinates: coor,
                                     origin: "ticketmaster" )
                     e.save!
                 end
@@ -97,7 +102,11 @@ class Ticketmaster
         result[:calendar_start] = res['dates']['start']['dateTime']
         result[:calendar_end] = result[:calendar_start]
         result[:image] = res['images'][2]['url']
-        result[:price] = res['priceRanges'][0]['min'].to_s + " - " + res['priceRanges'][0]['max'].to_s + " " + res['priceRanges'][0]['currency']
+        if res['priceRanges'].nil?
+            result[:price]="non definito"
+        else
+            result[:price] = res['priceRanges'][0]['min'].to_s + " - " + res['priceRanges'][0]['max'].to_s + " " + res['priceRanges'][0]['currency']
+        end
         result[:url] = res['url']
         result[:location] = res['_embedded']['venues'][0]['city']['name'] + ', ' + res['_embedded']['venues'][0]['address']['line1']
         if res['promoter'].present? then result[:organizer] = res['promoter']['name'] end
