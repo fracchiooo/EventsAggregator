@@ -75,6 +75,7 @@
   document.getElementById('comment_testo').value='';
 
   function functio(n) {
+    console.log('control function');
     if(n==1){
       if(!<%=current_user.present?%>){
         alert("accedi per completare l'azione!");

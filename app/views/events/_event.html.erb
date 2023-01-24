@@ -71,26 +71,39 @@
               <% end %>
               <div class="row mt-1">
                 <div>
-                  <% if @user_like == true %>
+
+                <% if !user_signed_in? %>
+                <label>
+                <button class="like-event btn", onclick="functio(1)">
+                <i class="fa-regular fa-thumbs-up fa-6" style="font-size: 2em;"></i>
+                </button>
+                </label>
+                <label>
+                <button class="like-event btn", onclick="functio(1)">
+                <i class="fa-regular fa-thumbs-down fa-6" style="font-size: 2em;"></i>
+                </button>
+                </label>
+
+                  <% elsif @user_like == true %>
                     <label> 
-                      <%= button_to like_events_path, :method => :post, class: "like-event btn link-primary", params: { like_event: {event_id: event.id, promoter: event.organizer_id, like: true} } do %>
+                      <%= button_to like_events_path, :method => :post, class: "like-event btn link-primary", onclick: "functio(1)", params: { like_event: {event_id: event.id, promoter: event.organizer_id, like: true} } do %>
                         <i class="fa-regular fa-thumbs-up fa-6" style="font-size: 2em; color: yellow !important"></i>
                       <%end%>
                     </label>
                     <label>
-                      <%= button_to like_events_path, :method => :post, class: "like-event btn link-primary", params: { like_event: {event_id: event.id, promoter: event.organizer_id, like: false} } do %>
+                      <%= button_to like_events_path, :method => :post, class: "like-event btn link-primary", onclick: "functio(1)", params: { like_event: {event_id: event.id, promoter: event.organizer_id, like: false} } do %>
                         <i class="fa-regular fa-thumbs-down fa-6" style="font-size: 2em;"></i>
                       <%end%>
                     </label>
 
                   <%elsif @user_like == false %>
                     <label> 
-                      <%= button_to like_events_path, :method => :post, class: "like-event btn link-primary", params: { like_event: {event_id: event.id, promoter: event.organizer_id, like: true} } do %>
+                      <%= button_to like_events_path, :method => :post, class: "like-event btn link-primary",onclick: "functio(1)", params: { like_event: {event_id: event.id, promoter: event.organizer_id, like: true} } do %>
                         <i class="fa-regular fa-thumbs-up fa-6" style="font-size: 2em;"></i>
                       <%end%>
                     </label>
                     <label>
-                      <%= button_to like_events_path, :method => :post, class: "like-event btn link-primary", params: { like_event: {event_id: event.id, promoter: event.organizer_id, like: false} } do %>
+                      <%= button_to like_events_path, :method => :post, class: "like-event btn link-primary",onclick: "functio(1)", params: { like_event: {event_id: event.id, promoter: event.organizer_id, like: false} } do %>
                         <i class="fa-regular fa-thumbs-down fa-6" style="font-size: 2em; color: yellow !important"></i>
                       <%end%>
                     </label>
